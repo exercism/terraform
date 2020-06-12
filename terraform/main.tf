@@ -1,5 +1,4 @@
 variable "region" {}
-variable "environment" {}
 
 provider "aws" {
   region  = var.region
