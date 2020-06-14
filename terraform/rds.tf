@@ -90,4 +90,11 @@ resource "aws_db_instance" "main" {
   tags = {
     Name = "v3"
   }
+
+  # Ignore changes to final_snapshot_identifier, which are caused by the
+  # timestamp being regenerated on each run.
+  lifecycle {
+    ignore_changes = [final_snapshot_identifier]
+  }
 }
+
