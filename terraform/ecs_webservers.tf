@@ -16,6 +16,7 @@ data "template_file" "webservers" {
 resource "aws_ecs_task_definition" "webserver" {
   family                   = "app"
   requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
   cpu                      = var.webservers_cpu
   memory                   = var.webservers_memory
   container_definitions    = data.template_file.webservers.rendered

@@ -20,6 +20,27 @@ brew install terraform
 
 [Downloads for other OS](https://www.terraform.io/downloads.html) are available.
 
+## AWS Setup
+
+Create a policy called `Iam CreateRole` with the following policy:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1469200763880",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Create a terraform IAM user and them PowerUser privileges and the above role.
 
 ## Setup
 

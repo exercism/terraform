@@ -1,6 +1,6 @@
 [
   {
-    "name": "v3-webserver",
+    "name": "webserver",
     "image": "${image}",
     "cpu": ${cpu},
     "memory": ${memory},

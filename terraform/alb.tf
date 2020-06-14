@@ -1,6 +1,6 @@
 # Start by creating the ALB that attaches to the 
 # relevant public subnets
-resource "aws_alb" "main" {
+resource "aws_alb" "webservers" {
   name            = "webservers-ecs"
   subnets         = aws_subnet.publics.*.id
   security_groups = ["${aws_security_group.alb.id}"]
@@ -17,7 +17,7 @@ resource "aws_alb_target_group" "webservers" {
 
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "webservers" {
-  load_balancer_arn = aws_alb.main.id
+  load_balancer_arn = aws_alb.webservers.id
   port              = "80"
   protocol          = "HTTP"
 

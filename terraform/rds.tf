@@ -55,7 +55,7 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name      = aws_db_subnet_group.main.name
   parameter_group_name      = aws_db_parameter_group.main.name
   multi_az                  = false
-  final_snapshot_identifier = "v3"
+  final_snapshot_identifier = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   enabled_cloudwatch_logs_exports = [
     "error",
     "slowquery",
