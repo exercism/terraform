@@ -1,5 +1,9 @@
 variable "region" {}
-variable "az_count" {}
+variable "webservers_port" {}
+variable "webservers_cpu" {}
+variable "webservers_memory" {}
+variable "webservers_image" {}
+variable "webservers_count" {}
 
 provider "aws" {
   region  = var.region

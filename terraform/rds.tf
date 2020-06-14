@@ -1,36 +1,9 @@
 resource "aws_db_subnet_group" "main" {
   name       = "v3-rds"
-  subnet_ids = aws_subnet.webservers.*.id
+  subnet_ids = aws_subnet.publics.*.id
   tags = {
     Name = "v3"
   }
-}
-
-resource "aws_security_group" "rds" {
-  name        = "v3 RDS"
-  description = "Security Group for V3 RDS"
-  vpc_id      = aws_vpc.main.id
-  tags = {
-    Name = "v3_rds"
-  }
-}
-
-resource "aws_security_group_rule" "main_rds_ingress_mysql" {
-  security_group_id = aws_security_group.rds.id
-  type              = "ingress"
-  from_port         = 3306
-  to_port           = 3306
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "main_rds_egress_public" {
-  security_group_id = aws_security_group.rds.id
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_db_parameter_group" "main" {
@@ -82,7 +55,7 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name      = aws_db_subnet_group.main.name
   parameter_group_name      = aws_db_parameter_group.main.name
   multi_az                  = false
-  final_snapshot_identifier = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
+  final_snapshot_identifier = "v3"
   enabled_cloudwatch_logs_exports = [
     "error",
     "slowquery",
