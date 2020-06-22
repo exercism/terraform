@@ -6,9 +6,9 @@ resource "aws_db_subnet_group" "main" {
   }
 }
 
-resource "aws_db_parameter_group" "main" {
-  name   = "rds-v3"
-  family = "mysql5.7"
+resource "aws_rds_cluster_parameter_group" "main" {
+  name   = "v3-rds"
+  family = "aurora-mysql5.7"
 
   parameter {
     name  = "character_set_server"
@@ -37,24 +37,19 @@ resource "aws_db_parameter_group" "main" {
   }
 }
 
-resource "aws_db_instance" "main" {
-  identifier                = "v3"
-  allocated_storage         = 20
-  storage_type              = "gp2"
-  engine                    = "mysql"
-  engine_version            = "5.7.26"
-  instance_class            = "db.t3.micro"
-  name                      = "exercism_v3"
-  username                  = "exercism_v3"
-  password                  = "exercism_v3"
+resource "aws_rds_cluster" "main" {
+  cluster_identifier                = "v3"
+  engine                    = "aurora-mysql"
+  engine_version            = "5.7.mysql_aurora.2.08.1"
+  #instance_class            = "db.t3.small"
+  database_name                      = "exercism_v3"
+  master_username                  = "exercism_v3"
+  master_password                  = "exercism_v3"
   port                      = 3306
-  publicly_accessible       = false
-  availability_zone         = "${var.region}a"
-  security_group_names      = []
+  availability_zones         = data.aws_availability_zones.available.names
   vpc_security_group_ids    = [aws_security_group.rds.id]
   db_subnet_group_name      = aws_db_subnet_group.main.name
-  parameter_group_name      = aws_db_parameter_group.main.name
-  multi_az                  = false
+  db_cluster_parameter_group_name       = aws_rds_cluster_parameter_group.main.name
   final_snapshot_identifier = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   enabled_cloudwatch_logs_exports = [
     "error",
@@ -71,3 +66,13 @@ resource "aws_db_instance" "main" {
   }
 }
 
+resource "aws_rds_cluster_instance" "write-instance" {
+  identifier         = "writer"
+  cluster_identifier = aws_rds_cluster.main.id
+  instance_class     = "db.t2.small"
+
+  # These have to be respecified here as well as in the cluster definition
+  # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
+  engine                    = "aurora-mysql"
+  engine_version            = "5.7.mysql_aurora.2.08.1"
+}
