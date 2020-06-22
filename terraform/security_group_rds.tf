@@ -7,16 +7,16 @@ resource "aws_security_group" "rds" {
   }
 
   ingress {
-    protocol          = "tcp"
-    from_port         = 3306
-    to_port           = 3306
+    protocol        = "tcp"
+    from_port       = 3306
+    to_port         = 3306
     security_groups = [aws_security_group.webservers.id]
   }
 
   egress {
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_blocks       = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

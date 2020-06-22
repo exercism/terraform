@@ -6,8 +6,8 @@ data "template_file" "webservers" {
   template = file("./templates/ecs_webservers.json.tpl")
 
   vars = {
-    image  = var.webservers_image
-    port   = var.webservers_port
+    image = var.webservers_image
+    port  = var.webservers_port
   }
 }
 

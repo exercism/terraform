@@ -7,9 +7,9 @@ output "ecs_task_execution_role_arn" {
 }
 
 output "rds_cluster_master_endpoint" {
-  value = aws_rds_cluster.main.endpoint 
+  value = aws_rds_cluster.main.endpoint
 }
 
 output "rds_cluster_reader_endpoint" {
-  value = aws_rds_cluster.main.reader_endpoint 
+  value = aws_rds_cluster.main.reader_endpoint
 }

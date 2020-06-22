@@ -38,19 +38,18 @@ resource "aws_rds_cluster_parameter_group" "main" {
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier                = "v3"
-  engine                    = "aurora-mysql"
-  engine_version            = "5.7.mysql_aurora.2.08.1"
-  #instance_class            = "db.t3.small"
-  database_name                      = "exercism_v3"
-  master_username                  = "exercism_v3"
-  master_password                  = "exercism_v3"
-  port                      = 3306
-  availability_zones         = data.aws_availability_zones.available.names
-  vpc_security_group_ids    = [aws_security_group.rds.id]
-  db_subnet_group_name      = aws_db_subnet_group.main.name
-  db_cluster_parameter_group_name       = aws_rds_cluster_parameter_group.main.name
-  final_snapshot_identifier = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
+  cluster_identifier              = "v3"
+  engine                          = "aurora-mysql"
+  engine_version                  = "5.7.mysql_aurora.2.08.1"
+  database_name                   = "exercism_v3"
+  master_username                 = "exercism_v3"
+  master_password                 = "exercism_v3"
+  port                            = 3306
+  availability_zones              = data.aws_availability_zones.available.names
+  vpc_security_group_ids          = [aws_security_group.rds.id]
+  db_subnet_group_name            = aws_db_subnet_group.main.name
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main.name
+  final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   enabled_cloudwatch_logs_exports = [
     "error",
     "slowquery",
@@ -73,6 +72,6 @@ resource "aws_rds_cluster_instance" "write-instance" {
 
   # These have to be respecified here as well as in the cluster definition
   # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
-  engine                    = "aurora-mysql"
-  engine_version            = "5.7.mysql_aurora.2.08.1"
+  engine         = "aurora-mysql"
+  engine_version = "5.7.mysql_aurora.2.08.1"
 }
