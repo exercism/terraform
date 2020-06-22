@@ -10,6 +10,12 @@ aws_access_key_id = XXXXXXXXXXXXXXXXXXXX
 aws_secret_access_key = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
+## Repo Setup
+
+The webserver repo needs the following secrets set:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+
 ## Install
 
 Terraform is available via `brew` on Mac OS:
@@ -22,7 +28,7 @@ brew install terraform
 
 ## AWS Setup
 
-Create a policy called `Iam CreateRole` with the following policy:
+Create a policy called `IAM Terraform` with the following policy:
 ```
 {
   "Version": "2012-10-17",
@@ -30,8 +36,15 @@ Create a policy called `Iam CreateRole` with the following policy:
     {
       "Sid": "Stmt1469200763880",
       "Action": [
-        "iam:AttachRolePolicy",
-        "iam:CreateRole"
+          "iam:AttachRolePolicy",
+          "iam:CreateRole",
+          "iam:GetRole",
+          "iam:ListInstanceProfilesForRole",
+          "iam:DeleteRole",
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:PassRole",
+          "iam:ListAttachedRolePolicies"
       ],
       "Effect": "Allow",
       "Resource": "*"

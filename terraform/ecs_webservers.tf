@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "webservers" {
-  name = "Webservers"
+  name = "webservers"
 }
 
 data "template_file" "webservers" {
@@ -8,24 +8,21 @@ data "template_file" "webservers" {
   vars = {
     image  = var.webservers_image
     port   = var.webservers_port
-    cpu    = var.webservers_cpu
-    memory = var.webservers_memory
   }
 }
 
 resource "aws_ecs_task_definition" "webserver" {
-  family                   = "app"
+  family                   = "webserver"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.webservers_cpu
   memory                   = var.webservers_memory
   container_definitions    = data.template_file.webservers.rendered
-
-  #execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 }
 
 resource "aws_ecs_service" "webservers" {
-  name            = "Webservers"
+  name            = "webservers"
   cluster         = aws_ecs_cluster.webservers.id
   task_definition = aws_ecs_task_definition.webserver.arn
   desired_count   = var.webservers_count
@@ -43,6 +40,5 @@ resource "aws_ecs_service" "webservers" {
     container_port   = var.webservers_port
   }
 
-  #depends_on = [aws_alb_listener.webservers, aws_iam_role_policy_attachment.ecs_task_execution_role]
-  depends_on = [aws_alb_listener.webservers]
+  depends_on = [aws_alb_listener.webservers, aws_iam_role_policy_attachment.ecs_task_execution_role]
 }
