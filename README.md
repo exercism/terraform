@@ -1,20 +1,5 @@
 # Terraform scripts for Exercism
 
-## Credentials Setup
-
-Create a file `~/.aws/credentials`, or add the following stanza to an existing file:
-
-```
-[exercism_terraform]
-aws_access_key_id = XXXXXXXXXXXXXXXXXXXX
-aws_secret_access_key = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
-## Repo Setup
-
-The webserver repo needs the following secrets set:
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
 
 ## Install
 
@@ -28,7 +13,35 @@ brew install terraform
 
 ## AWS Setup
 
-Create a policy called `IAM Terraform` with the following policy:
+### Create state bucket
+
+Terraform state is stored in s3.
+
+Create a bucket with Bucket Versioning enabled.
+The default bucket is currently `exercism-staging-terraform` - update `terraform/terraform.tf` if you want to change this.
+
+
+Create a policy called `terraform-s3-state` with the following JSON:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::mybucket"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject"],
+      "Resource": "arn:aws:s3:::exercism-terraform/pre-production.state"
+    }
+  ]
+}
+```
+
+
+Create a policy called `terraform-iam` with the following JSON:
 ```
 {
   "Version": "2012-10-17",
@@ -53,7 +66,10 @@ Create a policy called `IAM Terraform` with the following policy:
 }
 ```
 
-Create a terraform IAM user and them PowerUser privileges and the above role.
+Create a terraform IAM user.
+Give them PowerUser privileges and the above policies.
+Set programatic access and save the keys for later.
+
 
 ## Setup
 
@@ -65,13 +81,30 @@ Install provider plugins:
 terraform init
 ```
 
+## Credentials Setup
+
+Create a file `~/.aws/credentials`, or add the following stanza to an existing file with terraform user's credentials.
+
+```
+[exercism_terraform]
+aws_access_key_id = XXXXXXXXXXXXXXXXXXXX
+aws_secret_access_key = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+## Init
+
+Start by running `terraform init`.
+
+```
+AWS_PROFILE=exercism_terraform terraform init
+```
 
 ## Testing Before Doing
 
 To see what will be run, use `plan`:
 
 ```bash
-terraform plan -var-file=environments/staging.tfvars
+AWS_PROFILE=exercism_terraform terraform plan -var-file=variables/pre-production.tfvars
 ```
 
 
@@ -80,7 +113,7 @@ terraform plan -var-file=environments/staging.tfvars
 To run things for real, and actually make changes to infrastructure:
 
 ```bash
-terraform apply -var-file=environments/staging.tfvars
+AWS_PROFILE=exercism_terraform terraform apply -var-file=environments/staging.tfvars
 ```
 
 ## Debugging

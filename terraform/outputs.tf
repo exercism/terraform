@@ -13,3 +13,7 @@ output "rds_cluster_master_endpoint" {
 output "rds_cluster_reader_endpoint" {
   value = aws_rds_cluster.main.reader_endpoint
 }
+
+output "aws_elasticache_cluster_endpoint" {
+  value = aws_elasticache_cluster.anycable.cache_nodes.0.address
+}
