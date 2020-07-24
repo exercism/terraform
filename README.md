@@ -44,25 +44,33 @@ Create a policy called `terraform-s3-state` with the following JSON:
 Create a policy called `terraform-iam` with the following JSON:
 ```
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1469200763880",
-      "Action": [
-          "iam:AttachRolePolicy",
-          "iam:CreateRole",
-          "iam:GetRole",
-          "iam:ListInstanceProfilesForRole",
-          "iam:DeleteRole",
-          "iam:PutRolePolicy",
-          "iam:DeleteRolePolicy",
-          "iam:PassRole",
-          "iam:ListAttachedRolePolicies"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1469200763880",
+            "Action": [
+                "iam:AttachRolePolicy",
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:ListInstanceProfilesForRole",
+                "iam:DeleteRole",
+                "iam:PutRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:PassRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:UpdateAssumeRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:GetServiceLinkedRoleDeletionStatus",
+                "iam:CreatePolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:ListPolicyVersions",
+                "iam:DeletePolicy"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
 }
 ```
 

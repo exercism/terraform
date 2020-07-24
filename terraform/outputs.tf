@@ -14,6 +14,10 @@ output "rds_cluster_reader_endpoint" {
   value = aws_rds_cluster.main.reader_endpoint
 }
 
-output "aws_elasticache_cluster_endpoint" {
+output "webservers_alb_dns_name" {
+  value = aws_alb.webservers.dns_name
+}
+
+output "anycable_endpoint" {
   value = aws_elasticache_cluster.anycable.cache_nodes.0.address
 }

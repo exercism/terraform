@@ -2,6 +2,7 @@ resource "aws_security_group" "elasticache_anycable" {
   name        = "elasticache anycable"
   description = "Security Group for Elasticache AnyCable"
   vpc_id      = aws_vpc.main.id
+
   tags = {
     Name = "elasticache-anycable"
   }
