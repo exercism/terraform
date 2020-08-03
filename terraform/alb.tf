@@ -6,23 +6,44 @@ resource "aws_alb" "webservers" {
   security_groups = ["${aws_security_group.alb.id}"]
 }
 
-# Create a target group for the webservers
-resource "aws_alb_target_group" "webservers" {
-  name        = "webservers-ecs"
-  port        = 80
+# Create a target group for the http webservers
+resource "aws_alb_target_group" "webservers_http" {
+  name        = "webservers-ecs-http"
+  port        = var.webservers_http_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
 }
 
 # Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "webservers" {
+resource "aws_alb_listener" "webservers_http" {
   load_balancer_arn = aws_alb.webservers.id
-  port              = "80"
+  port              = var.webservers_http_port
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.webservers.id
+    target_group_arn = aws_alb_target_group.webservers_http.id
+    type             = "forward"
+  }
+}
+
+# Create a target group for the websockets
+resource "aws_alb_target_group" "webservers_websockets" {
+  name        = "webservers-ecs-websockets"
+  port        = var.webservers_websockets_port
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip"
+}
+
+# Redirect all traffic from the ALB to the target group
+resource "aws_alb_listener" "webservers_websockets" {
+  load_balancer_arn = aws_alb.webservers.id
+  port              = var.webservers_websockets_port
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_alb_target_group.webservers_websockets.id
     type             = "forward"
   }
 }

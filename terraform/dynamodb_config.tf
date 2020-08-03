@@ -41,7 +41,7 @@ resource "aws_dynamodb_table_item" "anycable_rpc_host" {
   item = <<ITEM
 {
   "id": {"S": "anycable_rpc_host"},
-  "value": {"S": "anycable_ruby:50051"}
+  "value": {"S": "localhost:50051"}
 }
 ITEM
 }

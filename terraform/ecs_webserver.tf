@@ -45,7 +45,7 @@ resource "aws_iam_role_policy_attachment" "webservers_access_dynamodb" {
 resource "aws_ecs_cluster" "webservers" {
   name = "webservers"
 }
-data "template_file" "webservers" {
+data "template_file" "webserver" {
   template = file("./templates/ecs_webserver.json.tpl")
 
   vars = {
@@ -54,7 +54,8 @@ data "template_file" "webservers" {
     anycable_go_image   = "${aws_ecr_repository.webserver_anycable_go.repository_url}:latest"
     anycable_ruby_image = "${aws_ecr_repository.webserver_anycable_ruby.repository_url}:latest"
     anycable_redis_url  = local.anycable_redis_url
-    port                = var.webservers_port
+    http_port           = var.webservers_http_port
+    websockets_port     = var.webservers_websockets_port
     region              = var.region
     log_group_name      = aws_cloudwatch_log_group.webservers.name
   }
@@ -65,7 +66,7 @@ resource "aws_ecs_task_definition" "webserver" {
   network_mode             = "awsvpc"
   cpu                      = var.webservers_cpu
   memory                   = var.webservers_memory
-  container_definitions    = data.template_file.webservers.rendered
+  container_definitions    = data.template_file.webserver.rendered
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs_webserver.arn
   tags                     = {}
@@ -84,10 +85,21 @@ resource "aws_ecs_service" "webservers" {
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.webservers.id
-    container_name   = "webserver"
-    container_port   = var.webservers_port
+    target_group_arn = aws_alb_target_group.webservers_http.id
+    container_name   = "nginx"
+    container_port   = var.webservers_http_port
   }
 
-  depends_on = [aws_alb_listener.webservers, aws_iam_role_policy_attachment.ecs_task_execution_role]
+  load_balancer {
+    target_group_arn = aws_alb_target_group.webservers_websockets.id
+    container_name   = "anycable_go"
+    container_port   = var.webservers_websockets_port
+  }
+
+  depends_on = [
+    aws_alb_listener.webservers_http,
+    aws_alb_listener.webservers_websockets,
+    aws_iam_role_policy_attachment.ecs_task_execution_role,
+    aws_security_group.ecs_webservers
+  ]
 }

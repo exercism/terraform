@@ -14,16 +14,15 @@
       "options": {
         "awslogs-group": "${log_group_name}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "firelens"
+        "awslogs-stream-prefix": "webserver"
       }
     },
     "cpu": 0,
-    "memoryReservation": 0,
     "user": "0",
     "mountPoints": [],
     "portMappings": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [ ]
   },
   {
     "name": "nginx",
@@ -31,12 +30,9 @@
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 80,
+        "containerPort": ${http_port},
         "protocol": "tcp"
       }
-    ],
-    "links": [
-      "puma"
     ],
 
     "logConfiguration": {
@@ -45,14 +41,12 @@
         "Name": "cloudwatch",
         "region": "${region}",
         "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "nginx"
+        "log_stream_prefix": "nginx/"
       }
     },
     "cpu": 0,
-    "memoryReservation": 0,
     "user": "0",
     "mountPoints": [],
-    "portMappings": [],
     "volumesFrom": [],
     "environment": []
   },
@@ -60,10 +54,6 @@
     "name": "puma",
     "image": "${puma_image}",
     "essential": true,
-    "links": [
-      "anycable_ruby",
-      "anycable_go"
-    ],
 
     "logConfiguration": {
       "logDriver":"awsfirelens",
@@ -71,11 +61,10 @@
         "Name": "cloudwatch",
         "region": "${region}",
         "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "puma"
+        "log_stream_prefix": "puma/"
       }
     },
     "cpu": 0,
-    "memoryReservation": 0,
     "user": "0",
     "mountPoints": [],
     "portMappings": [],
@@ -93,11 +82,10 @@
         "Name": "cloudwatch",
         "region": "${region}",
         "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "anycable_ruby"
+        "log_stream_prefix": "anycable-ruby/"
       }
     },
     "cpu": 0,
-    "memoryReservation": 0,
     "user": "0",
     "mountPoints": [],
     "portMappings": [],
@@ -108,26 +96,31 @@
     "name": "anycable_go",
     "image": "${anycable_go_image}",
     "essential": true,
-    "command": ["--redis_url=${anycable_redis_url}"],
-    "links": [
-      "anycable_ruby"
+    "portMappings": [
+      {
+        "containerPort": ${websockets_port},
+        "protocol": "tcp"
+      }
     ],
-
+    "environment": [
+      {"name": "ANYCABLE_REDIS_URL", "value": "${anycable_redis_url}"},
+      {"name": "ANYCABLE_HOST", "value": "127.0.0.1"},
+      {"name": "ANYCABLE_PORT", "value": "3334"},
+      {"name": "ANYCABLE_RPC_HOST", "value": "127.0.0.1:50051"},
+      {"name": "ANYCABLE_DEBUG", "value": "true"}
+    ],
     "logConfiguration": {
       "logDriver":"awsfirelens",
       "options": {
         "Name": "cloudwatch",
         "region": "${region}",
         "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "anycable_go"
+        "log_stream_prefix": "anycable-go/"
       }
     },
     "cpu": 0,
-    "memoryReservation": 0,
     "user": "0",
     "mountPoints": [],
-    "portMappings": [],
-    "volumesFrom": [],
-    "environment": []
+    "volumesFrom": []
   }
 ]

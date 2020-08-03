@@ -5,8 +5,15 @@ resource "aws_security_group" "ecs_webservers" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = var.webservers_port
-    to_port         = var.webservers_port
+    from_port       = var.webservers_http_port
+    to_port         = var.webservers_http_port
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.webservers_websockets_port
+    to_port         = var.webservers_websockets_port
     security_groups = [aws_security_group.alb.id]
   }
 

@@ -20,5 +20,7 @@ resource "aws_security_group" "elasticache_anycable" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  depends_on = [ aws_security_group.ecs_webservers ]
 }
 

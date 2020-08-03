@@ -1,5 +1,6 @@
 variable "region" {}
-variable "webservers_port" {}
+variable "webservers_http_port" {}
+variable "webservers_websockets_port" {}
 variable "webservers_cpu" {}
 variable "webservers_memory" {}
 variable "webservers_image" {}

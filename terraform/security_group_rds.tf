@@ -19,4 +19,6 @@ resource "aws_security_group" "rds" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  depends_on = [ aws_security_group.ecs_webservers ]
 }

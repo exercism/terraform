@@ -4,5 +4,6 @@ region = "eu-west-2"
 webservers_cpu = 256
 webservers_memory = 512
 webservers_image = "webservers:latest"
-webservers_port = 80
+webservers_http_port = 80
+webservers_websockets_port = 8080
 webservers_count = 1
