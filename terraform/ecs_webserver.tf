@@ -26,33 +26,18 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
 # ###
 # Set up an iam role that allows for task execution
 # ###
-resource "aws_iam_policy" "write_to_cloudwatch" {
-  name        = "write_to_cloudwatch"
-  path        = "/"
-  description = "Write to CloudWatch"
-  policy      = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Action": [
-      "logs:CreateLogStream",
-      "logs:CreateLogGroup",
-      "logs:DescribeLogStreams",
-      "logs:PutLogEvents"
-    ],
-    "Resource": "*"
-  }]
-}
-EOF
-}
-resource "aws_iam_role" "ecs_webservers" {
-  name               = "ecs_webservers"
+
+resource "aws_iam_role" "ecs_webserver" {
+  name               = "ecs_webserver"
   assume_role_policy = data.aws_iam_policy_document.assume_ecs_role.json
 }
-resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
-  role       = aws_iam_role.ecs_webservers.name
+resource "aws_iam_role_policy_attachment" "webservers_write_to_cloudwatch" {
+  role       = aws_iam_role.ecs_webserver.name
   policy_arn = aws_iam_policy.write_to_cloudwatch.arn
+}
+resource "aws_iam_role_policy_attachment" "webservers_access_dynamodb" {
+  role       = aws_iam_role.ecs_webserver.name
+  policy_arn = aws_iam_policy.access_dynamodb.arn
 }
 # ###
 # Set up the cluster
@@ -61,13 +46,17 @@ resource "aws_ecs_cluster" "webservers" {
   name = "webservers"
 }
 data "template_file" "webservers" {
-  template = file("./templates/ecs_webservers.json.tpl")
+  template = file("./templates/ecs_webserver.json.tpl")
 
   vars = {
-    image          = "${aws_ecr_repository.webservers.repository_url}:a6655abc0b1086c7d301182b3a37a0e796620e17"
-    port           = var.webservers_port
-    region         = var.region
-    log_group_name = aws_cloudwatch_log_group.webservers.name
+    nginx_image         = "${aws_ecr_repository.webserver_nginx.repository_url}:latest"
+    puma_image          = "${aws_ecr_repository.webserver_puma.repository_url}:latest"
+    anycable_go_image   = "${aws_ecr_repository.webserver_anycable_go.repository_url}:latest"
+    anycable_ruby_image = "${aws_ecr_repository.webserver_anycable_ruby.repository_url}:latest"
+    anycable_redis_url  = local.anycable_redis_url
+    port                = var.webservers_port
+    region              = var.region
+    log_group_name      = aws_cloudwatch_log_group.webservers.name
   }
 }
 resource "aws_ecs_task_definition" "webserver" {
@@ -78,7 +67,8 @@ resource "aws_ecs_task_definition" "webserver" {
   memory                   = var.webservers_memory
   container_definitions    = data.template_file.webservers.rendered
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
-  task_role_arn            = aws_iam_role.ecs_webservers.arn
+  task_role_arn            = aws_iam_role.ecs_webserver.arn
+  tags                     = {}
 }
 resource "aws_ecs_service" "webservers" {
   name            = "webservers"
@@ -88,7 +78,7 @@ resource "aws_ecs_service" "webservers" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.webservers.id]
+    security_groups  = [aws_security_group.ecs_webservers.id]
     subnets          = aws_subnet.publics.*.id
     assign_public_ip = true
   }
