@@ -14,7 +14,7 @@
       "options": {
         "awslogs-group": "${log_group_name}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "webserver"
+        "awslogs-stream-prefix": "webservers"
       }
     },
     "cpu": 0,
