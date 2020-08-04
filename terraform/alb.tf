@@ -4,6 +4,15 @@ resource "aws_alb" "webservers" {
   name            = "webservers-ecs"
   subnets         = aws_subnet.publics.*.id
   security_groups = ["${aws_security_group.alb.id}"]
+
+  access_logs {
+    bucket  = aws_s3_bucket.ops_bucket.bucket
+    prefix  = "alb"
+    enabled = true
+  }
+
+  # TODO - Turn this on in production
+  enable_deletion_protection = true
 }
 
 # Create a target group for the http webservers
