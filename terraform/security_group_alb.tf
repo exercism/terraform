@@ -5,8 +5,15 @@ resource "aws_security_group" "alb" {
 
   ingress {
     protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    from_port   = var.webservers_http_port
+    to_port     = var.webservers_http_port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = var.webservers_websockets_port
+    to_port     = var.webservers_websockets_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 

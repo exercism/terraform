@@ -18,6 +18,6 @@ output "webservers_alb_dns_name" {
   value = aws_alb.webservers.dns_name
 }
 
-output "anycable_endpoint" {
+output "anycable_redis_url" {
   value = aws_elasticache_cluster.anycable.cache_nodes.0.address
 }
