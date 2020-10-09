@@ -43,6 +43,9 @@ resource "aws_alb_target_group" "webservers_websockets" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
+  health_check {
+    path = "/health"
+  }
 }
 
 # Redirect all traffic from the ALB to the target group

@@ -104,8 +104,8 @@
     ],
     "environment": [
       {"name": "ANYCABLE_REDIS_URL", "value": "${anycable_redis_url}"},
-      {"name": "ANYCABLE_HOST", "value": "127.0.0.1"},
-      {"name": "ANYCABLE_PORT", "value": "3334"},
+      {"name": "ANYCABLE_HOST", "value": "0.0.0.0"},
+      {"name": "ANYCABLE_PORT", "value": "${websockets_port}"},
       {"name": "ANYCABLE_RPC_HOST", "value": "127.0.0.1:50051"},
       {"name": "ANYCABLE_DEBUG", "value": "true"}
     ],
