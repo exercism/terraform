@@ -50,9 +50,8 @@ data "template_file" "webserver" {
 
   vars = {
     nginx_image         = "${aws_ecr_repository.webserver_nginx.repository_url}:latest"
-    puma_image          = "${aws_ecr_repository.webserver_puma.repository_url}:latest"
+    rails_image          = "${aws_ecr_repository.webserver_rails.repository_url}:latest"
     anycable_go_image   = "${aws_ecr_repository.webserver_anycable_go.repository_url}:latest"
-    anycable_ruby_image = "${aws_ecr_repository.webserver_anycable_ruby.repository_url}:latest"
     anycable_redis_url  = local.anycable_redis_url
     http_port           = var.webservers_http_port
     websockets_port     = var.webservers_websockets_port

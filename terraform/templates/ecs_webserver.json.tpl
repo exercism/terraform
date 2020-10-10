@@ -52,7 +52,7 @@
   },
   {
     "name": "puma",
-    "image": "${puma_image}",
+    "image": "${rails_image}",
     "essential": true,
 
     "logConfiguration": {
@@ -73,8 +73,12 @@
   },
   {
     "name": "anycable_ruby",
-    "image": "${anycable_ruby_image}",
+    "image": "${rails_image}",
     "essential": true,
+    "environment": [
+      {"name": "RAILS_ENV", "value": "production"}
+    ],
+    "entryPoint": "bundle exec anycable"
 
     "logConfiguration": {
       "logDriver":"awsfirelens",
