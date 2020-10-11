@@ -47,37 +47,37 @@ ITEM
 }
 
 
-resource "aws_dynamodb_table_item" "rds_master_endpoint" {
+resource "aws_dynamodb_table_item" "mysql_master_endpoint" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "rds_master_endpoint"},
+  "id": {"S": "mysql_master_endpoint"},
   "value": {"S": "${aws_rds_cluster.main.endpoint}"}
 }
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "rds_reader_endpoint" {
+resource "aws_dynamodb_table_item" "mysql_reader_endpoint" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "rds_reader_endpoint"},
+  "id": {"S": "mysql_reader_endpoint"},
   "value": {"S": "${aws_rds_cluster.main.reader_endpoint}"}
 }
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "rds_port" {
+resource "aws_dynamodb_table_item" "mysql_port" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "rds_port"},
+  "id": {"S": "mysql_port"},
   "value": {"S": "3306"}
 }
 ITEM
