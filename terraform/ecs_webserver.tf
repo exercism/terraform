@@ -45,8 +45,8 @@ resource "aws_iam_role_policy_attachment" "webservers_access_dynamodb" {
 resource "aws_ecs_cluster" "webservers" {
   name = "webservers"
 }
-data "template_file" "webserver" {
-  template = file("./templates/ecs_webserver.json.tpl")
+data "template_file" "webservers" {
+  template = file("./templates/ecs_webservers.json.tpl")
 
   vars = {
     nginx_image         = "${aws_ecr_repository.webserver_nginx.repository_url}:latest"
@@ -59,13 +59,13 @@ data "template_file" "webserver" {
     log_group_name      = aws_cloudwatch_log_group.webservers.name
   }
 }
-resource "aws_ecs_task_definition" "webserver" {
-  family                   = "webserver"
+resource "aws_ecs_task_definition" "webservers" {
+  family                   = "webservers"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.webservers_cpu
   memory                   = var.webservers_memory
-  container_definitions    = data.template_file.webserver.rendered
+  container_definitions    = data.template_file.webservers.rendered
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs_webserver.arn
   tags                     = {}
@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "webserver" {
 resource "aws_ecs_service" "webservers" {
   name            = "webservers"
   cluster         = aws_ecs_cluster.webservers.id
-  task_definition = aws_ecs_task_definition.webserver.arn
+  task_definition = aws_ecs_task_definition.webservers.arn
   desired_count   = var.webservers_count
   launch_type     = "FARGATE"
 

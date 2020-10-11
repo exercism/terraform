@@ -78,7 +78,7 @@
     "environment": [
       {"name": "RAILS_ENV", "value": "production"}
     ],
-    "entryPoint": "bundle exec anycable"
+    "entryPoint": ["bundle", "exec", "anycable"],
 
     "logConfiguration": {
       "logDriver":"awsfirelens",
@@ -93,8 +93,7 @@
     "user": "0",
     "mountPoints": [],
     "portMappings": [],
-    "volumesFrom": [],
-    "environment": []
+    "volumesFrom": []
   },
   {
     "name": "anycable_go",
