@@ -18,8 +18,29 @@ resource "aws_iam_user_policy" "ecs" {
             "ecs:DescribeTaskDefinition"
         ],
         "Resource": ["*"]
-    }
-  ]
+      },
+      {
+          "Sid": "GithubDeployECSServicesPolicy",
+          "Effect": "Allow",
+          "Action": [
+              "ecs:DescribeServices",
+              "ecs:UpdateService"
+          ],
+          "Resource": ["*"]
+      },
+      {
+          "Action": "iam:PassRole",
+          "Effect": "Allow",
+          "Resource": [
+              "*"
+          ],
+          "Condition": {
+              "StringLike": {
+                  "iam:PassedToService": "ecs-tasks.amazonaws.com"
+              }
+          }
+      }
+    ]
 }
 EOF
 }
