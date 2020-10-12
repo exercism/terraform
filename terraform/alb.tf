@@ -22,6 +22,13 @@ resource "aws_alb_target_group" "webservers_http" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
+
+  health_check {
+    # TODO: These are awful values for production
+    # but work well for development.
+    unhealthy_threshold = 10
+    interval            = 300
+  }
 }
 
 # Redirect all traffic from the ALB to the target group
@@ -45,6 +52,11 @@ resource "aws_alb_target_group" "webservers_websockets" {
   target_type = "ip"
   health_check {
     path = "/health"
+
+    # TODO: These are awful values for production
+    # but work well for development.
+    unhealthy_threshold = 10
+    interval            = 300
   }
 }
 
