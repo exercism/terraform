@@ -2,8 +2,8 @@
 # relevant public subnets
 resource "aws_alb" "webservers" {
   name            = "webservers-ecs"
-  subnets         = aws_subnet.publics.*.id
-  security_groups = ["${aws_security_group.alb.id}"]
+  subnets         = var.aws_subnet_publics.*.id
+  security_groups = ["${aws_security_group.webservers_alb.id}"]
 
   #access_logs {
   #  bucket  = aws_s3_bucket.ops_bucket.bucket
@@ -18,9 +18,9 @@ resource "aws_alb" "webservers" {
 # Create a target group for the http webservers
 resource "aws_alb_target_group" "webservers_http" {
   name        = "webservers-ecs-http"
-  port        = var.webservers_http_port
+  port        = var.http_port
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
 
   health_check {
@@ -34,7 +34,7 @@ resource "aws_alb_target_group" "webservers_http" {
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "webservers_http" {
   load_balancer_arn = aws_alb.webservers.id
-  port              = var.webservers_http_port
+  port              = var.http_port
   protocol          = "HTTP"
 
   default_action {
@@ -46,9 +46,9 @@ resource "aws_alb_listener" "webservers_http" {
 # Create a target group for the websockets
 resource "aws_alb_target_group" "webservers_websockets" {
   name        = "webservers-ecs-websockets"
-  port        = var.webservers_websockets_port
+  port        = var.websockets_port
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
   health_check {
     path = "/health"
@@ -63,7 +63,7 @@ resource "aws_alb_target_group" "webservers_websockets" {
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "webservers_websockets" {
   load_balancer_arn = aws_alb.webservers.id
-  port              = var.webservers_websockets_port
+  port              = var.websockets_port
   protocol          = "HTTP"
 
   default_action {

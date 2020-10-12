@@ -1,7 +1,7 @@
 resource "aws_security_group" "rds" {
   name        = "v3 RDS"
   description = "Security Group for V3 RDS"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
   tags = {
     Name = "v3 RDS"
   }
@@ -20,5 +20,5 @@ resource "aws_security_group" "rds" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  depends_on = [ aws_security_group.ecs_webservers ]
+  depends_on = [aws_security_group.ecs_webservers]
 }

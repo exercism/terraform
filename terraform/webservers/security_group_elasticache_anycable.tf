@@ -1,7 +1,7 @@
 resource "aws_security_group" "elasticache_anycable" {
   name        = "elasticache anycable"
   description = "Security Group for Elasticache AnyCable"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
 
   tags = {
     Name = "elasticache-anycable"
@@ -21,6 +21,6 @@ resource "aws_security_group" "elasticache_anycable" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  depends_on = [ aws_security_group.ecs_webservers ]
+  depends_on = [aws_security_group.ecs_webservers]
 }
 

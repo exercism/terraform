@@ -1,6 +1,6 @@
 resource "aws_elasticache_subnet_group" "anycable" {
   name       = "tf-test-cache-subnet"
-  subnet_ids = aws_subnet.publics.*.id
+  subnet_ids = var.aws_subnet_publics.*.id
 }
 
 resource "aws_elasticache_cluster" "anycable" {
@@ -11,7 +11,7 @@ resource "aws_elasticache_cluster" "anycable" {
   parameter_group_name = "default.redis3.2"
   engine_version       = "3.2.10"
   port                 = 6379
-  availability_zone    = local.az_names[0]
+  availability_zone    = data.aws_availability_zones.available.names[0]
   subnet_group_name    = aws_elasticache_subnet_group.anycable.name
   security_group_ids   = [aws_security_group.elasticache_anycable.id]
 }

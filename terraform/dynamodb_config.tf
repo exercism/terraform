@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "webservers_alb_dns_name" {
   item = <<ITEM
 {
   "id": {"S": "webservers_alb_dns_name"},
-  "value": {"S": "${aws_alb.webservers.dns_name}"}
+  "value": {"S": "${module.webservers.alb_hostname}"}
 }
 ITEM
 }
@@ -29,7 +29,7 @@ resource "aws_dynamodb_table_item" "anycable_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "anycable_redis_url"},
-  "value": {"S": "${local.anycable_redis_url}"}
+  "value": {"S": "${module.webservers.anycable_redis_url}"}
 }
 ITEM
 }
@@ -54,7 +54,7 @@ resource "aws_dynamodb_table_item" "mysql_master_endpoint" {
   item = <<ITEM
 {
   "id": {"S": "mysql_master_endpoint"},
-  "value": {"S": "${aws_rds_cluster.main.endpoint}"}
+  "value": {"S": "${module.webservers.rds_cluster_master_endpoint}"}
 }
 ITEM
 }
@@ -66,7 +66,7 @@ resource "aws_dynamodb_table_item" "mysql_reader_endpoint" {
   item = <<ITEM
 {
   "id": {"S": "mysql_reader_endpoint"},
-  "value": {"S": "${aws_rds_cluster.main.reader_endpoint}"}
+  "value": {"S": "${module.webservers.rds_cluster_reader_endpoint}"}
 }
 ITEM
 }

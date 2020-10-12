@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "main" {
   name       = "v3-rds"
-  subnet_ids = aws_subnet.publics.*.id
+  subnet_ids = var.aws_subnet_publics.*.id
   tags = {
     Name = "v3"
   }

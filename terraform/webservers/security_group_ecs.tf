@@ -1,20 +1,20 @@
 resource "aws_security_group" "ecs_webservers" {
   name        = "ecs_webservers"
   description = "allow inbound access from the ALB only"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
 
   ingress {
     protocol        = "tcp"
-    from_port       = var.webservers_http_port
-    to_port         = var.webservers_http_port
-    security_groups = [aws_security_group.alb.id]
+    from_port       = var.http_port
+    to_port         = var.http_port
+    security_groups = [aws_security_group.webservers_alb.id]
   }
 
   ingress {
     protocol        = "tcp"
-    from_port       = var.webservers_websockets_port
-    to_port         = var.webservers_websockets_port
-    security_groups = [aws_security_group.alb.id]
+    from_port       = var.websockets_port
+    to_port         = var.websockets_port
+    security_groups = [aws_security_group.webservers_alb.id]
   }
 
   egress {

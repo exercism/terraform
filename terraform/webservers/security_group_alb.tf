@@ -1,19 +1,19 @@
 resource "aws_security_group" "webservers_alb" {
   name        = "webservers_alb"
   description = "controls access to the ALB"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.aws_vpc_main.id
 
   ingress {
     protocol    = "tcp"
-    from_port   = var.webservers_http_port
-    to_port     = var.webservers_http_port
+    from_port   = var.http_port
+    to_port     = var.http_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     protocol    = "tcp"
-    from_port   = var.webservers_websockets_port
-    to_port     = var.webservers_websockets_port
+    from_port   = var.websockets_port
+    to_port     = var.websockets_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 
