@@ -1,5 +1,5 @@
-resource "aws_security_group" "alb" {
-  name        = "v3 alb"
+resource "aws_security_group" "webservers_alb" {
+  name        = "webservers_alb"
   description = "controls access to the ALB"
   vpc_id      = aws_vpc.main.id
 
