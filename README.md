@@ -12,6 +12,12 @@ brew install terraform
 
 ## AWS Setup
 
+### Create a deploy user
+
+- Create an IAM user called `github-deploy`
+- Give them no permissions (these will be set by terraform)
+- Set programatic access and save the keys for later.
+
 ### Create state bucket
 
 Terraform state is stored in s3.
@@ -38,6 +44,8 @@ Create a policy called `terraform-s3-state` with the following JSON:
 }
 ```
 
+### Create a terraform user
+
 
 Create a policy called `terraform-iam` with the following JSON:
 ```
@@ -45,28 +53,37 @@ Create a policy called `terraform-iam` with the following JSON:
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "Stmt1469200763880",
-            "Action": [
-                "iam:AttachRolePolicy",
-                "iam:CreateRole",
-                "iam:GetRole",
-                "iam:ListInstanceProfilesForRole",
-                "iam:DeleteRole",
-                "iam:PutRolePolicy",
-                "iam:DeleteRolePolicy",
-                "iam:PassRole",
-                "iam:ListAttachedRolePolicies",
-                "iam:UpdateAssumeRolePolicy",
-                "iam:DetachRolePolicy",
-                "iam:GetServiceLinkedRoleDeletionStatus",
-                "iam:CreatePolicy",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
-                "iam:ListPolicyVersions",
-                "iam:DeletePolicy"
-            ],
+            "Sid": "VisualEditor0",
             "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:UpdateAssumeRolePolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetPolicy",
+                "iam:DeletePolicy",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:CreatePolicy",
+                "iam:ListInstanceProfilesForRole",
+                "iam:GetServiceLinkedRoleDeletionStatus",
+                "iam:PassRole",
+                "iam:DetachRolePolicy",
+                "iam:ListPolicyVersions",
+                "iam:ListAttachedRolePolicies",
+                "iam:DeleteRolePolicy"
+            ],
             "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUserPolicy",
+                "iam:PutUserPolicy"
+            ],
+            "Resource": "arn:aws:iam::*:user/github-deploy"
         }
     ]
 }
@@ -74,12 +91,6 @@ Create a policy called `terraform-iam` with the following JSON:
 
 - Create a terraform IAM user.
 - Give them PowerUser privileges and the above policies.
-- Set programatic access and save the keys for later.
-
-### Create a deploy user
-
-- Create an IAM user called `github-deploy`
-- Give them no permissions (these will be set by terraform)
 - Set programatic access and save the keys for later.
 
 ## Setup

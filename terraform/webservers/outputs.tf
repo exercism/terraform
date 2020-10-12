@@ -13,3 +13,15 @@ output "rds_cluster_master_endpoint" {
 output "rds_cluster_reader_endpoint" {
   value = aws_rds_cluster.main.reader_endpoint
 }
+
+output "ecr_repository_name_rails" {
+  value = aws_ecr_repository.rails.name
+}
+
+output "ecr_repository_name_nginx" {
+  value = aws_ecr_repository.nginx.name
+}
+
+output "ecr_repository_name_anycable_go" {
+  value = aws_ecr_repository.anycable_go.name
+}
