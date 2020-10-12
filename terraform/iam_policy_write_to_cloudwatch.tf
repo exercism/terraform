@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "write_to_cloudwatch" {
-  name        = "write_to_cloudwatch"
+  name        = "write-to-cloudwatch"
   path        = "/"
   description = "Write to CloudWatch"
   policy      = <<EOF

@@ -1,9 +1,9 @@
 # Start by creating the ALB that attaches to the 
 # relevant public subnets
 resource "aws_alb" "webservers" {
-  name            = "webservers-ecs"
+  name            = "webservers"
   subnets         = var.aws_subnet_publics.*.id
-  security_groups = ["${aws_security_group.webservers_alb.id}"]
+  security_groups = [aws_security_group.alb.id]
 
   #access_logs {
   #  bucket  = aws_s3_bucket.ops_bucket.bucket
@@ -16,8 +16,8 @@ resource "aws_alb" "webservers" {
 }
 
 # Create a target group for the http webservers
-resource "aws_alb_target_group" "webservers_http" {
-  name        = "webservers-ecs-http"
+resource "aws_alb_target_group" "http" {
+  name        = "webservers-http"
   port        = var.http_port
   protocol    = "HTTP"
   vpc_id      = var.aws_vpc_main.id
@@ -32,20 +32,20 @@ resource "aws_alb_target_group" "webservers_http" {
 }
 
 # Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "webservers_http" {
+resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_alb.webservers.id
   port              = var.http_port
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.webservers_http.id
+    target_group_arn = aws_alb_target_group.http.id
     type             = "forward"
   }
 }
 
 # Create a target group for the websockets
-resource "aws_alb_target_group" "webservers_websockets" {
-  name        = "webservers-ecs-websockets"
+resource "aws_alb_target_group" "websockets" {
+  name        = "webservers-websockets"
   port        = var.websockets_port
   protocol    = "HTTP"
   vpc_id      = var.aws_vpc_main.id
@@ -61,13 +61,13 @@ resource "aws_alb_target_group" "webservers_websockets" {
 }
 
 # Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "webservers_websockets" {
+resource "aws_alb_listener" "websockets" {
   load_balancer_arn = aws_alb.webservers.id
   port              = var.websockets_port
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.webservers_websockets.id
+    target_group_arn = aws_alb_target_group.websockets.id
     type             = "forward"
   }
 }

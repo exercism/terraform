@@ -1,6 +1,5 @@
 # Terraform scripts for Exercism
 
-
 ## Install
 
 Terraform is available via `brew` on Mac OS:
@@ -19,7 +18,6 @@ Terraform state is stored in s3.
 
 Create a bucket with Bucket Versioning enabled.
 The default bucket is currently `exercism-staging-terraform` - update `terraform/terraform.tf` if you want to change this.
-
 
 Create a policy called `terraform-s3-state` with the following JSON:
 ```
@@ -74,10 +72,15 @@ Create a policy called `terraform-iam` with the following JSON:
 }
 ```
 
-Create a terraform IAM user.
-Give them PowerUser privileges and the above policies.
-Set programatic access and save the keys for later.
+- Create a terraform IAM user.
+- Give them PowerUser privileges and the above policies.
+- Set programatic access and save the keys for later.
 
+### Create a deploy user
+
+- Create an IAM user called `github-deploy`
+- Give them no permissions (these will be set by terraform)
+- Set programatic access and save the keys for later.
 
 ## Setup
 

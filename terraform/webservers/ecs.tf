@@ -4,14 +4,14 @@
 # ###
 
 resource "aws_iam_role" "ecs_webserver" {
-  name               = "ecs_webserver"
+  name               = "webserver-ecs"
   assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
 }
-resource "aws_iam_role_policy_attachment" "webservers_write_to_cloudwatch" {
+resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
   role       = aws_iam_role.ecs_webserver.name
   policy_arn = var.aws_iam_policy_write_to_cloudwatch.arn
 }
-resource "aws_iam_role_policy_attachment" "webservers_access_dynamodb" {
+resource "aws_iam_role_policy_attachment" "access_dynamodb" {
   role       = aws_iam_role.ecs_webserver.name
   policy_arn = var.aws_iam_policy_access_dynamodb.arn
 }
@@ -23,12 +23,12 @@ resource "aws_ecs_cluster" "webservers" {
   name = "webservers"
 }
 data "template_file" "webservers" {
-  template = file("./templates/ecs_webservers.json.tpl")
+  template = file("./webservers/ecs_task_definition.json.tpl")
 
   vars = {
-    nginx_image        = "${aws_ecr_repository.webserver_nginx.repository_url}:latest"
-    rails_image        = "${aws_ecr_repository.webserver_rails.repository_url}:latest"
-    anycable_go_image  = "${aws_ecr_repository.webserver_anycable_go.repository_url}:latest"
+    nginx_image        = "${aws_ecr_repository.nginx.repository_url}:latest"
+    rails_image        = "${aws_ecr_repository.rails.repository_url}:latest"
+    anycable_go_image  = "${aws_ecr_repository.anycable_go.repository_url}:latest"
     anycable_redis_url = local.anycable_redis_url
     http_port          = var.http_port
     websockets_port    = var.websockets_port
@@ -55,27 +55,27 @@ resource "aws_ecs_service" "webservers" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs_webservers.id]
+    security_groups  = [aws_security_group.ecs.id]
     subnets          = var.aws_subnet_publics.*.id
     assign_public_ip = true
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.webservers_http.id
+    target_group_arn = aws_alb_target_group.http.id
     container_name   = "nginx"
     container_port   = var.http_port
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.webservers_websockets.id
+    target_group_arn = aws_alb_target_group.websockets.id
     container_name   = "anycable_go"
     container_port   = var.websockets_port
   }
 
   depends_on = [
-    aws_alb_listener.webservers_http,
-    aws_alb_listener.webservers_websockets,
+    aws_alb_listener.http,
+    aws_alb_listener.websockets,
     var.aws_iam_role_policy_attachment_ecs_task_execution_role,
-    aws_security_group.ecs_webservers
+    aws_security_group.ecs
   ]
 }

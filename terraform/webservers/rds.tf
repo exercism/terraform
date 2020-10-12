@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "v3-rds"
+  name       = "webservers"
   subnet_ids = var.aws_subnet_publics.*.id
   tags = {
     Name = "v3"
@@ -7,7 +7,7 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_rds_cluster_parameter_group" "main" {
-  name   = "v3-rds"
+  name   = "webservers"
   family = "aurora-mysql5.7"
 
   parameter {
@@ -38,7 +38,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier              = "v3"
+  cluster_identifier              = "webservers"
   engine                          = "aurora-mysql"
   engine_version                  = "5.7.mysql_aurora.2.08.1"
   database_name                   = "exercism_v3"
@@ -55,7 +55,7 @@ resource "aws_rds_cluster" "main" {
     "slowquery",
   ]
   tags = {
-    Name = "v3"
+    Name = "webservers"
   }
 
   # Ignore changes to final_snapshot_identifier, which are caused by the

@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "assume_ecs_role" {
   }
 }
 resource "aws_iam_role" "ecs_task_execution" {
-  name               = "ecs_task_execution"
+  name               = "ecs-task-execution"
   assume_role_policy = data.aws_iam_policy_document.assume_ecs_role.json
 }
 resource "aws_iam_role_policy_attachment" "ecs_task_execution" {

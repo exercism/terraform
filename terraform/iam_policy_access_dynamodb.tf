@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "access_dynamodb" {
-  name        = "access_dynamodb"
+  name        = "access-dynamodb"
   path        = "/"
   description = "Assess Dyanmodb"
   policy      = <<EOF

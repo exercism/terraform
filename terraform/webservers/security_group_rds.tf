@@ -1,6 +1,6 @@
 resource "aws_security_group" "rds" {
-  name        = "v3 RDS"
-  description = "Security Group for V3 RDS"
+  name        = "webservers-rds"
+  description = "Security Group for Webservers RDS"
   vpc_id      = var.aws_vpc_main.id
   tags = {
     Name = "v3 RDS"
@@ -10,7 +10,7 @@ resource "aws_security_group" "rds" {
     protocol        = "tcp"
     from_port       = 3306
     to_port         = 3306
-    security_groups = [aws_security_group.ecs_webservers.id]
+    security_groups = [aws_security_group.ecs.id]
   }
 
   egress {
@@ -20,5 +20,7 @@ resource "aws_security_group" "rds" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  depends_on = [aws_security_group.ecs_webservers]
+  lifecycle {
+    create_before_destroy = true
+  }
 }

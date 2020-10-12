@@ -1,10 +1,10 @@
 resource "aws_elasticache_subnet_group" "anycable" {
-  name       = "tf-test-cache-subnet"
+  name       = "webservers-anycable"
   subnet_ids = var.aws_subnet_publics.*.id
 }
 
 resource "aws_elasticache_cluster" "anycable" {
-  cluster_id           = "anycable"
+  cluster_id           = "webservers-anycable"
   engine               = "redis"
   node_type            = "cache.t3.micro"
   num_cache_nodes      = 1
