@@ -13,7 +13,7 @@ resource "aws_ecr_repository" "anycable_go" {
 }
 
 resource "aws_ecr_repository" "nginx" {
-  name         = "webserver-nginx"
+  name                 = "webserver-nginx"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration { scan_on_push = false }

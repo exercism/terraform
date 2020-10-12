@@ -24,7 +24,7 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
 
-locals { 
+locals {
   anycable_redis_url = "redis://${aws_elasticache_cluster.anycable.cache_nodes.0.address}:6379/1"
-  aws_account_id = data.aws_caller_identity.current.account_id
+  aws_account_id     = data.aws_caller_identity.current.account_id
 }

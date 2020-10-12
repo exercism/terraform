@@ -2,7 +2,7 @@ resource "aws_iam_user_policy" "ecr" {
   name = "github-deploy-ecr"
   user = local.username
 
-  policy      = <<EOF
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [

@@ -61,8 +61,8 @@ module "github_deploy" {
   region = var.region
 
   aws_ecr_repository_name_tooling_orchestrator_application = module.tooling_orchestrator.ecr_repository_name_application
-  aws_ecr_repository_name_tooling_orchestrator_nginx = module.tooling_orchestrator.ecr_repository_name_nginx
-  aws_ecr_repository_name_webserver_rails = module.webservers.ecr_repository_name_rails
-  aws_ecr_repository_name_webserver_nginx = module.webservers.ecr_repository_name_nginx
-  aws_ecr_repository_name_webserver_anycable_go = module.webservers.ecr_repository_name_anycable_go
+  aws_ecr_repository_name_tooling_orchestrator_nginx       = module.tooling_orchestrator.ecr_repository_name_nginx
+  aws_ecr_repository_name_webserver_rails                  = module.webservers.ecr_repository_name_rails
+  aws_ecr_repository_name_webserver_nginx                  = module.webservers.ecr_repository_name_nginx
+  aws_ecr_repository_name_webserver_anycable_go            = module.webservers.ecr_repository_name_anycable_go
 }

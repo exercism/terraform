@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "nginx" {
-  name         = "tooling-orchestrator-nginx"
+  name                 = "tooling-orchestrator-nginx"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration { scan_on_push = false }

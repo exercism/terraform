@@ -56,7 +56,7 @@ POLICY
   }
 
   depends_on = [
-    aws_iam_service_linked_role.elasticsearch, 
+    aws_iam_service_linked_role.elasticsearch,
     aws_cognito_user_pool_domain.logs
   ]
 }

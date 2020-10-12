@@ -11,7 +11,7 @@ variable "aws_ecr_repository_name_webserver_anycable_go" {}
 
 data "aws_caller_identity" "current" {}
 
-locals { 
+locals {
   aws_account_id = data.aws_caller_identity.current.account_id
-  username = "github-deploy"
+  username       = "github-deploy"
 }

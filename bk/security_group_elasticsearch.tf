@@ -6,7 +6,7 @@ resource "aws_security_group" "elasticsearch_logs" {
   tags = {
     Name = "elasticsearch-logs"
   }
-  
+
   ingress {
     from_port = 443
     to_port   = 443
