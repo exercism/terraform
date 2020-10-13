@@ -8,6 +8,7 @@ variable "aws_ecr_repository_name_tooling_orchestrator_nginx" {}
 variable "aws_ecr_repository_name_webserver_rails" {}
 variable "aws_ecr_repository_name_webserver_nginx" {}
 variable "aws_ecr_repository_name_webserver_anycable_go" {}
+variable "aws_s3_bucket_name_webservers_assets" {}
 
 data "aws_caller_identity" "current" {}
 

@@ -25,3 +25,7 @@ output "ecr_repository_name_nginx" {
 output "ecr_repository_name_anycable_go" {
   value = aws_ecr_repository.anycable_go.name
 }
+
+output "s3_bucket_name_assets" {
+  value = aws_s3_bucket.assets.bucket
+}
