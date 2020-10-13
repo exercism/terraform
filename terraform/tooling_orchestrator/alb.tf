@@ -27,7 +27,7 @@ resource "aws_alb_target_group" "http" {
     # TODO: These are awful values for production
     # but work well for development.
     unhealthy_threshold = 10
-    interval            = 300
+    interval            = 10
   }
 }
 

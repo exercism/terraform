@@ -3,12 +3,16 @@
 # to any services required.
 # ###
 
-resource "aws_iam_role" "ecs_tooling_orchestrator" {
-  name               = "tooling-orchestrator"
+resource "aws_iam_role" "ecs" {
+  name               = "tooling-orchestrator-ecs"
   assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
 }
-resource "aws_iam_role_policy_attachment" "ecs_tooling_orchestrator_access_dynamodb" {
-  role       = aws_iam_role.ecs_tooling_orchestrator.name
+resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = var.aws_iam_policy_write_to_cloudwatch.arn
+}
+resource "aws_iam_role_policy_attachment" "access_dynamodb" {
+  role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_access_dynamodb.arn
 }
 
@@ -38,7 +42,7 @@ resource "aws_ecs_task_definition" "tooling_orchestrators" {
   memory                   = var.container_memory
   container_definitions    = data.template_file.tooling_orchestrators.rendered
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
-  task_role_arn            = aws_iam_role.ecs_tooling_orchestrator.arn
+  task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
 }
 resource "aws_ecs_service" "tooling_orchestrators" {
