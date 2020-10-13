@@ -17,14 +17,18 @@ resource "aws_security_group" "ecs" {
     security_groups = [aws_security_group.alb.id]
   }
 
+  # TODO - Change this to just have access to what it
+  # needs - which I think is ECR. It shouldn't need to 
+  # be pinging out to the internet.
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   lifecycle {
     create_before_destroy = true
   }
 
-  #   egress {
-  #     from_port   = 0
-  #     to_port     = 0
-  #     protocol    = "-1"
-  #     cidr_blocks = ["0.0.0.0/0"]
-  #   }
 }

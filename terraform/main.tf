@@ -20,7 +20,6 @@ module "webservers" {
   aws_iam_policy_access_dynamodb                         = aws_iam_policy.access_dynamodb
   aws_iam_policy_write_to_cloudwatch                     = aws_iam_policy.write_to_cloudwatch
   aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
-  aws_iam_role_policy_attachment_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -43,7 +42,6 @@ module "tooling_orchestrator" {
   aws_iam_policy_access_dynamodb                         = aws_iam_policy.access_dynamodb
   aws_iam_policy_write_to_cloudwatch                     = aws_iam_policy.write_to_cloudwatch
   aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
-  aws_iam_role_policy_attachment_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

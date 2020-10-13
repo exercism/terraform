@@ -7,10 +7,6 @@ resource "aws_iam_role" "ecs_tooling_orchestrator" {
   name               = "tooling-orchestrator"
   assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
 }
-resource "aws_iam_role_policy_attachment" "ecs_tooling_orchestrator_write_to_cloudwatch" {
-  role       = aws_iam_role.ecs_tooling_orchestrator.name
-  policy_arn = var.aws_iam_policy_write_to_cloudwatch.arn
-}
 resource "aws_iam_role_policy_attachment" "ecs_tooling_orchestrator_access_dynamodb" {
   role       = aws_iam_role.ecs_tooling_orchestrator.name
   policy_arn = var.aws_iam_policy_access_dynamodb.arn
@@ -65,8 +61,6 @@ resource "aws_ecs_service" "tooling_orchestrators" {
   }
 
   depends_on = [
-    aws_alb_listener.http,
-    var.aws_iam_role_policy_attachment_ecs_task_execution_role,
-    aws_security_group.ecs
+    aws_alb_listener.http
   ]
 }

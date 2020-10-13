@@ -7,11 +7,11 @@ resource "aws_iam_role" "ecs_webserver" {
   name               = "webserver-ecs"
   assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
 }
-resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
+resource "aws_iam_role_policy_attachment" "webservers_write_to_cloudwatch" {
   role       = aws_iam_role.ecs_webserver.name
   policy_arn = var.aws_iam_policy_write_to_cloudwatch.arn
 }
-resource "aws_iam_role_policy_attachment" "access_dynamodb" {
+resource "aws_iam_role_policy_attachment" "webservers_access_dynamodb" {
   role       = aws_iam_role.ecs_webserver.name
   policy_arn = var.aws_iam_policy_access_dynamodb.arn
 }
@@ -75,7 +75,5 @@ resource "aws_ecs_service" "webservers" {
   depends_on = [
     aws_alb_listener.http,
     aws_alb_listener.websockets,
-    var.aws_iam_role_policy_attachment_ecs_task_execution_role,
-    aws_security_group.ecs
   ]
 }
