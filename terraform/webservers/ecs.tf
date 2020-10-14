@@ -5,7 +5,7 @@
 
 resource "aws_iam_role" "ecs" {
   name               = "webserver-ecs"
-  assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
+  assume_role_policy = var.aws_iam_policy_document_assume_role_ecs.json
 }
 resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
   role       = aws_iam_role.ecs.name
