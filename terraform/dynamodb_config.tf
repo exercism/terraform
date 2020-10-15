@@ -107,3 +107,15 @@ resource "aws_dynamodb_table_item" "aws_iterations_bucket" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "tooling_orchestrator_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "tooling_orchestrator_url"},
+  "value": {"S": "${module.tooling_orchestrator.alb_hostname}"}
+}
+ITEM
+}
+

@@ -1,3 +1,4 @@
+# TODO - Remove this and move it into webservers
 resource "aws_iam_policy" "access_dynamodb" {
   name        = "access-dynamodb"
   path        = "/"
