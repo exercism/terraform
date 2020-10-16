@@ -22,7 +22,8 @@ resource "aws_iam_policy" "ecr" {
             ],
             "Resource": [
               "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ruby-test-runner",
-              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/csharp-test-runner"
+              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/csharp-test-runner",
+              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/elixir-test-runner"
             ]
         }, {
             "Effect": "Allow",
