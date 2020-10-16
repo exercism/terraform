@@ -14,10 +14,7 @@ resource "aws_iam_policy" "read_s3_bucket_submissions" {
     {
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject",
-        "s3:PutObjectAcl",
-        "s3:GetObject",
-        "s3:DeleteObject"
+        "s3:GetObject"
       ],
       "Resource": ["${aws_s3_bucket.submissions.arn}/*"]
     }

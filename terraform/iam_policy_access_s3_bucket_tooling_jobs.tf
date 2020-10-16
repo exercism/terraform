@@ -1,3 +1,4 @@
+# Note: This policy does not have the ability to delete objects
 resource "aws_iam_policy" "access_s3_bucket_tooling_jobs" {
   name        = "access-s3-bucket-tooling-jobs"
   path        = "/"

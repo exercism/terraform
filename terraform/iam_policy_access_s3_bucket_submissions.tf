@@ -1,3 +1,4 @@
+# Note: This policy does not have the ability to delete objects
 resource "aws_iam_policy" "access_s3_bucket_submissions" {
   name        = "access-s3-bucket-submissions"
   path        = "/"
