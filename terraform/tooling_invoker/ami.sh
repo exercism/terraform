@@ -132,6 +132,26 @@ popd
 
 ln -s $CONTAINER_DIR /opt/containers/csharp-test-runner/current
 
+##########################################
+# TEMPORARY: Download Elixir Test Runner #
+##########################################
+
+CONTAINER_DIR="/opt/containers/elixir-test-runner/releases/latest"
+echo $CONTAINER_DIR
+mkdir -p $CONTAINER_DIR
+
+pushd $CONTAINER_DIR
+  /opt/container_tools/img logout
+
+  aws ecr get-login-password --region eu-west-2 | /opt/container_tools/img login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
+
+  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/elixir-test-runner:latest
+  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/elixir-test-runner:latest
+  chmod -R a-w rootfs
+  chmod -R go-rwx rootfs
+popd
+
+ln -s $CONTAINER_DIR /opt/containers/elixir-test-runner/current
 
 #############################
 # TEMPORARY: Run the worker #
