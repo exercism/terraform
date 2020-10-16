@@ -89,25 +89,49 @@ sudo chown worker:exercism /opt/jobs/
 ##############################
 sudo mkdir /opt/containers/
 sudo chown worker:exercism /opt/containers/
-CONTAINER_DIR="/opt/containers/ruby-test-runner/releases/8913b2edc9665b8c764fea37423009164bb841d5"
-echo $CONTAINER_DIR
-mkdir -p $CONTAINER_DIR
 
 ########################################
 # TEMPORARY: Download Ruby Test Runner #
 ########################################
+
+CONTAINER_DIR="/opt/containers/ruby-test-runner/releases/latest"
+echo $CONTAINER_DIR
+mkdir -p $CONTAINER_DIR
+
 pushd $CONTAINER_DIR
   /opt/container_tools/img logout
 
   aws ecr get-login-password --region eu-west-2 | /opt/container_tools/img login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
 
-  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:8913b2edc9665b8c764fea37423009164bb841d5
-  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:8913b2edc9665b8c764fea37423009164bb841d5
+  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
+  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
   chmod -R a-w rootfs
   chmod -R go-rwx rootfs
 popd
 
 ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
+
+########################################
+# TEMPORARY: Download C# Test Runner #
+########################################
+
+CONTAINER_DIR="/opt/containers/csharp-test-runner/releases/latest"
+echo $CONTAINER_DIR
+mkdir -p $CONTAINER_DIR
+
+pushd $CONTAINER_DIR
+  /opt/container_tools/img logout
+
+  aws ecr get-login-password --region eu-west-2 | /opt/container_tools/img login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
+
+  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/csharp-test-runner:latest
+  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/csharp-test-runner:latest
+  chmod -R a-w rootfs
+  chmod -R go-rwx rootfs
+popd
+
+ln -s $CONTAINER_DIR /opt/containers/csharp-test-runner/current
+
 
 #############################
 # TEMPORARY: Run the worker #
