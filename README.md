@@ -146,7 +146,6 @@ To see what will be run, use `plan`:
 AWS_PROFILE=exercism_terraform terraform plan -var-file=variables/pre-production.tfvars
 ```
 
-
 ## Running for Real
 
 To run things for real, and actually make changes to infrastructure:
@@ -168,6 +167,14 @@ Terraform provides a tool to format manifests:
 ```
 terraform fmt
 ```
+
+## Adding new tooling
+
+- Add a block to `tooling/ecr.tf`
+- Add a line to `tooling/iam_ecr.tf`
+- Add a line to `tooling_invoker/iam_policy_ecr.tf`
+
+Currently the ami.sh also needs updating
 
 ## More Documentation
 
