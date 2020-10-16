@@ -26,6 +26,10 @@ resource "aws_iam_role_policy_attachment" "dynamodb_config" {
   role       = aws_iam_role.ec2.name
   policy_arn = var.aws_iam_policy_read_dynamodb_config_arn
 }
+resource "aws_iam_role_policy_attachment" "read_s3_bucket_submissions" {
+  role       = aws_iam_role.ec2.name
+  policy_arn = var.aws_iam_policy_read_s3_bucket_submissions.arn
+}
 
 
 # There are some eventual consistency issues with this.

@@ -16,10 +16,13 @@ module "webservers" {
 
   region = var.region
 
-  aws_iam_policy_document_assume_role_ecs = data.aws_iam_policy_document.assume_role_ecs
-  aws_iam_policy_access_dynamodb          = aws_iam_policy.access_dynamodb
-  aws_iam_policy_write_to_cloudwatch      = aws_iam_policy.write_to_cloudwatch
-  aws_iam_role_ecs_task_execution         = aws_iam_role.ecs_task_execution
+  aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
+  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
+  aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
+  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -37,11 +40,13 @@ module "tooling_orchestrator" {
 
   region = var.region
 
-  aws_account_id                          = data.aws_caller_identity.current.account_id
-  aws_iam_policy_document_assume_role_ecs = data.aws_iam_policy_document.assume_role_ecs
-  aws_iam_policy_access_dynamodb          = aws_iam_policy.access_dynamodb
-  aws_iam_policy_write_to_cloudwatch      = aws_iam_policy.write_to_cloudwatch
-  aws_iam_role_ecs_task_execution         = aws_iam_role.ecs_task_execution
+  aws_account_id                               = data.aws_caller_identity.current.account_id
+  aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
+  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
+  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -59,10 +64,11 @@ module "tooling_invoker" {
   region = var.region
 
   # aws_account_id                                         = data.aws_caller_identity.current.account_id
-  # aws_iam_policy_access_dynamodb                         = aws_iam_policy.access_dynamodb
+  # aws_iam_policy_read_dynamodb_config                         = aws_iam_policy.read_dynamodb_config
   # aws_iam_policy_write_to_cloudwatch                     = aws_iam_policy.write_to_cloudwatch
   # aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
-  aws_iam_policy_read_dynamodb_config_arn = aws_iam_policy.read_dynamodb_config.arn
+  aws_iam_policy_read_dynamodb_config_arn   = aws_iam_policy.read_dynamodb_config.arn
+  aws_iam_policy_read_s3_bucket_submissions = aws_iam_policy.read_s3_bucket_submissions
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

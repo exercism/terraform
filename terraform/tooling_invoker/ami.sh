@@ -51,22 +51,38 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 sudo ./aws/install
 
-###########################
-# Install container tools #
-###########################
+#############################
+# Setup container tools dir #
+#############################
 sudo mkdir /opt/container_tools
 sudo chown worker:exercism /opt/container_tools
-wget https://exercism-ops.s3-eu-west-1.amazonaws.com/binaries/runc -O  /opt/container_tools/runc
-chmod 755 /opt/container_tools/runc
-
-wget https://exercism-ops.s3-eu-west-1.amazonaws.com/binaries/img -O  /opt/container_tools/img
-chmod 755 /opt/container_tools/img
-
-# TODO: Check the tools are owned by the correct 
-# user/group and think about permissions
 
 sed -i '1s/^/PATH=\/opt\/container_tools:$PATH\n/' ~/.profile
 source ~/.profile
+
+########################
+# Install worker tools #
+########################
+
+# TODO: Check the tools are owned by the correct 
+# user/group and think about permissions
+wget https://exercism-ops.s3-eu-west-1.amazonaws.com/binaries/runc -O  /opt/container_tools/runc
+chmod 755 /opt/container_tools/runc
+
+#####################
+# Install img tools #
+#####################
+
+# TODO: Check the tools are owned by the correct 
+# user/group and think about permissions
+wget https://exercism-ops.s3-eu-west-1.amazonaws.com/binaries/img -O  /opt/container_tools/img
+chmod 755 /opt/container_tools/img
+
+########################
+# Setup Jobs Directory #
+########################
+sudo mkdir /opt/jobs/
+sudo chown worker:exercism /opt/jobs/
 
 ##############################
 # Setup containers Directory #
@@ -93,3 +109,8 @@ popd
 
 ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
 
+#############################
+# TEMPORARY: Run the worker #
+#############################
+cd /opt/tooling-invoker
+EXERCISM_ENV=production bundle exec bin/worker 

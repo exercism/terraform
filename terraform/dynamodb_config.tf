@@ -22,6 +22,19 @@ resource "aws_dynamodb_table_item" "webservers_alb_dns_name" {
 ITEM
 }
 
+# TODO: Change this so it's a seperately protected thing
+resource "aws_dynamodb_table_item" "spi_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "spi_url"},
+  "value": {"S": "${module.webservers.alb_hostname}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "anycable_redis_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -29,7 +42,7 @@ resource "aws_dynamodb_table_item" "anycable_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "anycable_redis_url"},
-  "value": {"S": "${module.webservers.anycable_redis_url}"}
+  "value": {"S": "redis://${module.webservers.anycable_redis_url}"}
 }
 ITEM
 }
@@ -95,17 +108,30 @@ resource "aws_dynamodb_table_item" "dynamodb_tooling_jobs_table" {
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "aws_iterations_bucket" {
+resource "aws_dynamodb_table_item" "aws_submissions_bucket" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "aws_iterations_bucket"},
-  "value": {"S": "exercism-staging-iterations"}
+  "id": {"S": "aws_submissions_bucket"},
+  "value": {"S": "${aws_s3_bucket.submissions.bucket}"}
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "aws_tooling_jobs_bucket" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "aws_tooling_jobs_bucket"},
+  "value": {"S": "${aws_s3_bucket.tooling_jobs.bucket}"}
+}
+ITEM
+}
+
 
 resource "aws_dynamodb_table_item" "tooling_orchestrator_url" {
   table_name = aws_dynamodb_table.config.name

@@ -29,3 +29,4 @@ output "ecr_repository_name_anycable_go" {
 output "s3_bucket_name_assets" {
   value = aws_s3_bucket.assets.bucket
 }
+
