@@ -170,9 +170,9 @@ terraform fmt
 
 ## Adding new tooling
 
-- Add a block to `tooling/ecr.tf`
-- Add a line to `tooling/iam_ecr.tf`
-- Add a line to `tooling_invoker/iam_policy_ecr.tf`
+- Add a block to `terraform/tooling/ecr.tf`
+- Add a line to `terraform/tooling/iam_ecr.tf`
+- Add a line to `terraform/tooling_invoker/iam_policy_ecr.tf`
 
 Currently the ami.sh also needs updating
 
