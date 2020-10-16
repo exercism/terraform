@@ -1,20 +1,4 @@
-# ###
-# Set up an iam role that allows servers to write
-# to any services required.
-# ###
 
-resource "aws_iam_role" "ecs" {
-  name               = "webserver-ecs"
-  assume_role_policy = var.aws_iam_policy_document_assume_ecs_role.json
-}
-resource "aws_iam_role_policy_attachment" "write_to_cloudwatch" {
-  role       = aws_iam_role.ecs.name
-  policy_arn = var.aws_iam_policy_write_to_cloudwatch.arn
-}
-resource "aws_iam_role_policy_attachment" "access_dynamodb" {
-  role       = aws_iam_role.ecs.name
-  policy_arn = var.aws_iam_policy_access_dynamodb.arn
-}
 
 # ###
 # Set up the cluster

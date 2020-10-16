@@ -14,7 +14,7 @@
       "options": {
         "awslogs-group": "${log_group_name}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "webservers"
+        "awslogs-stream-prefix": "tooling-orchestrators"
       }
     },
     "cpu": 0,

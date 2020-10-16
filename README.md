@@ -14,9 +14,16 @@ brew install terraform
 
 ### Create a deploy user
 
+- Create an IAM user called `tooling-public-write-user`
+- Give them no permissions (these will be set by terraform)
+- Set programatic access and save the keys for later.
+
+### Create a ECR public-write user for tooling
+
 - Create an IAM user called `github-deploy`
 - Give them no permissions (these will be set by terraform)
 - Set programatic access and save the keys for later.
+
 
 ### Create state bucket
 
@@ -66,13 +73,20 @@ Create a policy called `terraform-iam` with the following JSON:
                 "iam:AttachRolePolicy",
                 "iam:PutRolePolicy",
                 "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
                 "iam:ListInstanceProfilesForRole",
                 "iam:GetServiceLinkedRoleDeletionStatus",
                 "iam:PassRole",
                 "iam:DetachRolePolicy",
                 "iam:ListPolicyVersions",
                 "iam:ListAttachedRolePolicies",
-                "iam:DeleteRolePolicy"
+                "iam:DeleteRolePolicy",
+                "iam:DeletePolicyVersion",
+                "iam:CreateInstanceProfile",
+                "iam:GetInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:AddRoleToInstanceProfile"
             ],
             "Resource": "*"
         },
@@ -83,7 +97,10 @@ Create a policy called `terraform-iam` with the following JSON:
                 "iam:GetUserPolicy",
                 "iam:PutUserPolicy"
             ],
-            "Resource": "arn:aws:iam::*:user/github-deploy"
+            "Resource": [ 
+              "arn:aws:iam::*:user/github-deploy",
+              "arn:aws:iam::*:user/tooling-public-write-user"
+            ]
         }
     ]
 }
