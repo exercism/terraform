@@ -108,6 +108,18 @@ resource "aws_dynamodb_table_item" "dynamodb_tooling_jobs_table" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "dynamodb_tooling_language_groups_table" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "dynamodb_tooling_language_groups_table"},
+  "value": {"S": "tooling_language_groups"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "aws_submissions_bucket" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -132,7 +144,6 @@ resource "aws_dynamodb_table_item" "aws_tooling_jobs_bucket" {
 ITEM
 }
 
-
 resource "aws_dynamodb_table_item" "tooling_orchestrator_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -144,4 +155,3 @@ resource "aws_dynamodb_table_item" "tooling_orchestrator_url" {
 }
 ITEM
 }
-

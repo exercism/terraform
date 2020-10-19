@@ -72,6 +72,7 @@ Create a policy called `terraform-iam` with the following JSON:
                 "iam:DeleteRole",
                 "iam:AttachRolePolicy",
                 "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
                 "iam:CreatePolicy",
                 "iam:CreatePolicyVersion",
                 "iam:ListInstanceProfilesForRole",

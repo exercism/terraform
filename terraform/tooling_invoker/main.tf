@@ -4,6 +4,7 @@ variable "region" {}
 # variable "aws_iam_policy_write_to_cloudwatch" {}
 # variable "aws_iam_role_ecs_task_execution" {}
 variable "aws_iam_policy_read_dynamodb_config_arn" {}
+variable "aws_iam_policy_read_dynamodb_tooling_language_groups_arn" {}
 variable "aws_iam_policy_read_s3_bucket_submissions" {}
 
 variable "aws_vpc_main" {}

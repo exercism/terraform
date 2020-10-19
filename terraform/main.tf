@@ -68,6 +68,7 @@ module "tooling_invoker" {
   # aws_iam_policy_write_to_cloudwatch                     = aws_iam_policy.write_to_cloudwatch
   # aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
   aws_iam_policy_read_dynamodb_config_arn   = aws_iam_policy.read_dynamodb_config.arn
+  aws_iam_policy_read_dynamodb_tooling_language_groups_arn   = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
   aws_iam_policy_read_s3_bucket_submissions = aws_iam_policy.read_s3_bucket_submissions
 
   aws_vpc_main       = aws_vpc.main

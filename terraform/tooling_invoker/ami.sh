@@ -30,7 +30,7 @@ tar -xzvf chruby-0.3.9.tar.gz
 pushd chruby-0.3.9/
   make install
 popd
-sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.profile
+sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.bashrc
 source /usr/local/share/chruby/chruby.sh
 chruby ruby-2.6.6
 
@@ -48,33 +48,32 @@ unzip awscliv2.zip
 #######################
 groupadd exercism
 
-useradd -m -s /bin/bash exercism_worker
+useradd -g exercism -m -s /bin/bash exercism_worker
 echo "exercism_worker    ALL=NOPASSWD: ALL" >/etc/sudoers.d/exercism_worker
 su exercism_worker
-  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.profile
-  sed -i '1s/^/PATH=\/opt\/container_tools:$PATH\n/' ~/.profile
+  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.bashrc
+  sed -i '1s/^/PATH=\/opt\/container_tools:$PATH\n/' ~/.bashrc
+  sed -i '1s/^/EXERCISM_ENV=production\n/' ~/.bashrc
   source /usr/local/share/chruby/chruby.sh
   chruby ruby-2.6.6
-  gem install bundler:2.1.4
 exit
 
 ########################
 # Add the manager user #
 ########################
-useradd -m -s /bin/bash exercism_manager
+useradd -g exercism -m -s /bin/bash exercism_manager
 echo "exercism_manager    ALL=NOPASSWD: ALL" >/etc/sudoers.d/exercism_manager
 su exercism_manager
-  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.profile
-  sed -i '1s/^/PATH=\/opt\/container_tools:$PATH\n/' ~/.profile
+  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.bashrc
+  sed -i '1s/^/PATH=\/opt\/container_tools:$PATH\n/' ~/.bashrc
   source /usr/local/share/chruby/chruby.sh
   chruby ruby-2.6.6
-  gem install bundler:2.1.4
 exit
 
 #############################
 # Setup container tools dir #
 #############################
-DIR = "/opt/container_tools"
+DIR="/opt/container_tools"
 mkdir $DIR
 chown exercism_manager:exercism $DIR
 chmod 770 $DIR
@@ -91,7 +90,7 @@ unset RUNC
 #####################
 # Install img tools #
 #####################
-FILE="/opt/container_tools/img"
+IMG="/opt/container_tools/img"
 wget https://exercism-ops.s3-eu-west-1.amazonaws.com/binaries/img -O $IMG
 chown exercism_manager:exercism $IMG
 chmod 500 $IMG
@@ -112,7 +111,7 @@ unset DIR
 DIR="/opt/containers"
 mkdir $DIR
 chown exercism_manager:exercism $DIR
-chmod 740 $DIR
+chmod 750 $DIR
 unset DIR
 
 ###########################
@@ -120,17 +119,20 @@ unset DIR
 ###########################
 DIR="/opt/tooling-invoker"
 mkdir $DIR
-chown exercism_worker:exercism $DIR
-chmod 700 $DIR
 
 # TODO: Pull this from AWS'Git thing
 cd $DIR/..
 git clone https://github.com/exercism/tooling-invoker.git
-pushd tooling-invoker
-  bundle install
-popd
-unset DIR
+su -l exercism_worker
+  pushd /opt/tooling-invoker
+    bundle install
+  popd
+exit
 
+chown -R exercism_worker:exercism $DIR
+chmod 700 $DIR
+
+unset DIR
 
 ###########################
 # Install tooling manager #
@@ -138,21 +140,86 @@ unset DIR
 
 DIR="/opt/tooling-manager"
 mkdir $DIR
-chown exercism_manager:exercism $DIR
-chmod 700 $DIR
 
 # TODO: Pull this from AWS's Git thing
 cd $DIR/..
 git clone https://github.com/exercism/tooling-manager.git
-pushd tooling-manager
-  bundle install
-popd
+su -l exercism_manager
+  pushd /opt/tooling-manager
+    bundle install
+  popd
+exit
+
+chown -R exercism_manager:exercism $DIR
+chmod 700 $DIR
+
 unset DIR
 
+#####################################
+# Setup Systemd for tooling manager #
+#####################################
+cat >/etc/systemd/system/exercism_manager.service << EOM
+[Unit]
+Description=Exercism Tooling Manager
+After=network.target
 
+# Keep restarting the service forever
+StartLimitIntervalSec=0
+StartLimitBurst=0
 
+[Service]
+Restart=always
 
+# Sleep for 30s before restarting the service
+RestartSec=30
+User=exercism_manager
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling-manager/bin/start
+SyslogIdentifier=tooling-manager
 
+[Install]
+WantedBy=multi-user.target
+EOM
+chmod 544 /etc/systemd/system/exercism_manager.service
+
+mkdir /etc/systemd/system/exercism_manager.service.d
+cat >/etc/systemd/system/exercism_manager.service.d/env.conf << EOM
+[Service]
+Environment="EXERCISM_ENV=production"
+EOM
+chmod 544 /etc/systemd/system/exercism_manager.service.d/env.conf
+
+#####################################
+# Setup Systemd for tooling worker #
+#####################################
+cat >/etc/systemd/system/exercism_invoker.service << EOM
+[Unit]
+Description=Exercism Tooling Invoker Worker
+After=network.target
+
+# Keep restarting the service forever
+StartLimitIntervalSec=0
+StartLimitBurst=0
+
+[Service]
+Restart=always
+
+# Sleep for 30s before restarting the service
+RestartSec=30
+User=exercism_worker
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling-invoker/bin/start
+SyslogIdentifier=tooling-invoker
+
+[Install]
+WantedBy=multi-user.target
+EOM
+chmod 544 /etc/systemd/system/exercism_invoker.service
+
+mkdir /etc/systemd/system/exercism_invoker.service.d
+cat >/etc/systemd/system/exercism_invoker.service.d/env.conf << EOM
+[Service]
+Environment="EXERCISM_ENV=production"
+EOM
+chmod 544 /etc/systemd/system/exercism_invoker.service.d/env.conf
 
 
 ########################################
@@ -179,11 +246,16 @@ ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
 #############################
 # TEMPORARY: Run the worker #
 #############################
-cd /opt/tooling-invoker
-git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/worker
+su -l exercism_worker
+  cd /opt/tooling-invoker
+  git fetch && git reset --hard origin/master && EXERCISM_ENV=production bundle exec bin/worker
+exit
 
 #############################
 # TEMPORARY: Run the manager #
 #############################
-cd /opt/tooling-manager
-git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/manager
+su -l exercism_manager
+  cd /opt/tooling-manager
+  git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/manager
+exit
+
