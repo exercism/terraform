@@ -21,7 +21,8 @@ resource "aws_iam_user_policy" "ecr" {
         "Resource": [
           "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${aws_ecr_repository.ruby_test_runner.name}",
           "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${aws_ecr_repository.csharp_test_runner.name}",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${aws_ecr_repository.elixir_test_runner.name}"
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${aws_ecr_repository.elixir_test_runner.name}",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${aws_ecr_repository.javascript_test_runner.name}"
         ]
     }, {
         "Sid": "GithubDeployECRAuthTokenPolicy",
