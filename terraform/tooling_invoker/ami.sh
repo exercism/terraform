@@ -222,40 +222,40 @@ EOM
 chmod 544 /etc/systemd/system/exercism_invoker.service.d/env.conf
 
 
-########################################
-# TEMPORARY: Download Ruby Test Runner #
-########################################
+#########################################
+## TEMPORARY: Download Ruby Test Runner #
+#########################################
 
-CONTAINER_DIR="/opt/containers/ruby-test-runner/releases/latest"
-echo $CONTAINER_DIR
-mkdir -p $CONTAINER_DIR
+#CONTAINER_DIR="/opt/containers/ruby-test-runner/releases/latest"
+#echo $CONTAINER_DIR
+#mkdir -p $CONTAINER_DIR
 
-pushd $CONTAINER_DIR
-  /opt/container_tools/img logout
+#pushd $CONTAINER_DIR
+#  /opt/container_tools/img logout
 
-  aws ecr get-login-password --region eu-west-2 | /opt/container_tools/img login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
+#  aws ecr get-login-password --region eu-west-2 | /opt/container_tools/img login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
 
-  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
-  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
-  chmod -R a-w rootfs
-  chmod -R go-rwx rootfs
-popd
+#  /opt/container_tools/img pull -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
+#  /opt/container_tools/img unpack -state /tmp/state-img 591712695352.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:latest
+#  chmod -R a-w rootfs
+#  chmod -R go-rwx rootfs
+#popd
 
-ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
+#ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
 
-#############################
-# TEMPORARY: Run the worker #
-#############################
-su -l exercism_worker
-  cd /opt/tooling-invoker
-  git fetch && git reset --hard origin/master && EXERCISM_ENV=production bundle exec bin/worker
-exit
+##############################
+## TEMPORARY: Run the worker #
+##############################
+#su -l exercism_worker
+#  cd /opt/tooling-invoker
+#  git fetch && git reset --hard origin/master && EXERCISM_ENV=production bundle exec bin/worker
+#exit
 
-#############################
-# TEMPORARY: Run the manager #
-#############################
-su -l exercism_manager
-  cd /opt/tooling-manager
-  git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/manager
-exit
+##############################
+## TEMPORARY: Run the manager #
+##############################
+#su -l exercism_manager
+#  cd /opt/tooling-manager
+#  git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/manager
+#exit
 
