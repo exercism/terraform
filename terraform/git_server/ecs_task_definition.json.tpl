@@ -54,6 +54,12 @@
     "name": "application",
     "image": "${application_image}",
     "essential": true,
+    "mountPoints": [
+      {
+        "containerPath": "/opt/repos-bk",
+        "sourceVolume": "efs-repositories"
+      }
+    ],
 
     "logConfiguration": {
       "logDriver":"awsfirelens",
@@ -66,7 +72,6 @@
     },
     "cpu": 0,
     "user": "0",
-    "mountPoints": [],
     "portMappings": [],
     "volumesFrom": [],
     "environment": []

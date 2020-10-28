@@ -22,13 +22,6 @@ resource "aws_alb_target_group" "http" {
   protocol    = "HTTP"
   vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
-
-  health_check {
-    # TODO: These are awful values for production
-    # but work well for development.
-    unhealthy_threshold = 10
-    interval            = 10
-  }
 }
 
 # Redirect all traffic from the ALB to the target group

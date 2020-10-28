@@ -31,7 +31,6 @@ resource "aws_ecs_task_definition" "git_servers" {
     name = "efs-repositories"
     efs_volume_configuration {
       file_system_id = aws_efs_file_system.repositories.id
-      root_directory = "/opt/data"
     }
   }
 }

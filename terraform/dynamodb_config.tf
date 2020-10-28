@@ -155,3 +155,15 @@ resource "aws_dynamodb_table_item" "tooling_orchestrator_url" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "git_server_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "git_server_url"},
+  "value": {"S": "${module.git_server.alb_hostname}"}
+}
+ITEM
+}
