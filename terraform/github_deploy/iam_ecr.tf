@@ -19,11 +19,7 @@ resource "aws_iam_user_policy" "ecr" {
             "ecr:CompleteLayerUpload"
         ],
         "Resource": [
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${var.aws_ecr_repository_name_tooling_orchestrator_application}",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${var.aws_ecr_repository_name_tooling_orchestrator_nginx}",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${var.aws_ecr_repository_name_webserver_rails}",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${var.aws_ecr_repository_name_webserver_nginx}",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/${var.aws_ecr_repository_name_webserver_anycable_go}"
+          ${join(",", formatlist("\"%s\"", var.aws_ecr_repo_arns))}
         ]
     }, {
         "Sid": "GithubDeployECRAuthTokenPolicy",

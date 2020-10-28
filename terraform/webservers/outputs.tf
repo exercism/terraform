@@ -14,16 +14,16 @@ output "rds_cluster_reader_endpoint" {
   value = aws_rds_cluster.main.reader_endpoint
 }
 
-output "ecr_repository_name_rails" {
-  value = aws_ecr_repository.rails.name
+output "ecr_repository_arn_rails" {
+  value = aws_ecr_repository.rails.arn
 }
 
-output "ecr_repository_name_nginx" {
-  value = aws_ecr_repository.nginx.name
+output "ecr_repository_arn_nginx" {
+  value = aws_ecr_repository.nginx.arn
 }
 
-output "ecr_repository_name_anycable_go" {
-  value = aws_ecr_repository.anycable_go.name
+output "ecr_repository_arn_anycable_go" {
+  value = aws_ecr_repository.anycable_go.arn
 }
 
 output "s3_bucket_name_assets" {

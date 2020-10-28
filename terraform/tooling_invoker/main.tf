@@ -1,4 +1,5 @@
 variable "region" {}
+variable "ecr_tooling_repos" {}
 
 # variable "aws_account_id" {}
 # variable "aws_iam_policy_write_to_cloudwatch" {}

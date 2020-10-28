@@ -7,6 +7,5 @@ output "ecr_repository_arn_nginx" {
 }
 
 output "alb_hostname" {
-  value = aws_alb.tooling_orchestrators.dns_name
+  value = aws_alb.git_server.dns_name
 }
-
