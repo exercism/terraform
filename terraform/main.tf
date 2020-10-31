@@ -7,7 +7,8 @@ locals {
     "ruby-test-runner",
     "csharp-test-runner",
     "elixir-test-runner",
-    "javascript-test-runner"
+    "javascript-test-runner",
+    "julia-test-runner"
   ])
 }
 
