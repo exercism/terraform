@@ -9,7 +9,8 @@ locals {
     "elixir-test-runner",
     "javascript-test-runner",
     "julia-test-runner",
-    "common-lisp-test-runner"
+    "common-lisp-test-runner",
+    "nim-test-runner"
   ])
 }
 
@@ -140,4 +141,3 @@ module "git_server" {
 
   http_port = 80
 }
-
