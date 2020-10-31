@@ -8,7 +8,8 @@ locals {
     "csharp-test-runner",
     "elixir-test-runner",
     "javascript-test-runner",
-    "julia-test-runner"
+    "julia-test-runner",
+    "common-lisp-test-runner"
   ])
 }
 
