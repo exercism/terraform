@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "ruby,csharp,elixir,javascript"}
+  "languages": {"S": "ruby,csharp,elixir,javascript,common-lisp"}
 }
 ITEM
 }
