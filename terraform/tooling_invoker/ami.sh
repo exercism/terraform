@@ -9,7 +9,6 @@ sudo apt-get install -y wget git make unzip uidmap
 #######################
 sudo groupadd exercism
 sudo useradd -g exercism -m -s /bin/bash exercism
-sudo loginctl enable-linger exercism
 
 ###################################
 # Install Docker as non-root user #
@@ -23,7 +22,6 @@ sudo su exercism
   sed -i '1s/^/export XDG_RUNTIME_DIR=\/home\/exercism\/.docker\/run\n/' ~/.bashrc
   sed -i '1s/^/export PATH=\/home\/exercism\/bin:$PATH\n/' ~/.bashrc
   sed -i '1s/^/export DOCKER_HOST=unix:\/\/\/home\/exercism\/.docker\/run\/docker.sock\n/' ~/.bashrc
-  source ~/.bashrc
 exit
 
 ############################
@@ -113,7 +111,6 @@ sudo su -
   mkdir $DIR
   chown exercism:exercism $DIR
   chmod 700 $DIR
-  unset DIR
 exit
 
 ###########################
@@ -126,16 +123,14 @@ sudo su -
   # TODO: Pull this from AWS'Git thing
   cd $DIR/..
   git clone https://github.com/exercism/tooling-invoker.git
-  su -l exercism
-    pushd /opt/tooling-invoker
-      bundle install
-    popd
-  exit
 
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
 
-  unset DIR
+  su exercism
+    cd /opt/tooling-invoker
+    bundle install
+  exit
 exit
 
 ###########################
@@ -148,16 +143,14 @@ sudo su -
   # TODO: Pull this from AWS's Git thing
   cd $DIR/..
   git clone https://github.com/exercism/tooling-manager.git
-  su -l exercism
-    pushd /opt/tooling-manager
-      bundle install
-    popd
-  exit
 
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
 
-  unset DIR
+  su exercism
+    cd /opt/tooling-manager
+    bundle install
+  exit
 exit
 
 #####################################
