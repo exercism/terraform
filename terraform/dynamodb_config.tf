@@ -167,3 +167,16 @@ resource "aws_dynamodb_table_item" "git_server_url" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "tooling_ecr_repository_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "tooling_ecr_repository_url"},
+  "value": {"S": "${module.tooling.ecr_repository_url}"}
+}
+ITEM
+}
+
