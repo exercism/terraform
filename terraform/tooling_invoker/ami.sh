@@ -58,6 +58,7 @@ Group=exercism
 [Install]
 WantedBy=default.target
 EOM
+
   chmod 400 /etc/systemd/system/docker.service
   systemctl enable docker.service
 
@@ -125,7 +126,6 @@ sudo su -
   # TODO: Pull this from AWS'Git thing
   cd $DIR/..
   git clone https://github.com/exercism/tooling-invoker.git
-  git checkout switch-to-docker
   su -l exercism
     pushd /opt/tooling-invoker
       bundle install
@@ -179,7 +179,7 @@ Restart=always
 # Sleep for 30s before restarting the service
 RestartSec=30
 User=exercism
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling_manager/bin/start
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling-manager/bin/start
 SyslogIdentifier=tooling-manager
 
 [Install]
