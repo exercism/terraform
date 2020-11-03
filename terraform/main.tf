@@ -11,6 +11,7 @@ locals {
     "java-test-runner",
     "julia-test-runner",
     "common-lisp-test-runner",
+    "common-lisp-representer",
     "nim-test-runner",
     "python-test-runner"
   ])
