@@ -22,6 +22,10 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
 {
   "group": {"S": "representers-all"},
   "languages": {"S": "common-lisp"}
+},
+{
+  "group": {"S": "analyzers-all"},
+  "languages": {"S": "common-lisp"}
 }
 ITEM
 }
