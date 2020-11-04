@@ -17,15 +17,15 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "ruby,csharp,elixir,javascript,java,julia,common-lisp,nim,python"}
+  "languages": {"S": "c,clojure,common-lisp,cpp,csharp,elixir,elm,erlang,fsharp,generic,go,j,java,javascript,julia,kotlin,nim,python,ruby,rust,scheme,swift,x86-64-assembly"}
 },
 {
   "group": {"S": "representers-all"},
-  "languages": {"S": "common-lisp"}
+  "languages": {"S": "clojure,common-lisp,csharp,elixir,fsharp,j,javascript,python,ruby,rust"}
 },
 {
   "group": {"S": "analyzers-all"},
-  "languages": {"S": "common-lisp"}
+  "languages": {"S": "clojure,common-lisp,csharp,elixir,erlang,go,java,javascript,python,ruby,rust,scala,typescript"}
 }
 ITEM
 }
