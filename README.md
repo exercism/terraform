@@ -87,7 +87,8 @@ Create a policy called `terraform-iam` with the following JSON:
                 "iam:GetInstanceProfile",
                 "iam:RemoveRoleFromInstanceProfile",
                 "iam:DeleteInstanceProfile",
-                "iam:AddRoleToInstanceProfile"
+                "iam:AddRoleToInstanceProfile",
+                "iam:DeleteUserPolicy"
             ],
             "Resource": "*"
         },
@@ -96,7 +97,7 @@ Create a policy called `terraform-iam` with the following JSON:
             "Effect": "Allow",
             "Action": [
                 "iam:GetUserPolicy",
-                "iam:PutUserPolicy"
+                "iam:PutUserPolicy",
             ],
             "Resource": [ 
               "arn:aws:iam::*:user/github-deploy",

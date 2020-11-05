@@ -1,6 +1,6 @@
 resource "aws_iam_user_policy" "ecr" {
-  name = "${local.public_username}-ecr"
-  user = local.public_username
+  name = "${local.username}-ecr"
+  user = local.username
 
   policy = <<EOF
 {
@@ -19,7 +19,9 @@ resource "aws_iam_user_policy" "ecr" {
             "ecr:CompleteLayerUpload"
         ],
         "Resource": [
-          ${join(",", formatlist("\"arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/%s\"", var.ecr_tooling_repos))}
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-test-runner",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-analyzer",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-representer"
         ]
     }, {
         "Sid": "GithubDeployECRAuthTokenPolicy",
