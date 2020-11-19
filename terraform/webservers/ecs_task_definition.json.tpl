@@ -64,9 +64,18 @@
         "log_stream_prefix": "puma/"
       }
     },
+    "mountPoints": [
+      {
+        "containerPath": "/mnt/repos",
+        "sourceVolume": "efs-repositories"
+      },
+      {
+        "containerPath": "/mnt/tooling_jobs",
+        "sourceVolume": "efs-tooling-jobs"
+      }
+    ],
     "cpu": 0,
     "user": "0",
-    "mountPoints": [],
     "portMappings": [],
     "volumesFrom": [],
     "environment": []

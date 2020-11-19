@@ -23,14 +23,3 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-# resource "aws_security_group_rule" "ecs-efs" {
-#   # Allow input from the efs. 
-#   # TODO: Is this necessary?
-#   security_group_id        = aws_security_group.ecs.id
-#   type                     = "ingress"
-#   protocol                 = "tcp"
-#   from_port                = 2049
-#   to_port                  = 2049
-#   source_security_group_id = aws_security_group.efs.id
-# }
-

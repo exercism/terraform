@@ -21,3 +21,11 @@ vs
 https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws/latest
 ?
 ```
+
+Tooling Invokers need the following security_groups:
+- tooling-invoker-ec2
+- efs-tooling-jobs-access 
+
+- The EFS should be mounted at /mnt/jobs.
+- It should be readonly
+

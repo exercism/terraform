@@ -40,7 +40,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
 resource "aws_rds_cluster" "main" {
   cluster_identifier              = "webservers"
   engine                          = "aurora-mysql"
-  engine_version                  = "5.7.mysql_aurora.2.08.1"
+  engine_version                  = "5.7.mysql_aurora.2.08.2"
   database_name                   = "exercism_v3"
   master_username                 = "exercism_v3"
   master_password                 = "exercism_v3"
@@ -73,5 +73,5 @@ resource "aws_rds_cluster_instance" "write-instance" {
   # These have to be respecified here as well as in the cluster definition
   # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
   engine         = "aurora-mysql"
-  engine_version = "5.7.mysql_aurora.2.08.1"
+  engine_version = "5.7.mysql_aurora.2.08.2"
 }

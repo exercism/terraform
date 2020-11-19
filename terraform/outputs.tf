@@ -17,8 +17,3 @@ output "webservers-anycable_redis_url" {
 output "tooling-orchestrator-alb_hostname" {
   value = module.tooling_orchestrator.alb_hostname
 }
-
-output "git-server-alb_hostname" {
-  value = module.git_server.alb_hostname
-}
-

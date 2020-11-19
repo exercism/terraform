@@ -75,6 +75,10 @@ module "webservers" {
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
+  aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
+  aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_efs_file_system_repositories             = aws_efs_file_system.repositories
+  aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -85,6 +89,27 @@ module "webservers" {
 
   http_port       = 80
   websockets_port = 3334
+}
+
+module "git_server" {
+  source = "./git_server"
+
+  region = var.region
+
+  aws_account_id                          = data.aws_caller_identity.current.account_id
+  aws_iam_policy_document_assume_role_ecs = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_read_dynamodb_config     = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_write_to_cloudwatch      = aws_iam_policy.write_to_cloudwatch
+  aws_iam_role_ecs_task_execution         = aws_iam_role.ecs_task_execution
+
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+
+  container_cpu    = 256
+  container_memory = 512
+  container_count  = 1
+
+  http_port = 80
 }
 
 module "tooling_orchestrator" {
@@ -113,7 +138,7 @@ module "tooling_orchestrator" {
 module "tooling_invoker" {
   source = "./tooling_invoker"
 
-  region = var.region
+  region            = var.region
   ecr_tooling_repos = local.ecr_tooling_repos
 
   # aws_account_id                                         = data.aws_caller_identity.current.account_id
@@ -122,7 +147,7 @@ module "tooling_invoker" {
   # aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
   aws_iam_policy_read_dynamodb_config_arn                  = aws_iam_policy.read_dynamodb_config.arn
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
-  aws_iam_policy_read_s3_bucket_submissions                = aws_iam_policy.read_s3_bucket_submissions
+  aws_iam_policy_write_s3_bucket_tooling_jobs              = aws_iam_policy.write_s3_bucket_tooling_jobs
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -141,9 +166,6 @@ module "github_deploy" {
   region = var.region
 
   aws_ecr_repo_arns = [
-    module.git_server.ecr_repository_arn_application,
-    module.git_server.ecr_repository_arn_nginx,
-
     module.tooling_orchestrator.ecr_repository_arn_application,
     module.tooling_orchestrator.ecr_repository_arn_nginx,
 
@@ -157,27 +179,6 @@ module "github_deploy" {
 module "tooling" {
   source = "./tooling"
 
-  region = var.region
+  region            = var.region
   ecr_tooling_repos = local.ecr_tooling_repos
-}
-
-module "git_server" {
-  source = "./git_server"
-
-  region = var.region
-
-  aws_account_id                          = data.aws_caller_identity.current.account_id
-  aws_iam_policy_document_assume_role_ecs = data.aws_iam_policy_document.assume_role_ecs
-  aws_iam_policy_read_dynamodb_config     = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_write_to_cloudwatch      = aws_iam_policy.write_to_cloudwatch
-  aws_iam_role_ecs_task_execution         = aws_iam_role.ecs_task_execution
-
-  aws_vpc_main       = aws_vpc.main
-  aws_subnet_publics = aws_subnet.publics
-
-  container_cpu    = 256
-  container_memory = 512
-  container_count  = 1
-
-  http_port = 80
 }

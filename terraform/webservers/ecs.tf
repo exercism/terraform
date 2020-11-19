@@ -30,19 +30,39 @@ resource "aws_ecs_task_definition" "webservers" {
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
+
+  volume {
+    name = "efs-repositories"
+    efs_volume_configuration {
+      file_system_id = var.aws_efs_file_system_repositories.id
+    }
+  }
+
+  volume {
+    name = "efs-tooling-jobs"
+    efs_volume_configuration {
+      file_system_id = var.aws_efs_file_system_tooling_jobs.id
+    }
+  }
+
 }
 resource "aws_ecs_service" "webservers" {
-  name            = "webservers"
-  cluster         = aws_ecs_cluster.webservers.id
-  task_definition = aws_ecs_task_definition.webservers.arn
-  desired_count   = var.container_count
-  launch_type     = "FARGATE"
+  name             = "webservers"
+  cluster          = aws_ecs_cluster.webservers.id
+  task_definition  = aws_ecs_task_definition.webservers.arn
+  desired_count    = var.container_count
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   # Pause for 10mins to let migrations run
   health_check_grace_period_seconds = 600
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups = [
+      aws_security_group.ecs.id,
+      var.aws_security_group_efs_repositories_access.id,
+      var.aws_security_group_efs_tooling_jobs_access.id
+    ]
     subnets          = var.aws_subnet_publics.*.id
     assign_public_ip = true
   }

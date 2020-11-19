@@ -26,21 +26,21 @@ resource "aws_dynamodb_table" "tooling_jobs" {
   }
 
   global_secondary_index {
-    name = "job_status"
-    hash_key = "job_status"
-    range_key = "created_at"
+    name            = "job_status"
+    hash_key        = "job_status"
+    range_key       = "created_at"
     projection_type = "KEYS_ONLY"
-    read_capacity  = 1
-    write_capacity = 1
+    read_capacity   = 1
+    write_capacity  = 1
   }
 
   global_secondary_index {
-    name = "submission_type"
-    hash_key = "submission_uuid"
-    range_key = "type"
-    projection_type = "INCLUDE"
+    name               = "submission_type"
+    hash_key           = "submission_uuid"
+    range_key          = "type"
+    projection_type    = "INCLUDE"
     non_key_attributes = ["id", "job_status"]
-    read_capacity  = 1
-    write_capacity = 1
+    read_capacity      = 1
+    write_capacity     = 1
   }
 }

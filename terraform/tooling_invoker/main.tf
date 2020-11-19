@@ -6,7 +6,7 @@ variable "ecr_tooling_repos" {}
 # variable "aws_iam_role_ecs_task_execution" {}
 variable "aws_iam_policy_read_dynamodb_config_arn" {}
 variable "aws_iam_policy_read_dynamodb_tooling_language_groups_arn" {}
-variable "aws_iam_policy_read_s3_bucket_submissions" {}
+variable "aws_iam_policy_write_s3_bucket_tooling_jobs" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
