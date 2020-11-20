@@ -9,7 +9,7 @@ data "template_file" "language_servers" {
   template = file("./language_servers/ecs_task_definition.json.tpl")
 
   vars = {
-    application_image = "${element(aws_ecr_repository.language_servers, 0).repository_url}:latest"
+    application_image = "${aws_ecr_repository.language_servers[0].repository_url}:latest"
     proxy_image       = "${aws_ecr_repository.proxy.repository_url}:latest"
     websockets_port   = var.websockets_port
     region            = var.region
