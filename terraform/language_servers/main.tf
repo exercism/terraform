@@ -10,6 +10,7 @@ variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
 
 variable "http_port" {}
+variable "websockets_port" {}
 
 variable "container_cpu" {}
 variable "container_memory" {}

@@ -226,4 +226,5 @@ module "language_servers" {
   container_count  = 1
 
   http_port = 80
+  websockets_port = 3023
 }
