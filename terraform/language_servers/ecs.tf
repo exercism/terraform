@@ -6,7 +6,7 @@ resource "aws_ecs_cluster" "language_servers" {
   name = "language-servers"
 }
 data "template_file" "language_servers" {
-  template = file("./tooling_orchestrator/ecs_task_definition.json.tpl")
+  template = file("./language_servers/ecs_task_definition.json.tpl")
 
   vars = {
     application_image = "${element(aws_ecr_repository.language_servers, 0).repository_url}:latest"
