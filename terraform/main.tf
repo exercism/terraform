@@ -213,6 +213,7 @@ module "language_servers" {
   source = "./language_servers"
 
   region = var.region
+  ecr_language_server_repos = local.ecr_language_server_repos
 
   aws_account_id                               = data.aws_caller_identity.current.account_id
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
