@@ -1,9 +1,9 @@
-output "ecr_repository_arn_application" {
-  value = aws_ecr_repository.application.arn
+output "ecr_repository_application" {
+  value = aws_ecr_repository.application
 }
 
-output "ecr_repository_arn_nginx" {
-  value = aws_ecr_repository.nginx.arn
+output "ecr_repository_nginx" {
+  value = aws_ecr_repository.nginx
 }
 
 output "alb_hostname" {

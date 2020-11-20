@@ -1,5 +1,3 @@
-
-
 # ###
 # Set up the cluster
 # ###
@@ -44,8 +42,8 @@ resource "aws_ecs_task_definition" "webservers" {
       file_system_id = var.aws_efs_file_system_tooling_jobs.id
     }
   }
-
 }
+
 resource "aws_ecs_service" "webservers" {
   name             = "webservers"
   cluster          = aws_ecs_cluster.webservers.id
@@ -64,6 +62,8 @@ resource "aws_ecs_service" "webservers" {
       var.aws_security_group_efs_tooling_jobs_access.id
     ]
     subnets          = var.aws_subnet_publics.*.id
+
+    # TODO: Can this be false?
     assign_public_ip = true
   }
 

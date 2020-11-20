@@ -91,6 +91,26 @@ module "webservers" {
   websockets_port = 3334
 }
 
+module "bastion" {
+  source = "./bastion"
+
+  region = var.region
+
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
+  aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
+  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
+  aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_ssh                       = aws_security_group.ssh
+  aws_efs_file_system_repositories             = aws_efs_file_system.repositories
+  aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
+
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+}
+
+
 module "git_server" {
   source = "./git_server"
 
@@ -166,12 +186,12 @@ module "github_deploy" {
   region = var.region
 
   aws_ecr_repo_arns = [
-    module.tooling_orchestrator.ecr_repository_arn_application,
-    module.tooling_orchestrator.ecr_repository_arn_nginx,
+    module.tooling_orchestrator.ecr_repository_application.arn,
+    module.tooling_orchestrator.ecr_repository_nginx.arn,
 
-    module.webservers.ecr_repository_arn_rails,
-    module.webservers.ecr_repository_arn_nginx,
-    module.webservers.ecr_repository_arn_anycable_go
+    module.webservers.ecr_repository_rails.arn,
+    module.webservers.ecr_repository_nginx.arn,
+    module.webservers.ecr_repository_anycable_go.arn
   ]
   aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_name_assets
 }
