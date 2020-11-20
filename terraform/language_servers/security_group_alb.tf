@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb" {
-  name        = "webservers-alb"
+  name        = "language-servers-alb"
   description = "controls access to the ALB"
   vpc_id      = var.aws_vpc_main.id
 
