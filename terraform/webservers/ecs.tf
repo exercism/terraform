@@ -61,7 +61,7 @@ resource "aws_ecs_service" "webservers" {
       var.aws_security_group_efs_repositories_access.id,
       var.aws_security_group_efs_tooling_jobs_access.id
     ]
-    subnets          = var.aws_subnet_publics.*.id
+    subnets = var.aws_subnet_publics.*.id
 
     # TODO: Can this be false?
     assign_public_ip = true

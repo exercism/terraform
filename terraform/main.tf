@@ -77,6 +77,7 @@ module "webservers" {
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
 
@@ -103,6 +104,7 @@ module "bastion" {
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
   aws_security_group_ssh                       = aws_security_group.ssh
+  aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
 

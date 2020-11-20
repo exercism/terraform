@@ -1,6 +1,6 @@
 resource "aws_iam_role" "ecr_pusher" {
   name = "tooling-ecr-pusher"
-  
+
   assume_role_policy = <<-EOF
 {
   "Version": "2012-10-17",
@@ -23,7 +23,7 @@ EOF
 resource "aws_iam_role_policy" "ecrs" {
   for_each = var.ecr_tooling_repos
   name     = "tooling-ecr-pusher-${each.key}"
-  role    = aws_iam_role.ecr_pusher.id
+  role     = aws_iam_role.ecr_pusher.id
 
   policy = <<EOF
 {

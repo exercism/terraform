@@ -67,7 +67,7 @@ resource "aws_dynamodb_table_item" "mysql_master_endpoint" {
   item = <<ITEM
 {
   "id": {"S": "mysql_master_endpoint"},
-  "value": {"S": "${module.webservers.rds_cluster_master_endpoint}"}
+  "value": {"S": "${aws_rds_cluster.main.endpoint}"}
 }
 ITEM
 }
@@ -79,7 +79,7 @@ resource "aws_dynamodb_table_item" "mysql_reader_endpoint" {
   item = <<ITEM
 {
   "id": {"S": "mysql_reader_endpoint"},
-  "value": {"S": "${module.webservers.rds_cluster_reader_endpoint}"}
+  "value": {"S": "${aws_rds_cluster.main.reader_endpoint}"}
 }
 ITEM
 }

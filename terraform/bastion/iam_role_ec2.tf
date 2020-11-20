@@ -1,5 +1,6 @@
 resource "aws_iam_role" "ec2" {
-  name               = "bastion-ec2"
+  name = "bastion-ec2"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -33,3 +34,9 @@ resource "aws_iam_role_policy_attachment" "access_s3_bucket_tooling_jobs" {
   policy_arn = var.aws_iam_policy_access_s3_bucket_tooling_jobs.arn
 }
 
+# There are some eventual consistency issues with this.
+#
+resource "aws_iam_instance_profile" "ec2" {
+  name = "bastion-ec2"
+  role = aws_iam_role.ec2.name
+}

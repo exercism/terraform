@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "main" {
   name       = "webservers"
-  subnet_ids = var.aws_subnet_publics.*.id
+  subnet_ids = aws_subnet.publics.*.id
   tags = {
     Name = "v3"
   }
@@ -46,7 +46,7 @@ resource "aws_rds_cluster" "main" {
   master_password                 = "exercism_v3"
   port                            = 3306
   availability_zones              = data.aws_availability_zones.available.names
-  vpc_security_group_ids          = [aws_security_group.rds.id]
+  vpc_security_group_ids          = [aws_security_group.rds_main.id]
   db_subnet_group_name            = aws_db_subnet_group.main.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main.name
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
@@ -65,7 +65,7 @@ resource "aws_rds_cluster" "main" {
   }
 }
 
-resource "aws_rds_cluster_instance" "write-instance" {
+resource "aws_rds_cluster_instance" "main_write_instance" {
   identifier         = "writer"
   cluster_identifier = aws_rds_cluster.main.id
   instance_class     = "db.t2.small"

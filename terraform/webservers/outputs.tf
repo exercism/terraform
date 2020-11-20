@@ -6,14 +6,6 @@ output "alb_hostname" {
   value = aws_alb.webservers.dns_name
 }
 
-output "rds_cluster_master_endpoint" {
-  value = aws_rds_cluster.main.endpoint
-}
-
-output "rds_cluster_reader_endpoint" {
-  value = aws_rds_cluster.main.reader_endpoint
-}
-
 output "ecr_repository_rails" {
   value = aws_ecr_repository.rails
 }
