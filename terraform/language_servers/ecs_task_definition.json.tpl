@@ -30,7 +30,8 @@
     "essential": true,
     "portMappings": [
       {
-        "containerPort": ${http_port},
+        "containerPort": ${websockets_port},
+        "hostPort": ${websockets_port},
         "protocol": "tcp"
       }
     ],
@@ -48,7 +49,10 @@
     "user": "0",
     "mountPoints": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [
+      {"name": "RUBY_LANGUAGE_SERVER_HOST", "value": "ruby-language-server"},
+      {"name": "RUBY_LANGUAGE_SERVER_PORT", "value": 7658}
+    ]
   },
   {
     "name": "ruby_language_server",
@@ -69,6 +73,9 @@
     "mountPoints": [],
     "portMappings": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [
+      {"name": "PROXY_HOST", "value": "proxy"},
+      {"name": "PROXY_PORT", "value": 4444}
+    ]
   }
 ]
