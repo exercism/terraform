@@ -52,6 +52,10 @@ locals {
     "typescript-analyzer",
     "x86-64-assembly-test-runner"
   ])
+
+  ecr_language_server_repos = toset([
+    "ruby-language-server"
+  ])
 }
 
 provider "aws" {

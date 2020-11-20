@@ -1,4 +1,5 @@
 variable "region" {}
+variable "ecr_language_server_repos" {}
 
 variable "aws_account_id" {}
 variable "aws_iam_policy_document_assume_role_ecs" {}
