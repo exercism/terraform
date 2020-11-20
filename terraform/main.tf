@@ -52,6 +52,10 @@ locals {
     "typescript-analyzer",
     "x86-64-assembly-test-runner"
   ])
+
+  ecr_language_server_repos = toset([
+    "ruby-language-server"
+  ])
 }
 
 provider "aws" {
@@ -203,4 +207,27 @@ module "tooling" {
 
   region            = var.region
   ecr_tooling_repos = local.ecr_tooling_repos
+}
+
+module "language_servers" {
+  source = "./language_servers"
+
+  region                    = var.region
+  ecr_language_server_repos = local.ecr_language_server_repos
+
+  aws_account_id                          = data.aws_caller_identity.current.account_id
+  aws_iam_policy_document_assume_role_ecs = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_read_dynamodb_config     = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_write_to_cloudwatch      = aws_iam_policy.write_to_cloudwatch
+  aws_iam_role_ecs_task_execution         = aws_iam_role.ecs_task_execution
+
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+
+  container_cpu    = 256
+  container_memory = 512
+  container_count  = 1
+
+  http_port       = 80
+  websockets_port = 3023
 }
