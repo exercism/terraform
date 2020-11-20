@@ -9,7 +9,7 @@ data "template_file" "tooling_orchestrators" {
   template = file("./tooling_orchestrator/ecs_task_definition.json.tpl")
 
   vars = {
-    application_image = "${element(aws_ecr_repository.language_servers, 0).repository_url}:latest"
+    application_image = "${aws_ecr_repository.application.repository_url}:latest"
     nginx_image       = "${aws_ecr_repository.nginx.repository_url}:latest"
     http_port         = var.http_port
     region            = var.region
