@@ -1,0 +1,15 @@
+---
+version: '2.4'
+services:
+  language-server-proxy:
+    image: exercism/language-server-proxy
+    ports:
+    - 3023:3023
+    environment:
+      RUBY_LANGUAGE_SERVER_HOST: ruby-language-server
+      RUBY_LANGUAGE_SERVER_PORT: 7658
+  ruby-language-server:
+    image: exercism/ruby-language-server
+    environment:
+      PROXY_HOST: language-server-proxy
+      PROXY_PORT: 4444
