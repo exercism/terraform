@@ -172,7 +172,7 @@ ITEM
 resource "aws_dynamodb_table_item" "language_server_proxy_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
-  item = <<ITEM
+  item       = <<ITEM
 {
   "id": {"S": "language_server_proxy_url"},
   "value": {"S": "${module.language_servers.alb_hostname}"}

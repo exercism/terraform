@@ -9,11 +9,11 @@ data "template_file" "language_servers" {
   template = file("./language_servers/ecs_task_definition.json.tpl")
 
   vars = {
-    application_image = "${aws_ecr_repository.language_servers[0].repository_url}:latest"
-    proxy_image       = "${aws_ecr_repository.proxy.repository_url}:latest"
-    websockets_port   = var.websockets_port
-    region            = var.region
-    log_group_name    = aws_cloudwatch_log_group.language_servers.name
+    ruby_ls_image   = "${aws_ecr_repository.language_servers["ruby-language-server"].repository_url}:latest"
+    proxy_image     = "${aws_ecr_repository.proxy.repository_url}:latest"
+    websockets_port = var.websockets_port
+    region          = var.region
+    log_group_name  = aws_cloudwatch_log_group.language_servers.name
   }
 }
 resource "aws_ecs_task_definition" "language_servers" {
@@ -35,8 +35,8 @@ resource "aws_ecs_service" "language_servers" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs.id]
-    subnets          = var.aws_subnet_publics.*.id
+    security_groups = [aws_security_group.ecs.id]
+    subnets         = var.aws_subnet_publics.*.id
 
     # TODO: Can this be false?
     assign_public_ip = true

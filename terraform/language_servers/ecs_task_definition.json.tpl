@@ -51,12 +51,12 @@
     "volumesFrom": [],
     "environment": [
       {"name": "RUBY_LANGUAGE_SERVER_HOST", "value": "ruby-language-server"},
-      {"name": "RUBY_LANGUAGE_SERVER_PORT", "value": 7658}
+      {"name": "RUBY_LANGUAGE_SERVER_PORT", "value": "7658"}
     ]
   },
   {
     "name": "ruby_language_server",
-    "image": "${ruby_language_server_image}",
+    "image": "${ruby_ls_image}",
     "essential": true,
 
     "logConfiguration": {
@@ -75,7 +75,7 @@
     "volumesFrom": [],
     "environment": [
       {"name": "PROXY_HOST", "value": "proxy"},
-      {"name": "PROXY_PORT", "value": 4444}
+      {"name": "PROXY_PORT", "value": "4444"}
     ]
   }
 ]
