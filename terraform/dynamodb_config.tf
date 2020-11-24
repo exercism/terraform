@@ -22,6 +22,18 @@ resource "aws_dynamodb_table_item" "webservers_alb_dns_name" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "websockets_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "websockets_url"},
+  "value": {"S": "ws://${local.website_host}:${local.websockets_port}"}
+}
+ITEM
+}
+
 # TODO: Change this so it's a seperately protected thing
 resource "aws_dynamodb_table_item" "spi_url" {
   table_name = aws_dynamodb_table.config.name

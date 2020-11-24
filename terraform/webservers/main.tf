@@ -15,6 +15,8 @@ variable "aws_efs_file_system_tooling_jobs" {}
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
 
+variable "website_protocol" {}
+variable "website_host" {}
 variable "http_port" {}
 variable "websockets_port" {}
 

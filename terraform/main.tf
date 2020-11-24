@@ -3,6 +3,13 @@ variable "region" {
 }
 
 locals {
+ # TODO: Change this to the real host
+  website_protocol = "http"
+  website_host = "exercism.lol"
+
+ # TODO: Change this to the https port
+  websockets_port = 2052
+
   ecr_tooling_repos = toset([
     "c-test-runner",
     "clojure-analyzer",
@@ -71,6 +78,8 @@ module "webservers" {
   source = "./webservers"
 
   region = var.region
+  website_protocol = local.website_protocol
+  website_host = local.website_host
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
@@ -92,8 +101,10 @@ module "webservers" {
   container_memory = 512
   container_count  = 1
 
+  # TODO: Choose a websockets port for HTTPS
+  # https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy
   http_port       = 80
-  websockets_port = 3334
+  websockets_port = local.websockets_port
 }
 
 module "bastion" {

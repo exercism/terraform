@@ -24,10 +24,12 @@ resource "aws_alb_target_group" "http" {
   target_type = "ip"
 
   health_check {
+    path = "/health-check"
+
     # TODO: These are awful values for production
     # but work well for development.
     unhealthy_threshold = 10
-    interval            = 10
+    interval            = 30
   }
 }
 
@@ -38,8 +40,27 @@ resource "aws_alb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.http.id
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = ""
+      status_code  = 404
+    }
+  }
+}
+
+resource "aws_alb_listener_rule" "http" {
+  listener_arn = aws_alb_listener.http.arn
+  action {
     type             = "forward"
+    target_group_arn = aws_alb_target_group.http.id
+  }
+
+  condition {
+    host_header {
+      values = [var.website_host]
+    }
   }
 }
 
@@ -70,4 +91,8 @@ resource "aws_alb_listener" "websockets" {
     target_group_arn = aws_alb_target_group.websockets.id
     type             = "forward"
   }
+  depends_on = [
+    aws_alb_target_group.websockets
+  ]
 }
+
