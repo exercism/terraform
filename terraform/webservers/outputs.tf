@@ -18,6 +18,6 @@ output "ecr_repository_anycable_go" {
   value = aws_ecr_repository.anycable_go
 }
 
-output "s3_bucket_name_assets" {
-  value = aws_s3_bucket.assets.bucket
+output "s3_bucket_assets" {
+  value = aws_s3_bucket.assets
 }

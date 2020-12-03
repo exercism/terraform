@@ -6,6 +6,7 @@ variable "aws_iam_policy_access_dynamodb_tooling_jobs" {}
 variable "aws_iam_policy_access_s3_bucket_submissions" {}
 variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
 variable "aws_iam_role_ecs_task_execution" {}
+variable "aws_iam_policy_read_secret_config" {}
 variable "aws_security_group_rds_main" {}
 variable "aws_security_group_efs_repositories_access" {}
 variable "aws_security_group_efs_tooling_jobs_access" {}

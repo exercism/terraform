@@ -71,6 +71,19 @@ resource "aws_dynamodb_table_item" "anycable_rpc_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "assets_host" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "website_assets_host"},
+  "value": {"S": "${module.webservers.s3_bucket_assets.bucket_regional_domain_name}"}
+}
+ITEM
+}
+
+
 
 resource "aws_dynamodb_table_item" "mysql_master_endpoint" {
   table_name = aws_dynamodb_table.config.name

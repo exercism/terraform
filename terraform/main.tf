@@ -3,11 +3,11 @@ variable "region" {
 }
 
 locals {
- # TODO: Change this to the real host
+  # TODO: Change this to the real host
   website_protocol = "http"
-  website_host = "exercism.lol"
+  website_host     = "exercism.lol"
 
- # TODO: Change this to the https port
+  # TODO: Change this to the https port
   websockets_port = 2052
 
   ecr_tooling_repos = toset([
@@ -77,9 +77,9 @@ data "aws_caller_identity" "current" {}
 module "webservers" {
   source = "./webservers"
 
-  region = var.region
+  region           = var.region
   website_protocol = local.website_protocol
-  website_host = local.website_host
+  website_host     = local.website_host
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
@@ -87,6 +87,7 @@ module "webservers" {
   aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
@@ -116,6 +117,7 @@ module "bastion" {
   aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
   aws_security_group_ssh                       = aws_security_group.ssh
@@ -196,7 +198,6 @@ module "tooling_invoker" {
   # http_port = 80
 }
 
-
 module "github_deploy" {
   source = "./github_deploy"
 
@@ -210,7 +211,7 @@ module "github_deploy" {
     module.webservers.ecr_repository_nginx.arn,
     module.webservers.ecr_repository_anycable_go.arn
   ]
-  aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_name_assets
+  aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_assets.bucket
 }
 
 module "tooling" {

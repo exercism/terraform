@@ -25,7 +25,7 @@ resource "aws_wafv2_web_acl" "webservers" {
     visibility_config {
       cloudwatch_metrics_enabled = false
       metric_name                = "waf-webservers-1"
-      sampled_requests_enabled   = false
+      sampled_requests_enabled   = true
     }
   }
 
@@ -47,14 +47,14 @@ resource "aws_wafv2_web_acl" "webservers" {
     visibility_config {
       cloudwatch_metrics_enabled = false
       metric_name                = "waf-webservers-2"
-      sampled_requests_enabled   = false
+      sampled_requests_enabled   = true
     }
   }
 
   visibility_config {
     cloudwatch_metrics_enabled = false
     metric_name                = "waf-webservers"
-    sampled_requests_enabled   = false
+    sampled_requests_enabled   = true
   }
 }
 
