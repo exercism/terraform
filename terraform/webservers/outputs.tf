@@ -21,3 +21,6 @@ output "ecr_repository_anycable_go" {
 output "s3_bucket_assets" {
   value = aws_s3_bucket.assets
 }
+output "cloudfront_distribution_assets" {
+  value = aws_cloudfront_distribution.assets
+}

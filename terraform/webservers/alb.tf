@@ -28,10 +28,9 @@ resource "aws_alb_target_group" "http" {
   health_check {
     path = "/health-check"
 
-    # TODO: These are awful values for production
-    # but work well for development.
+    healthy_threshold   = 1
     unhealthy_threshold = 10
-    interval            = 30
+    interval            = 5
   }
 }
 
@@ -82,10 +81,9 @@ resource "aws_alb_target_group" "websockets" {
   health_check {
     path = "/health"
 
-    # TODO: These are awful values for production
-    # but work well for development.
+    healthy_threshold   = 1
     unhealthy_threshold = 10
-    interval            = 300
+    interval            = 5
   }
 }
 

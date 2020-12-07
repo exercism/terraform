@@ -78,7 +78,7 @@ resource "aws_dynamodb_table_item" "assets_host" {
   item = <<ITEM
 {
   "id": {"S": "website_assets_host"},
-  "value": {"S": "${module.webservers.s3_bucket_assets.bucket_regional_domain_name}"}
+  "value": {"S": "${module.webservers.cloudfront_distribution_assets.domain_name}"}
 }
 ITEM
 }
