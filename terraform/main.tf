@@ -4,10 +4,11 @@ variable "region" {
 
 locals {
   # TODO: Change this to the real host
-  website_protocol = "http"
+  website_protocol = "https"
   website_host     = "exercism.lol"
-
-  websockets_port = 2053
+  http_port        = 80
+  websockets_protocol = "wss"
+  websockets_port  = 80
 
   ecr_tooling_repos = toset([
     "c-test-runner",
@@ -65,7 +66,7 @@ locals {
 }
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 # Fetch AZs in the current region
@@ -102,7 +103,7 @@ module "webservers" {
 
   # TODO: Choose a websockets port for HTTPS
   # https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy
-  http_port       = 80
+  http_port       = local.http_port
   websockets_port = local.websockets_port
 }
 
@@ -177,7 +178,7 @@ module "tooling_orchestrator" {
   container_memory = 1024
   container_count  = 1
 
-  http_port = 80
+  http_port = local.http_port
 }
 
 module "tooling_invoker" {
@@ -240,12 +241,10 @@ module "language_servers" {
   container_memory = 512
   container_count  = 1
 
-  http_port       = 80
-  websockets_port = 2053
+  http_port       = local.http_port
+  websockets_port = local.websockets_port
 }
 
 module "git_server" {
   source = "./git_server"
 }
-
-

@@ -73,14 +73,13 @@ resource "aws_ecs_service" "webservers" {
     container_port   = var.http_port
   }
 
-  load_balancer {
-    target_group_arn = aws_alb_target_group.websockets.id
-    container_name   = "anycable_go"
-    container_port   = var.websockets_port
-  }
+#   load_balancer {
+#     target_group_arn = aws_alb_target_group.websockets.id
+#     container_name   = "anycable_go"
+#     container_port   = var.websockets_port
+#   }
 
   depends_on = [
-    aws_alb_listener.http,
-    aws_alb_listener.websockets,
+    aws_alb_listener.http
   ]
 }

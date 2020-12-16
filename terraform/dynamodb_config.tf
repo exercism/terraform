@@ -10,6 +10,18 @@ resource "aws_dynamodb_table" "config" {
   }
 }
 
+resource "aws_dynamodb_table_item" "website_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "website_url"},
+  "value": {"S": "${local.website_protocol}://${local.website_host}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "webservers_alb_dns_name" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -29,7 +41,7 @@ resource "aws_dynamodb_table_item" "websockets_url" {
   item = <<ITEM
 {
   "id": {"S": "websockets_url"},
-  "value": {"S": "wss://${local.website_host}:${local.websockets_port}"}
+  "value": {"S": "${local.websockets_protocol}://${local.website_host}"}
 }
 ITEM
 }

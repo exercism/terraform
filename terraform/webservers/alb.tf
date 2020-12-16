@@ -35,6 +35,26 @@ resource "aws_alb_target_group" "http" {
   }
 }
 
+# Create a target group for the websockets
+# resource "aws_alb_target_group" "websockets" {
+#   name        = "webservers-websockets"
+#   port        = var.websockets_port
+#   protocol    = "HTTP"
+#   vpc_id      = var.aws_vpc_main.id
+#   target_type = "ip"
+
+#   deregistration_delay = 10
+
+#   health_check {
+#     path = "/cable/health"
+
+#     healthy_threshold   = 2
+#     unhealthy_threshold = 10
+#     interval            = 5
+#     timeout             = 4
+#   }
+# }
+
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_alb.webservers.id
@@ -49,6 +69,9 @@ resource "aws_alb_listener" "http" {
       message_body = ""
       status_code  = 429 # We use a 429 as this is exclusivily to block bots
     }
+  }
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -69,54 +92,57 @@ resource "aws_alb_listener_rule" "http" {
   }
 }
 
-# Create a target group for the websockets
-resource "aws_alb_target_group" "websockets" {
-  name        = "webservers-websockets"
-  port        = var.websockets_port
-  protocol    = "HTTP"
-  vpc_id      = var.aws_vpc_main.id
-  target_type = "ip"
+# resource "aws_alb_listener_rule" "websockets" {
+#   listener_arn = aws_alb_listener.webservers.arn
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_alb_target_group.websockets.id
+#   }
 
-  deregistration_delay = 10
+#   condition {
+#     host_header {
+#       values = [
+#         var.website_host,
+#         aws_alb.webservers.dns_name
+#       ]
+#     }
+#     path_pattern {
+#       values = ["cable"]
+#     }
+#   }
+# }
 
-  health_check {
-    path = "/health"
+# # Redirect all traffic from the ALB to the target group
+# resource "aws_alb_listener" "websockets" {
+#   load_balancer_arn = aws_alb.webservers.id
+#   port              = var.websockets_port
+#   protocol          = "HTTP"
 
-    healthy_threshold   = 2
-    unhealthy_threshold = 10
-    interval            = 5
-    timeout             = 4
-  }
-}
+#   default_action {
+#     type = "fixed-response"
 
-# Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "websockets" {
-  load_balancer_arn = aws_alb.webservers.id
-  port              = var.websockets_port
-  protocol          = "HTTP"
+#     fixed_response {
+#       content_type = "text/plain"
+#       message_body = ""
+#       status_code  = 429 # We use a 429 as this is exclusivily to block bots
+#     }
+#   }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-  default_action {
-    type = "fixed-response"
+# resource "aws_alb_listener_rule" "websockets" {
+#   listener_arn = aws_alb_listener.websockets.arn
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_alb_target_group.websockets.id
+#   }
 
-    fixed_response {
-      content_type = "text/plain"
-      message_body = ""
-      status_code  = 429 # We use a 429 as this is exclusivily to block bots
-    }
-  }
-}
-
-resource "aws_alb_listener_rule" "websockets" {
-  listener_arn = aws_alb_listener.websockets.arn
-  action {
-    type             = "forward"
-    target_group_arn = aws_alb_target_group.websockets.id
-  }
-
-  condition {
-    host_header {
-      values = [var.website_host]
-    }
-  }
-}
+#   condition {
+#     host_header {
+#       values = [var.website_host]
+#     }
+#   }
+# }
 

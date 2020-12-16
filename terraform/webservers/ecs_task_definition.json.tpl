@@ -108,16 +108,11 @@
     "name": "anycable_go",
     "image": "${anycable_go_image}",
     "essential": true,
-    "portMappings": [
-      {
-        "containerPort": ${websockets_port},
-        "protocol": "tcp"
-      }
-    ],
     "environment": [
       {"name": "ANYCABLE_REDIS_URL", "value": "${anycable_redis_url}"},
       {"name": "ANYCABLE_HOST", "value": "0.0.0.0"},
-      {"name": "ANYCABLE_PORT", "value": "${websockets_port}"},
+      {"name": "ANYCABLE_PORT", "value": "3035"},
+      {"name": "ANYCABLE_HEALTH_PATH", "value": "/cable/health"},
       {"name": "ANYCABLE_RPC_HOST", "value": "127.0.0.1:50051"},
       {"name": "ANYCABLE_DEBUG", "value": "true"}
     ],
