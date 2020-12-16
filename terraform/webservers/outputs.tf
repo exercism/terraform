@@ -1,6 +1,12 @@
 output "anycable_redis_url" {
   value = aws_elasticache_cluster.anycable.cache_nodes.0.address
 }
+output "sidekiq_redis_url" {
+  value = aws_elasticache_cluster.sidekiq.cache_nodes.0.address
+}
+output "security_group_elasticache_sidekiq" {
+  value = aws_security_group.elasticache_sidekiq
+}
 
 output "alb_hostname" {
   value = aws_alb.webservers.dns_name

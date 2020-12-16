@@ -13,7 +13,6 @@ variable "aws_subnet_publics" {}
 
 provider "aws" {
   region  = var.region
-  version = "~> 2.64"
 }
 
 data "aws_caller_identity" "current" {}

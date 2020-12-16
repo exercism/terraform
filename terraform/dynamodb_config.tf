@@ -29,7 +29,7 @@ resource "aws_dynamodb_table_item" "websockets_url" {
   item = <<ITEM
 {
   "id": {"S": "websockets_url"},
-  "value": {"S": "ws://${local.website_host}:${local.websockets_port}"}
+  "value": {"S": "wss://${local.website_host}:${local.websockets_port}"}
 }
 ITEM
 }
@@ -71,6 +71,19 @@ resource "aws_dynamodb_table_item" "anycable_rpc_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "sidekiq_redis_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "sidekiq_redis_url"},
+  "value": {"S": "redis://${module.webservers.sidekiq_redis_url}"}
+}
+ITEM
+}
+
+
 resource "aws_dynamodb_table_item" "assets_host" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -78,7 +91,7 @@ resource "aws_dynamodb_table_item" "assets_host" {
   item = <<ITEM
 {
   "id": {"S": "website_assets_host"},
-  "value": {"S": "${module.webservers.cloudfront_distribution_assets.domain_name}"}
+  "value": {"S": "https://${module.webservers.cloudfront_distribution_assets.domain_name}"}
 }
 ITEM
 }

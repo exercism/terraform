@@ -28,9 +28,10 @@ resource "aws_alb_target_group" "http" {
   health_check {
     path = "/health-check"
 
-    healthy_threshold   = 1
+    healthy_threshold   = 2
     unhealthy_threshold = 10
     interval            = 5
+    timeout             = 4
   }
 }
 
@@ -81,9 +82,10 @@ resource "aws_alb_target_group" "websockets" {
   health_check {
     path = "/health"
 
-    healthy_threshold   = 1
+    healthy_threshold   = 2
     unhealthy_threshold = 10
     interval            = 5
+    timeout             = 4
   }
 }
 

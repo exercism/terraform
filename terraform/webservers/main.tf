@@ -27,7 +27,6 @@ variable "container_count" {}
 
 provider "aws" {
   region  = var.region
-  version = "~> 2.64"
 }
 
 # Fetch AZs in the current region
