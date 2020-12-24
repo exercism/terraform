@@ -146,6 +146,18 @@ resource "aws_dynamodb_table_item" "mysql_port" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "mysql_socket" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "mysql_socket"},
+  "value": {"S": ""}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "dynamodb_tooling_jobs_table" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -219,12 +231,12 @@ ITEM
 }
 
 
-resource "aws_dynamodb_table_item" "language_server_proxy_url" {
+resource "aws_dynamodb_table_item" "language_server_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
   item       = <<ITEM
 {
-  "id": {"S": "language_server_proxy_url"},
+  "id": {"S": "language_server_url"},
   "value": {"S": "${module.language_servers.alb_hostname}"}
 }
 ITEM
