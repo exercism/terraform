@@ -187,7 +187,8 @@ Restart=always
 # Sleep for 30s before restarting the service
 RestartSec=30
 User=exercism
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling-manager/bin/start
+WorkingDirectory=/opt/tooling-manager
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-manager
 
 [Install]
@@ -223,7 +224,8 @@ Restart=always
 # Sleep for 30s before restarting the service
 RestartSec=30
 User=exercism
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- ruby /opt/tooling-invoker/bin/start
+WorkingDirectory=/opt/tooling-invoker
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-invoker
 
 [Install]
