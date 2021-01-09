@@ -4,11 +4,11 @@ variable "region" {
 
 locals {
   # TODO: Change this to the real host
-  website_protocol = "https"
-  website_host     = "exercism.lol"
-  http_port        = 80
+  website_protocol    = "https"
+  website_host        = "exercism.lol"
+  http_port           = 80
   websockets_protocol = "wss"
-  websockets_port  = 80
+  websockets_port     = 80
 
   ecr_tooling_repos = toset([
     "c-test-runner",
@@ -76,9 +76,10 @@ data "aws_caller_identity" "current" {}
 module "webservers" {
   source = "./webservers"
 
-  region           = var.region
-  website_protocol = local.website_protocol
-  website_host     = local.website_host
+  region            = var.region
+  ecr_tooling_repos = local.ecr_tooling_repos
+  website_protocol  = local.website_protocol
+  website_host      = local.website_host
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
@@ -139,7 +140,8 @@ module "sidekiq" {
 module "bastion" {
   source = "./bastion"
 
-  region = var.region
+  region            = var.region
+  ecr_tooling_repos = local.ecr_tooling_repos
 
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs

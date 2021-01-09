@@ -1,4 +1,5 @@
 variable "region" {}
+variable "ecr_tooling_repos" {}
 variable "aws_iam_policy_document_assume_role_ecs" {}
 variable "aws_iam_policy_read_dynamodb_config" {}
 variable "aws_iam_policy_write_to_cloudwatch" {}

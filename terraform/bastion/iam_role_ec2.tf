@@ -37,11 +37,13 @@ resource "aws_iam_role_policy_attachment" "read_secret_config" {
   role       = aws_iam_role.ec2.name
   policy_arn = var.aws_iam_policy_read_secret_config.arn
 }
-
+resource "aws_iam_role_policy_attachment" "ecr" {
+  role       = aws_iam_role.ec2.name
+  policy_arn = aws_iam_policy.ecr.arn
+}
 # There are some eventual consistency issues with this.
 #
 resource "aws_iam_instance_profile" "ec2" {
   name = "bastion-ec2"
   role = aws_iam_role.ec2.name
 }
-
