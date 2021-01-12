@@ -26,6 +26,7 @@ locals {
     "elixir-representer",
     "elixir-test-runner",
     "elm-test-runner",
+    "elm-representer",
     "erlang-analyzer",
     "erlang-test-runner",
     "fsharp-representer",
