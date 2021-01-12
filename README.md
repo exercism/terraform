@@ -172,9 +172,8 @@ terraform fmt
 
 ## Adding new tooling
 
-- Add a block to `terraform/tooling/ecr.tf`
-- Add a line to `terraform/tooling/iam_ecr.tf`
-- Add a line to `terraform/tooling_invoker/iam_policy_ecr.tf`
+- Add a line to the list of tools in [`terraform/main.tf`](./terraform/main.tf)
+- Add a line to the tooling type's configuration in [`terraform/dynamodb_tooling_language_groups.tf`](./terraform/dynamodb_tooling_language_groups.tf)
 
 Currently the ami.sh also needs updating
 
