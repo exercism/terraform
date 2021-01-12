@@ -29,7 +29,7 @@ resource "aws_dynamodb_table_item" "tooling_language_r_all" {
   item = <<ITEM
 {
   "group": {"S": "representers-all"},
-  "languages": {"S": "clojure,common-lisp,csharp,elixir,elm,fsharp,j,javascript,python,ruby,rust"}
+  "languages": {"S": "clojure,common-lisp,csharp,elixir,elm,fsharp,j,javascript,nim,python,ruby,rust"}
 }
 ITEM
 }
@@ -41,7 +41,7 @@ resource "aws_dynamodb_table_item" "tooling_language_a_all" {
   item = <<ITEM
 {
   "group": {"S": "analyzers-all"},
-  "languages": {"S": "clojure,common-lisp,csharp,elixir,erlang,go,java,javascript,python,ruby,rust,scala,typescript"}
+  "languages": {"S": "clojure,common-lisp,csharp,elixir,erlang,go,java,javascript,nim,python,ruby,rust,scala,typescript"}
 }
 ITEM
 }
