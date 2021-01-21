@@ -24,8 +24,8 @@ https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws/late
 
 Tooling Invokers need the following security_groups:
 - tooling-invoker-ec2
-- efs-tooling-jobs-access 
+- efs-submissions-access 
 
-- The EFS should be mounted at /mnt/jobs.
+- The EFS should be mounted at /mnt/submissions.
 - It should be readonly
 

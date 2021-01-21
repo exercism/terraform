@@ -37,9 +37,9 @@ resource "aws_ecs_task_definition" "webservers" {
   }
 
   volume {
-    name = "efs-tooling-jobs"
+    name = "efs-submissions"
     efs_volume_configuration {
-      file_system_id = var.aws_efs_file_system_tooling_jobs.id
+      file_system_id = var.aws_efs_file_system_submissions.id
     }
   }
 }
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "webservers" {
     security_groups = [
       aws_security_group.ecs.id,
       var.aws_security_group_efs_repositories_access.id,
-      var.aws_security_group_efs_tooling_jobs_access.id
+      var.aws_security_group_efs_submissions_access.id
     ]
     subnets = var.aws_subnet_publics.*.id
 

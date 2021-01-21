@@ -94,10 +94,10 @@ module "webservers" {
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_efs_submissions_access   = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
+  aws_efs_file_system_submissions             = aws_efs_file_system.submissions
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -128,10 +128,10 @@ module "sidekiq" {
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_efs_submissions_access   = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
+  aws_efs_file_system_submissions             = aws_efs_file_system.submissions
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -153,12 +153,12 @@ module "bastion" {
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_efs_submissions_access   = aws_security_group.efs_submissions_access
   aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
   aws_security_group_ssh                       = aws_security_group.ssh
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_tooling_jobs             = aws_efs_file_system.tooling_jobs
+  aws_efs_file_system_submissions             = aws_efs_file_system.submissions
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

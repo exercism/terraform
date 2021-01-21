@@ -10,9 +10,9 @@ variable "aws_iam_role_ecs_task_execution" {}
 variable "aws_iam_policy_read_secret_config" {}
 variable "aws_security_group_rds_main" {}
 variable "aws_security_group_efs_repositories_access" {}
-variable "aws_security_group_efs_tooling_jobs_access" {}
+variable "aws_security_group_efs_submissions_access" {}
 variable "aws_efs_file_system_repositories" {}
-variable "aws_efs_file_system_tooling_jobs" {}
+variable "aws_efs_file_system_submissions" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

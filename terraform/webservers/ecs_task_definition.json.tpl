@@ -70,8 +70,8 @@
         "sourceVolume": "efs-repositories"
       },
       {
-        "containerPath": "/mnt/tooling_jobs",
-        "sourceVolume": "efs-tooling-jobs"
+        "containerPath": "/mnt/submissions",
+        "sourceVolume": "efs-submissions"
       }
     ],
     "cpu": 0,

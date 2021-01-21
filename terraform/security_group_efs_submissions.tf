@@ -1,5 +1,5 @@
-resource "aws_security_group" "efs_tooling_jobs_access" {
-  name        = "efs-tooling-jobs-access"
+resource "aws_security_group" "efs_submissions_access" {
+  name        = "efs-submissions-access"
   description = "Controls what can access to the EFS"
   vpc_id      = aws_vpc.main.id
 
@@ -7,7 +7,7 @@ resource "aws_security_group" "efs_tooling_jobs_access" {
     protocol        = "tcp"
     from_port       = 2049
     to_port         = 2049
-    security_groups = [aws_security_group.efs_tooling_jobs.id]
+    security_groups = [aws_security_group.efs_submissions.id]
   }
 
   lifecycle {
@@ -15,9 +15,9 @@ resource "aws_security_group" "efs_tooling_jobs_access" {
   }
 }
 
-resource "aws_security_group" "efs_tooling_jobs" {
-  name        = "efs_tooling_jobs"
-  description = "Allows the efs_tooling_jobs_access to be accessed"
+resource "aws_security_group" "efs_submissions" {
+  name        = "efs_submissions"
+  description = "Allows the efs_submissions_access to be accessed"
   vpc_id      = aws_vpc.main.id
 
   lifecycle {
@@ -25,14 +25,14 @@ resource "aws_security_group" "efs_tooling_jobs" {
   }
 }
 
-resource "aws_security_group_rule" "efs_tooling_jobs_ingress" {
-  security_group_id = aws_security_group.efs_tooling_jobs.id
+resource "aws_security_group_rule" "efs_submissions_ingress" {
+  security_group_id = aws_security_group.efs_submissions.id
 
   type                     = "ingress"
   protocol                 = "tcp"
   from_port                = 2049
   to_port                  = 2049
-  source_security_group_id = aws_security_group.efs_tooling_jobs_access.id
+  source_security_group_id = aws_security_group.efs_submissions_access.id
 
   lifecycle {
     create_before_destroy = true
