@@ -8,14 +8,16 @@ data "template_file" "webservers" {
   template = file("./webservers/ecs_task_definition.json.tpl")
 
   vars = {
-    nginx_image        = "${aws_ecr_repository.nginx.repository_url}:latest"
-    rails_image        = "${aws_ecr_repository.rails.repository_url}:latest"
-    anycable_go_image  = "${aws_ecr_repository.anycable_go.repository_url}:latest"
-    anycable_redis_url = local.anycable_redis_url
-    http_port          = var.http_port
-    websockets_port    = var.websockets_port
-    region             = var.region
-    log_group_name     = aws_cloudwatch_log_group.webservers.name
+    nginx_image                  = "${aws_ecr_repository.nginx.repository_url}:latest"
+    rails_image                  = "${aws_ecr_repository.rails.repository_url}:latest"
+    anycable_go_image            = "${aws_ecr_repository.anycable_go.repository_url}:latest"
+    anycable_redis_url           = local.anycable_redis_url
+    http_port                    = var.http_port
+    websockets_port              = var.websockets_port
+    region                       = var.region
+    log_group_name               = aws_cloudwatch_log_group.webservers.name
+    efs_submissions_mount_point  = var.efs_submissions_mount_point
+    efs_repositories_mount_point = var.efs_repositories_mount_point
   }
 }
 resource "aws_ecs_task_definition" "webservers" {
@@ -73,11 +75,11 @@ resource "aws_ecs_service" "webservers" {
     container_port   = var.http_port
   }
 
-#   load_balancer {
-#     target_group_arn = aws_alb_target_group.websockets.id
-#     container_name   = "anycable_go"
-#     container_port   = var.websockets_port
-#   }
+  #   load_balancer {
+  #     target_group_arn = aws_alb_target_group.websockets.id
+  #     container_name   = "anycable_go"
+  #     container_port   = var.websockets_port
+  #   }
 
   depends_on = [
     aws_alb_listener.http

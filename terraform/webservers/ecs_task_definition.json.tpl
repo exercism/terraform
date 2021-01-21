@@ -66,11 +66,11 @@
     },
     "mountPoints": [
       {
-        "containerPath": "/mnt/repos",
+        "containerPath": "${efs_repositories_mount_point}",
         "sourceVolume": "efs-repositories"
       },
       {
-        "containerPath": "/mnt/submissions",
+        "containerPath": "${efs_submissions_mount_point}",
         "sourceVolume": "efs-submissions"
       }
     ],

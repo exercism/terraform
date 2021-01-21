@@ -26,6 +26,6 @@ Tooling Invokers need the following security_groups:
 - tooling-invoker-ec2
 - efs-submissions-access 
 
-- The EFS should be mounted at /mnt/submissions.
+- The EFS should be mounted at /mnt/efs/submissions.
 - It should be readonly
 

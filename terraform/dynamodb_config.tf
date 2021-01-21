@@ -230,7 +230,6 @@ resource "aws_dynamodb_table_item" "tooling_ecr_repository_url" {
 ITEM
 }
 
-
 resource "aws_dynamodb_table_item" "language_server_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -238,6 +237,28 @@ resource "aws_dynamodb_table_item" "language_server_url" {
 {
   "id": {"S": "language_server_url"},
   "value": {"S": "${module.language_servers.alb_hostname}"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "efs_submissions_mount_point" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+  item       = <<ITEM
+{
+  "id": {"S": "efs_submissions_mount_point"},
+  "value": {"S": "${local.efs_submissions_mount_point}"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "efs_repositories_mount_point" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+  item       = <<ITEM
+{
+  "id": {"S": "efs_repositories_mount_point"},
+  "value": {"S": "${local.efs_repositories_mount_point}"}
 }
 ITEM
 }
