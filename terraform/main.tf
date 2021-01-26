@@ -38,6 +38,7 @@ locals {
     "j-representer",
     "j-test-runner",
     "java-analyzer",
+    "java-representer",
     "java-test-runner",
     "javascript-analyzer",
     "javascript-representer",
