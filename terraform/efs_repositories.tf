@@ -1,5 +1,6 @@
 resource "aws_efs_file_system" "repositories" {
   creation_token = "git-repositories"
+  name = "Repositories"
 
   tags = {
     name = "Git Repositories"

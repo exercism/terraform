@@ -2,19 +2,28 @@
 # System packages #
 ###################
 sudo apt-get -y update
-sudo apt-get install -y wget git make unzip uidmap nfs-common
+sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config
 
-
-#############
-# Mount EFS #
-#############
-
+#########################
+# Mount EFS Submissions #
+#########################
 sudo su -
   # TODO: Add correct fs-xxxx filesystem
-  FILE_SYSTEM_ID=""
+  FILE_SYSTEM_ID="fs-11f0c5e0"
   EFS_MOUNT_POINT="/mnt/efs/submissions"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev,ro 0 0\n" >> /etc/fstab
+  retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+exit
+
+#################
+# Mount EFS Git #
+#################
+sudo su -
+  FILE_SYSTEM_ID="fs-064a13f7"
+  EFS_MOUNT_POINT="/mnt/efs/repos"
+  mkdir -p "${EFS_MOUNT_POINT}"
+  test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
   retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
 exit
 
@@ -189,6 +198,11 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-manager
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- git fetch
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- git reset --hard origin/main
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle config set deployment 'true'
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle config set without 'development test'
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle check || bundle install
 ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-manager
 
