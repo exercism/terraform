@@ -198,11 +198,7 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-manager
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- git fetch
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- git reset --hard origin/main
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle config set deployment 'true'
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle config set without 'development test'
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle check || bundle install
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
 ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-manager
 
@@ -240,6 +236,7 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-invoker
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
 ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-invoker
 
