@@ -15,6 +15,7 @@ locals {
 
   ecr_tooling_repos = toset([
     "c-test-runner",
+    "c-representer",
     "clojure-analyzer",
     "clojure-representer",
     "clojure-test-runner",

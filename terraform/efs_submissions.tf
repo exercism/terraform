@@ -1,9 +1,8 @@
 resource "aws_efs_file_system" "submissions" {
   creation_token = "submissions"
-  name = "Submissions"
 
   tags = {
-    name = "Submissions"
+    Name = "Submissions"
   }
 }
 
