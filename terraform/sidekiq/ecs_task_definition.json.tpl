@@ -44,7 +44,16 @@
     },
     "cpu": 0,
     "user": "0",
-    "mountPoints": [],
+    "mountPoints": [
+      {
+        "containerPath": "${efs_repositories_mount_point}",
+        "sourceVolume": "efs-repositories"
+      },
+      {
+        "containerPath": "${efs_submissions_mount_point}",
+        "sourceVolume": "efs-submissions"
+      }
+    ],
     "portMappings": [],
     "volumesFrom": []
   }

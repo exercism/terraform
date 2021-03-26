@@ -140,6 +140,8 @@ module "sidekiq" {
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
+  efs_submissions_mount_point                  = local.efs_submissions_mount_point
+  efs_repositories_mount_point                 = local.efs_repositories_mount_point
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

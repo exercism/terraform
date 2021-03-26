@@ -11,6 +11,8 @@ data "template_file" "sidekiq" {
     rails_image        = "${var.aws_ecr_repository_webserver_rails.repository_url}:latest"
     region             = var.region
     log_group_name     = aws_cloudwatch_log_group.sidekiq.name
+    efs_submissions_mount_point  = var.efs_submissions_mount_point
+    efs_repositories_mount_point = var.efs_repositories_mount_point
   }
 }
 resource "aws_ecs_task_definition" "sidekiq" {

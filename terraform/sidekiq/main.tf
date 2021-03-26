@@ -14,6 +14,8 @@ variable "aws_security_group_efs_submissions_access" {}
 variable "aws_security_group_elasticache_sidekiq" {}
 variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
+variable "efs_submissions_mount_point" {}
+variable "efs_repositories_mount_point" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
