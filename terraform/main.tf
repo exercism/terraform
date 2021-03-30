@@ -52,6 +52,7 @@ locals {
     "nim-analyzer",
     "nim-representer",
     "nim-test-runner",
+    "ocaml-test-runner",
     "prolog-test-runner",
     "python-analyzer",
     "python-representer",
