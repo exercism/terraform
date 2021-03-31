@@ -49,6 +49,7 @@ locals {
     "javascript-test-runner",
     "julia-test-runner",
     "kotlin-test-runner",
+    "lua-test-runner",
     "nim-analyzer",
     "nim-representer",
     "nim-test-runner",
