@@ -68,6 +68,7 @@ locals {
     "scheme-test-runner",
     "stub-analyzer",
     "swift-test-runner",
+    "tcl-test-runner",
     "typescript-analyzer",
     "x86-64-assembly-test-runner"
   ])
