@@ -66,6 +66,7 @@ locals {
     "rust-test-runner",
     "scala-analyzer",
     "scheme-test-runner",
+    "sml-test-runner",
     "stub-analyzer",
     "swift-test-runner",
     "tcl-test-runner",
