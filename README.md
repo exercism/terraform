@@ -184,4 +184,4 @@ Currently the ami.sh also needs updating
 - [S3 Bucket provider documentation](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html)
 
 - [Public + Private VPC](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario2.html#VPC_Scenario2_Implementation)
-- [Useful Fargate Blog Post] (https://blog.oxalide.io/post/aws-fargate/)
+- [Useful Fargate Blog Post](https://blog.oxalide.io/post/aws-fargate/)
