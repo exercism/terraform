@@ -14,6 +14,7 @@ locals {
   efs_repositories_mount_point = "/mnt/efs/repos"
 
   ecr_tooling_repos = toset([
+    "bash-test-runner",
     "c-test-runner",
     "c-representer",
     "clojure-analyzer",
