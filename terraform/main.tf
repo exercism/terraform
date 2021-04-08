@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
 variable "region" {
   default = "eu-west-2"
 }
@@ -75,6 +84,11 @@ locals {
     "typescript-analyzer",
     "vimscript-test-runner",
     "x86-64-assembly-test-runner"
+  ])
+
+
+  ecr_lambda_repos = toset([
+    "generic-snippet-extractor"
   ])
 
   ecr_language_server_repos = toset([
@@ -228,6 +242,8 @@ module "github_deploy" {
   region = var.region
 
   aws_ecr_repo_arns = [
+    module.snippet_extractor.ecr_repository_snippet_extractor.arn,
+
     module.tooling_orchestrator.ecr_repository_application.arn,
     module.tooling_orchestrator.ecr_repository_nginx.arn,
 
@@ -270,4 +286,11 @@ module "language_servers" {
 
 module "git_server" {
   source = "./git_server"
+}
+
+module "snippet_extractor" {
+  source = "./snippet_extractor"
+
+  region         = var.region
+  aws_account_id = data.aws_caller_identity.current.account_id
 }

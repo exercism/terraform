@@ -16,14 +16,19 @@ brew install terraform
 
 - Create an IAM user called `tooling-public-write-user`
 - Give them no permissions (these will be set by terraform)
-- Set programatic access and save the keys for later.
+- Set programatic access and save the keys to add to GitHub
 
-### Create a ECR public-write user for tooling
+### Create a public-write user for tooling
 
 - Create an IAM user called `github-deploy`
 - Give them no permissions (these will be set by terraform)
-- Set programatic access and save the keys for later.
+- Set programatic access and save the keys to add to GitHub
 
+### Create a public-write user for lambda
+
+- Create an IAM user called `lambda-public-write-user-public-write-user`
+- Give them no permissions (these will be set by terraform)
+- Set programatic access and save the keys to add to GitHub
 
 ### Create state bucket
 
@@ -88,7 +93,8 @@ Create a policy called `terraform-iam` with the following JSON:
                 "iam:RemoveRoleFromInstanceProfile",
                 "iam:DeleteInstanceProfile",
                 "iam:AddRoleToInstanceProfile",
-                "iam:DeleteUserPolicy"
+                "iam:DeleteUserPolicy",
+                "iam:ListRolePolicies"
             ],
             "Resource": "*"
         },
@@ -97,11 +103,12 @@ Create a policy called `terraform-iam` with the following JSON:
             "Effect": "Allow",
             "Action": [
                 "iam:GetUserPolicy",
-                "iam:PutUserPolicy",
+                "iam:PutUserPolicy"
             ],
             "Resource": [ 
               "arn:aws:iam::*:user/github-deploy",
-              "arn:aws:iam::*:user/tooling-public-write-user"
+              "arn:aws:iam::*:user/tooling-public-write-user",
+              "arn:aws:iam::*:user/lambda-public-write-user"
             ]
         }
     ]
