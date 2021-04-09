@@ -26,6 +26,7 @@ locals {
     "bash-test-runner",
     "c-test-runner",
     "c-representer",
+    "cfml-test-runner",
     "clojure-analyzer",
     "clojure-representer",
     "clojure-test-runner",
