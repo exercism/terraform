@@ -84,6 +84,7 @@ locals {
     "swift-test-runner",
     "tcl-test-runner",
     "typescript-analyzer",
+    "typescript-representer",
     "typescript-test-runner",
     "vimscript-test-runner",
     "x86-64-assembly-test-runner"
