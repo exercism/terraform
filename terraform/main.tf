@@ -30,6 +30,7 @@ locals {
     "clojure-analyzer",
     "clojure-representer",
     "clojure-test-runner",
+    "coffeescript-test-runner",
     "common-lisp-analyzer",
     "common-lisp-representer",
     "common-lisp-test-runner",
