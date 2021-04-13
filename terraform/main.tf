@@ -79,6 +79,7 @@ locals {
     "rust-representer",
     "rust-test-runner",
     "scala-analyzer",
+    "scala-test-runner",
     "scheme-test-runner",
     "sml-test-runner",
     "stub-analyzer",
