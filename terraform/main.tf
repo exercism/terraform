@@ -166,6 +166,7 @@ module "sidekiq" {
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
+  aws_security_group_elasticache_anycable       = module.webservers.security_group_elasticache_anycable
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main

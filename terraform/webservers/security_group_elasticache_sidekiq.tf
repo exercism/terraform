@@ -4,7 +4,7 @@ resource "aws_security_group" "elasticache_sidekiq" {
   vpc_id      = var.aws_vpc_main.id
 
   tags = {
-    Name = "webservers-elasticache-anycable"
+    Name = "webservers-elasticache-sidekiq"
   }
 }
 

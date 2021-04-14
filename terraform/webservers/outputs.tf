@@ -7,6 +7,9 @@ output "sidekiq_redis_url" {
 output "security_group_elasticache_sidekiq" {
   value = aws_security_group.elasticache_sidekiq
 }
+output "security_group_elasticache_anycable" {
+  value = aws_security_group.elasticache_anycable
+}
 
 output "alb_hostname" {
   value = aws_alb.webservers.dns_name
