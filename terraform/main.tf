@@ -71,6 +71,7 @@ locals {
     "python-analyzer",
     "python-representer",
     "python-test-runner",
+    "raku-test-runner",
     "reasonml-test-runner",
     "ruby-analyzer",
     "ruby-representer",
