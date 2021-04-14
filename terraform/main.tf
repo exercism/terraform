@@ -38,6 +38,7 @@ locals {
     "csharp-analyzer",
     "csharp-representer",
     "csharp-test-runner",
+    "dart-test-runner",
     "elixir-analyzer",
     "elixir-representer",
     "elixir-test-runner",
