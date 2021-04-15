@@ -46,6 +46,7 @@ locals {
     "elm-analyzer",
     "elm-representer",
     "elm-test-runner",
+    "emacs-lisp-test-runner",
     "erlang-analyzer",
     "erlang-test-runner",
     "fsharp-representer",
