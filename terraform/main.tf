@@ -75,6 +75,7 @@ locals {
     "perl5-test-runner",
     "php-test-runner",
     "prolog-test-runner",
+    "purescript-test-runner",
     "python-analyzer",
     "python-representer",
     "python-test-runner",
