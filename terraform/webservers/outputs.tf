@@ -33,3 +33,10 @@ output "s3_bucket_assets" {
 output "cloudfront_distribution_assets" {
   value = aws_cloudfront_distribution.assets
 }
+
+output "s3_bucket_icons" {
+  value = aws_s3_bucket.icons
+}
+output "cloudfront_distribution_icons" {
+  value = aws_cloudfront_distribution.icons
+}

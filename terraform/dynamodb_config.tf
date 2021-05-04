@@ -95,7 +95,6 @@ resource "aws_dynamodb_table_item" "sidekiq_redis_url" {
 ITEM
 }
 
-
 resource "aws_dynamodb_table_item" "assets_host" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -108,7 +107,17 @@ resource "aws_dynamodb_table_item" "assets_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "icons_host" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
 
+  item = <<ITEM
+{
+  "id": {"S": "website_icons_host"},
+  "value": {"S": "https://${module.webservers.cloudfront_distribution_icons.domain_name}"}
+}
+ITEM
+}
 
 resource "aws_dynamodb_table_item" "mysql_master_endpoint" {
   table_name = aws_dynamodb_table.config.name
