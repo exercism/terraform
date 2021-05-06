@@ -67,6 +67,7 @@ locals {
     "javascript-test-runner",
     "julia-test-runner",
     "kotlin-test-runner",
+    "lfe-test-runner",
     "lua-test-runner",
     "mips-test-runner",
     "nim-analyzer",
