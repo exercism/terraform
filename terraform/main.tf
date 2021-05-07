@@ -57,6 +57,7 @@ locals {
     "go-analyzer",
     "go-test-runner",
     "groovy-test-runner",
+    "haskell-test-runner",
     "j-representer",
     "j-test-runner",
     "java-analyzer",
