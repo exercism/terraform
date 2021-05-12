@@ -10,7 +10,10 @@ resource "aws_iam_user_policy" "s3" {
         "Sid": "GithubDeployS3ListPolicy",
         "Effect": "Allow",
         "Action": ["s3:ListBucket"],
-        "Resource": ["arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}"]
+        "Resource": [
+          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}",
+          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_icons}"
+        ]
       }, {
         "Sid": "GithubDeployS3ReadWritePolicy",
         "Effect": "Allow",
@@ -20,7 +23,8 @@ resource "aws_iam_user_policy" "s3" {
           "s3:PutObjectAcl"
         ],
         "Resource": [
-          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}/*"
+          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}/*",
+          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_icons}/*"
         ]
       }
     ]

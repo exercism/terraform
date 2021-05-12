@@ -5,6 +5,7 @@ variable "region" {}
 # so that we don't leak all this info into this module
 variable "aws_ecr_repo_arns" {}
 variable "aws_s3_bucket_name_webservers_assets" {}
+variable "aws_s3_bucket_name_webservers_icons" {}
 
 data "aws_caller_identity" "current" {}
 

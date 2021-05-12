@@ -108,7 +108,7 @@ locals {
 
 
   ecr_lambda_repos = toset([
-    "generic-snippet-extractor"
+    "snippet-extractor"
   ])
 
   ecr_language_server_repos = toset([
@@ -273,6 +273,7 @@ module "github_deploy" {
     module.webservers.ecr_repository_anycable_go.arn
   ]
   aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_assets.bucket
+  aws_s3_bucket_name_webservers_icons = module.webservers.s3_bucket_icons.bucket
 }
 
 module "tooling" {

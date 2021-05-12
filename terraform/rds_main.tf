@@ -68,7 +68,7 @@ resource "aws_rds_cluster" "main" {
 resource "aws_rds_cluster_instance" "main_write_instance" {
   identifier         = "writer"
   cluster_identifier = aws_rds_cluster.main.id
-  instance_class     = "db.t2.small"
+  instance_class     = "db.r5.large"
 
   # These have to be respecified here as well as in the cluster definition
   # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
