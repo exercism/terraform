@@ -167,14 +167,14 @@ resource "aws_dynamodb_table_item" "mysql_socket" {
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "dynamodb_tooling_jobs_table" {
+resource "aws_dynamodb_table_item" "tooling_redis_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "dynamodb_tooling_jobs_table"},
-  "value": {"S": "tooling_jobs"}
+  "id": {"S": "tooling_redis_url"},
+  "value": {"S": "redis://${aws_elasticache_cluster.tooling.cache_nodes.0.address}"}
 }
 ITEM
 }

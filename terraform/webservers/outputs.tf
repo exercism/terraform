@@ -10,6 +10,9 @@ output "security_group_elasticache_sidekiq" {
 output "security_group_elasticache_anycable" {
   value = aws_security_group.elasticache_anycable
 }
+output "security_group_ecs" {
+  value = aws_security_group.ecs
+}
 
 output "alb_hostname" {
   value = aws_alb.webservers.dns_name

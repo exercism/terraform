@@ -135,7 +135,6 @@ module "webservers" {
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
@@ -170,7 +169,6 @@ module "sidekiq" {
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
@@ -200,13 +198,13 @@ module "bastion" {
   ecr_tooling_repos = local.ecr_tooling_repos
 
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
+  aws_security_group_elasticache_tooling       = aws_security_group.elasticache_tooling
   aws_security_group_ssh                       = aws_security_group.ssh
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
@@ -225,7 +223,6 @@ module "tooling_orchestrator" {
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_dynamodb_tooling_jobs  = aws_iam_policy.access_dynamodb_tooling_jobs
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
 

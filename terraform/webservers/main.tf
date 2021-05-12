@@ -3,7 +3,6 @@ variable "ecr_tooling_repos" {}
 variable "aws_iam_policy_document_assume_role_ecs" {}
 variable "aws_iam_policy_read_dynamodb_config" {}
 variable "aws_iam_policy_write_to_cloudwatch" {}
-variable "aws_iam_policy_access_dynamodb_tooling_jobs" {}
 variable "aws_iam_policy_access_s3_bucket_submissions" {}
 variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
 variable "aws_iam_role_ecs_task_execution" {}

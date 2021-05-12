@@ -10,3 +10,6 @@ output "alb_hostname" {
   value = aws_alb.tooling_orchestrators.dns_name
 }
 
+output "security_group_ecs" {
+  value = aws_security_group.ecs
+}
