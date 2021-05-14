@@ -86,6 +86,7 @@ locals {
     "racket-test-runner",
     "raku-test-runner",
     "reasonml-test-runner",
+    "red-test-runner",
     "ruby-analyzer",
     "ruby-representer",
     "ruby-test-runner",
