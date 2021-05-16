@@ -22,6 +22,9 @@ locals {
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
 
+  s3_assets_bucket_name = "exercism-assets-staging"
+  s3_attachments_bucket_name = "exercism-attachments-staging"
+
   ecr_tooling_repos = toset([
     "bash-test-runner",
     "c-test-runner",
@@ -133,6 +136,8 @@ module "webservers" {
   ecr_tooling_repos = local.ecr_tooling_repos
   website_protocol  = local.website_protocol
   website_host      = local.website_host
+  s3_assets_bucket_name = local.s3_assets_bucket_name
+  s3_attachments_bucket_name = local.s3_attachments_bucket_name
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config

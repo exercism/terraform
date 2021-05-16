@@ -26,3 +26,7 @@ resource "aws_iam_role_policy_attachment" "ecr" {
   role       = aws_iam_role.ecs.name
   policy_arn = aws_iam_policy.ecr.arn
 }
+resource "aws_iam_role_policy_attachment" "s3" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = aws_iam_policy.s3.arn
+}

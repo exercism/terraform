@@ -20,6 +20,8 @@ variable "aws_subnet_publics" {}
 
 variable "website_protocol" {}
 variable "website_host" {}
+variable "s3_assets_bucket_name" {}
+variable "s3_attachments_bucket_name" {}
 variable "http_port" {}
 variable "websockets_port" {}
 

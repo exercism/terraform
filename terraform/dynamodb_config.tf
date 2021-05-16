@@ -107,6 +107,29 @@ resource "aws_dynamodb_table_item" "assets_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "aws_attachments_region" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "aws_attachments_region"},
+  "value": {"S": "${var.region}"}
+}
+ITEM
+}
+resource "aws_dynamodb_table_item" "aws_attachments_bucket" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "aws_attachments_bucket"},
+  "value": {"S": "${local.s3_attachments_bucket_name}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "icons_host" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key

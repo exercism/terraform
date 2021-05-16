@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "assets" {
   # TODO - Change this to the real bucket
-  bucket = "exercism-assets-staging"
+  bucket = var.s3_assets_bucket_name
   acl    = "private"
 
   cors_rule {
