@@ -89,6 +89,37 @@ EOM
   systemctl enable docker
 exit
 
+sudo su -
+  cat >/etc/systemd/system/restart-docker.timer << EOM
+[Unit]
+Description=Restart Docker periodically
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOM
+
+  cat >/etc/systemd/system/restart-docker.service << EOM
+[Unit]
+Description=Restart Docker
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl try-restart docker.service
+EOM
+
+  chmod 400 /etc/systemd/system/restart-docker.service
+  chmod 400 /etc/systemd/system/restart-docker.timer
+  systemctl daemon-reload
+  systemctl enable restart-docker.timer
+  systemctl start restart-docker.timer
+exit
+
+
+
 ################
 # Install Ruby #
 ################
@@ -182,7 +213,7 @@ exit
 # Setup Systemd for tooling manager #
 #####################################
 sudo su -
-  cat >/etc/systemd/system/exercism_manager.service << EOM
+  cat >/etc/systemd/system/exercism-manager.service << EOM
 [Unit]
 Description=Exercism Tooling Manager
 After=network.target
@@ -205,22 +236,22 @@ SyslogIdentifier=tooling-manager
 [Install]
 WantedBy=multi-user.target
 EOM
-chmod 544 /etc/systemd/system/exercism_manager.service
+chmod 544 /etc/systemd/system/exercism-manager.service
 
-mkdir /etc/systemd/system/exercism_manager.service.d
-cat >/etc/systemd/system/exercism_manager.service.d/env.conf << EOM
+mkdir /etc/systemd/system/exercism-manager.service.d
+cat >/etc/systemd/system/exercism-manager.service.d/env.conf << EOM
 [Service]
 Environment="EXERCISM_ENV=production"
 EOM
-  chmod 544 /etc/systemd/system/exercism_manager.service.d/env.conf
-  systemctl enable exercism_manager.service
+  chmod 544 /etc/systemd/system/exercism-manager.service.d/env.conf
+  systemctl enable exercism-manager.service
 exit
 
 #####################################
 # Setup Systemd for tooling worker #
 #####################################
 sudo su -
-  cat >/etc/systemd/system/exercism_invoker.service << EOM
+  cat >/etc/systemd/system/exercism-invoker.service << EOM
 [Unit]
 Description=Exercism Tooling Invoker Worker
 After=network.target
@@ -243,16 +274,16 @@ SyslogIdentifier=tooling-invoker
 [Install]
 WantedBy=multi-user.target
 EOM
-chmod 544 /etc/systemd/system/exercism_invoker.service
+chmod 544 /etc/systemd/system/exercism-invoker.service
 
-mkdir /etc/systemd/system/exercism_invoker.service.d
-cat >/etc/systemd/system/exercism_invoker.service.d/env.conf << EOM
+mkdir /etc/systemd/system/exercism-invoker.service.d
+cat >/etc/systemd/system/exercism-invoker.service.d/env.conf << EOM
 [Service]
 Environment="EXERCISM_ENV=production"
 Environment="JOB_POLLING_DELAY=0.1"
 EOM
-  chmod 544 /etc/systemd/system/exercism_invoker.service.d/env.conf
-  systemctl enable exercism_invoker.service
+  chmod 544 /etc/systemd/system/exercism-invoker.service.d/env.conf
+  systemctl enable exercism-invoker.service
 exit
 
 #########################################
