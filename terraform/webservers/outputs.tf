@@ -17,6 +17,9 @@ output "security_group_ecs" {
 output "alb_hostname" {
   value = aws_alb.webservers.dns_name
 }
+output "cloudfront_distribution_webservers_hostname" {
+  value = aws_cloudfront_distribution.assets.domain_name
+}
 
 output "ecr_repository_rails" {
   value = aws_ecr_repository.rails

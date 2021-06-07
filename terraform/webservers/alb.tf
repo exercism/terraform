@@ -86,7 +86,8 @@ resource "aws_alb_listener_rule" "http" {
     host_header {
       values = [
         var.website_host,
-        aws_alb.webservers.dns_name
+        aws_alb.webservers.dns_name,
+        aws_cloudfront_distribution.webservers.domain_name
       ]
     }
   }

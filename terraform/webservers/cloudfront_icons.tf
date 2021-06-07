@@ -34,9 +34,9 @@ resource "aws_cloudfront_distribution" "icons" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl            = 31536000
+    min_ttl                = 31536000
     default_ttl            = 31536000
-    max_ttl            = 31536000
+    max_ttl                = 31536000
     compress               = true
   }
   restrictions {
