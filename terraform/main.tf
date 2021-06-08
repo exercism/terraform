@@ -107,6 +107,7 @@ locals {
     "typescript-representer",
     "typescript-test-runner",
     "vimscript-test-runner",
+    "wren-representer",
     "wren-test-runner",
     "x86-64-assembly-test-runner"
   ])
