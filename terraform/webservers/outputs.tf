@@ -47,3 +47,6 @@ output "cloudfront_distribution_icons" {
   value = aws_cloudfront_distribution.icons
 }
 
+output "api_gateway_invoke_url_plausible" {
+  value = aws_api_gateway_deployment.plausible.invoke_url
+}

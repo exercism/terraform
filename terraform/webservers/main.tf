@@ -14,6 +14,7 @@ variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
 variable "efs_submissions_mount_point" {}
 variable "efs_repositories_mount_point" {}
+variable "route53_zone_main" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

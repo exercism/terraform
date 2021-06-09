@@ -154,6 +154,7 @@ module "webservers" {
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
   efs_repositories_mount_point                 = local.efs_repositories_mount_point
+  route53_zone_main = aws_route53_zone.main
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

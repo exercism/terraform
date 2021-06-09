@@ -12,3 +12,7 @@ output "webservers-anycable_redis_url" {
 output "tooling-orchestrator-alb_hostname" {
   value = module.tooling_orchestrator.alb_hostname
 }
+
+output "plausible-endpoint" {
+  value = module.webservers.api_gateway_invoke_url_plausible
+}
