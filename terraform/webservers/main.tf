@@ -14,6 +14,8 @@ variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
 variable "efs_submissions_mount_point" {}
 variable "efs_repositories_mount_point" {}
+variable "route53_zone_main" {}
+variable "acm_certificate_arn" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
@@ -32,6 +34,12 @@ variable "container_count" {}
 provider "aws" {
   region  = var.region
 }
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "global"
+}
+
 
 # Fetch AZs in the current region
 data "aws_availability_zones" "available" {}

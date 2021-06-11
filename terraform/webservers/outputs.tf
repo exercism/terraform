@@ -46,4 +46,3 @@ output "s3_bucket_icons" {
 output "cloudfront_distribution_icons" {
   value = aws_cloudfront_distribution.icons
 }
-
