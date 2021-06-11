@@ -10,7 +10,7 @@ locals {
 resource "aws_cloudfront_distribution" "webservers" {
   enabled         = true
   is_ipv6_enabled = true
-  # aliases         = [var.website_host]
+  aliases         = [var.website_host]
 
   origin {
     domain_name = aws_alb.webservers.dns_name
@@ -51,7 +51,9 @@ resource "aws_cloudfront_distribution" "webservers" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = var.acm_certificate_arn
+    ssl_support_method = "sni-only"
+    # minimum_protocol_version = "TLSv1.2_2019"
   }
 
   #############

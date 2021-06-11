@@ -19,10 +19,13 @@ locals {
   websockets_protocol = "wss"
   websockets_port     = 80
 
+  # TODO: Change this to real cert
+  acm_certificate_arn = "arn:aws:acm:us-east-1:591712695352:certificate/29b70eb3-a20f-4036-9165-08865bbdad7c"
+
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
 
-  s3_assets_bucket_name = "exercism-assets-staging"
+  s3_assets_bucket_name      = "exercism-assets-staging"
   s3_attachments_bucket_name = "exercism-attachments-staging"
 
   ecr_tooling_repos = toset([
@@ -133,11 +136,11 @@ data "aws_caller_identity" "current" {}
 module "webservers" {
   source = "./webservers"
 
-  region            = var.region
-  ecr_tooling_repos = local.ecr_tooling_repos
-  website_protocol  = local.website_protocol
-  website_host      = local.website_host
-  s3_assets_bucket_name = local.s3_assets_bucket_name
+  region                     = var.region
+  ecr_tooling_repos          = local.ecr_tooling_repos
+  website_protocol           = local.website_protocol
+  website_host               = local.website_host
+  s3_assets_bucket_name      = local.s3_assets_bucket_name
   s3_attachments_bucket_name = local.s3_attachments_bucket_name
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
@@ -154,7 +157,8 @@ module "webservers" {
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
   efs_repositories_mount_point                 = local.efs_repositories_mount_point
-  route53_zone_main = aws_route53_zone.main
+  route53_zone_main                            = aws_route53_zone.main
+  acm_certificate_arn                          = local.acm_certificate_arn
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -279,7 +283,7 @@ module "github_deploy" {
     module.webservers.ecr_repository_anycable_go.arn
   ]
   aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_assets.bucket
-  aws_s3_bucket_name_webservers_icons = module.webservers.s3_bucket_icons.bucket
+  aws_s3_bucket_name_webservers_icons  = module.webservers.s3_bucket_icons.bucket
 }
 
 module "tooling" {
