@@ -57,6 +57,7 @@ locals {
     "emacs-lisp-test-runner",
     "erlang-analyzer",
     "erlang-test-runner",
+    "fortran-test-runner",
     "fsharp-representer",
     "fsharp-test-runner",
     "generic-test-runner",
