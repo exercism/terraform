@@ -294,3 +294,15 @@ resource "aws_dynamodb_table_item" "efs_repositories_mount_point" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "github_organization" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "github_organization"},
+  "value": {"S": "exercism"}
+}
+ITEM
+}
