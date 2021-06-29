@@ -302,7 +302,7 @@ resource "aws_dynamodb_table_item" "github_organization" {
   item = <<ITEM
 {
   "id": {"S": "github_organization"},
-  "value": {"S": "exercism"}
+  "value": {"S": "fake-exercism"}
 }
 ITEM
 }
