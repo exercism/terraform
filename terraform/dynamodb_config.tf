@@ -306,3 +306,15 @@ resource "aws_dynamodb_table_item" "github_organization" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "github_bot_username" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "github_bot_username"},
+  "value": {"S": "exercism-bot"}
+}
+ITEM
+}
