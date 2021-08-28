@@ -10,8 +10,8 @@ data "template_file" "webservers" {
   vars = {
     nginx_image                  = "${aws_ecr_repository.nginx.repository_url}:latest"
     rails_image                  = "${aws_ecr_repository.rails.repository_url}:latest"
-    anycable_go_image            = "${aws_ecr_repository.anycable_go.repository_url}:latest"
-    anycable_redis_url           = local.anycable_redis_url
+    anycable_go_image            = "${var.aws_ecr_repository_anycable_go.repository_url}:latest"
+    anycable_redis_url           = var.aws_redis_url_anycable
     http_port                    = var.http_port
     websockets_port              = var.websockets_port
     region                       = var.region
@@ -74,12 +74,6 @@ resource "aws_ecs_service" "webservers" {
     container_name   = "nginx"
     container_port   = var.http_port
   }
-
-  #   load_balancer {
-  #     target_group_arn = aws_alb_target_group.websockets.id
-  #     container_name   = "anycable_go"
-  #     container_port   = var.websockets_port
-  #   }
 
   depends_on = [
     aws_alb_listener.http

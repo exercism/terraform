@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "webservers"
+  name       = "primary"
   subnet_ids = aws_subnet.publics.*.id
   tags = {
     Name = "v3"
@@ -7,7 +7,7 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_rds_cluster_parameter_group" "main" {
-  name   = "webservers"
+  name   = "primary"
   family = "aurora-mysql5.7"
 
   parameter {

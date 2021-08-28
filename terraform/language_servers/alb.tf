@@ -2,8 +2,8 @@ resource "aws_alb" "language_servers" {
   name            = "language-servers"
   subnets         = var.aws_subnet_publics.*.id
   security_groups = [aws_security_group.alb.id]
-  # TODO - Turn this on in production
-  enable_deletion_protection = false
+
+  enable_deletion_protection = true
 }
 
 # Create a target group for the websockets

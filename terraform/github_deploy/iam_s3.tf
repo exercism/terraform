@@ -11,8 +11,8 @@ resource "aws_iam_user_policy" "s3" {
         "Effect": "Allow",
         "Action": ["s3:ListBucket"],
         "Resource": [
-          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}",
-          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_icons}"
+          "arn:aws:s3:::${var.aws_s3_bucket_name_assets}",
+          "arn:aws:s3:::${var.aws_s3_bucket_name_icons}"
         ]
       }, {
         "Sid": "GithubDeployS3ReadWritePolicy",
@@ -23,8 +23,8 @@ resource "aws_iam_user_policy" "s3" {
           "s3:PutObjectAcl"
         ],
         "Resource": [
-          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_assets}/*",
-          "arn:aws:s3:::${var.aws_s3_bucket_name_webservers_icons}/*"
+          "arn:aws:s3:::${var.aws_s3_bucket_name_assets}/*",
+          "arn:aws:s3:::${var.aws_s3_bucket_name_icons}/*"
         ]
       }
     ]

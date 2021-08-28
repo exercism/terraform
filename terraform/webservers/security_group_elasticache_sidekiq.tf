@@ -1,15 +1,5 @@
-resource "aws_security_group" "elasticache_sidekiq" {
-  name        = "webservers-elasticache-sidekiq"
-  description = "Security Group for Elasticache sidekiq"
-  vpc_id      = var.aws_vpc_main.id
-
-  tags = {
-    Name = "webservers-elasticache-sidekiq"
-  }
-}
-
 resource "aws_security_group_rule" "elasticache_sidekiq_ingress" {
-  security_group_id = aws_security_group.elasticache_sidekiq.id
+  security_group_id = var.aws_security_group_elasticache_sidekiq.id
 
   type                     = "ingress"
   protocol                 = "tcp"
@@ -23,7 +13,7 @@ resource "aws_security_group_rule" "elasticache_sidekiq_ingress" {
 }
 
 resource "aws_security_group_rule" "elasticache_sidekiq_egress" {
-  security_group_id = aws_security_group.elasticache_sidekiq.id
+  security_group_id = var.aws_security_group_elasticache_sidekiq.id
 
   type        = "egress"
   from_port   = 0

@@ -26,7 +26,7 @@ brew install terraform
 
 ### Create a public-write user for lambda
 
-- Create an IAM user called `lambda-public-write-user-public-write-user`
+- Create an IAM user called `lambda-public-write-user`
 - Give them no permissions (these will be set by terraform)
 - Set programatic access and save the keys to add to GitHub
 
@@ -35,7 +35,7 @@ brew install terraform
 Terraform state is stored in s3.
 
 Create a bucket with Bucket Versioning enabled.
-The default bucket is currently `exercism-staging-terraform` - update `terraform/terraform.tf` if you want to change this.
+The default bucket is currently `exercism-terraform` - update `terraform/terraform.tf` if you want to change this.
 
 Create a policy called `terraform-s3-state` with the following JSON:
 ```
@@ -45,19 +45,18 @@ Create a policy called `terraform-s3-state` with the following JSON:
     {
       "Effect": "Allow",
       "Action": "s3:ListBucket",
-      "Resource": "arn:aws:s3:::mybucket"
+      "Resource": "arn:aws:s3:::exercism-terraform"
     },
     {
       "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:PutObject"],
-      "Resource": "arn:aws:s3:::exercism-terraform/pre-production.state"
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:PutObjectAcl"],
+      "Resource": "arn:aws:s3:::exercism-terraform/production.state"
     }
   ]
 }
 ```
 
 ### Create a terraform user
-
 
 Create a policy called `terraform-iam` with the following JSON:
 ```
@@ -116,7 +115,7 @@ Create a policy called `terraform-iam` with the following JSON:
 ```
 
 - Create a terraform IAM user.
-- Give them PowerUser privileges and the above policies.
+- Give them PowerUser privileges and the above policies (`terraform-iam` and `s3-state`)
 - Set programatic access and save the keys for later.
 
 ## Setup

@@ -1,6 +1,15 @@
+resource "aws_s3_bucket" "submissions" {
+  bucket = var.bucket_submissions_name
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+}
+
 # Note: This policy does not have the ability to delete objects
-resource "aws_iam_policy" "access_s3_bucket_submissions" {
-  name        = "access-s3-bucket-submissions"
+resource "aws_iam_policy" "bucket_submissions_access" {
+  name        = "s3-bucket-submissions-access"
   path        = "/"
   description = "Access the submissions s3 bucket"
   policy      = <<EOF
@@ -25,3 +34,4 @@ resource "aws_iam_policy" "access_s3_bucket_submissions" {
 }
 EOF
 }
+

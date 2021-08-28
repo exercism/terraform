@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "icons" {
-  # TODO - Change this to the real bucket
-  bucket = "exercism-icons-staging"
+  bucket = var.bucket_icons_name
   acl    = "private"
 
   cors_rule {
@@ -12,7 +11,7 @@ resource "aws_s3_bucket" "icons" {
   }
 }
 
-data "aws_iam_policy_document" "s3_icons" {
+data "aws_iam_policy_document" "bucket_icons_read" {
   statement {
     actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.icons.arn}/*"]
@@ -24,8 +23,8 @@ data "aws_iam_policy_document" "s3_icons" {
   }
 }
 
-resource "aws_s3_bucket_policy" "icons" {
+resource "aws_s3_bucket_policy" "bucket_icons_read" {
   bucket = aws_s3_bucket.icons.id
-  policy = data.aws_iam_policy_document.s3_icons.json
+  policy = data.aws_iam_policy_document.bucket_icons_read.json
 }
 

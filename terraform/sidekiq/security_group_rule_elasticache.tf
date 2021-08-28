@@ -1,5 +1,5 @@
 resource "aws_security_group_rule" "elasticache_sidekiq_ingress" {
-  security_group_id = var.aws_security_group_elasticache_sidekiq.id
+  security_group_id = aws_security_group.elasticache.id
 
   type                     = "ingress"
   protocol                 = "tcp"

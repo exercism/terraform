@@ -12,21 +12,23 @@ variable "region" {
 }
 
 locals {
-  # TODO: Change this to the real host
   website_protocol    = "https"
-  website_host        = "exercism.lol"
+  website_host        = "exercism.org"
   http_port           = 80
   websockets_protocol = "wss"
   websockets_port     = 80
 
-  # TODO: Change this to real cert
-  acm_certificate_arn = "arn:aws:acm:us-east-1:591712695352:certificate/29b70eb3-a20f-4036-9165-08865bbdad7c"
+  acm_certificate_arn = "arn:aws:acm:eu-west-2:681735686245:certificate/53beb6e3-2d1d-439c-8eeb-62e202e3e463"
 
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
 
-  s3_assets_bucket_name      = "exercism-assets-staging"
-  s3_attachments_bucket_name = "exercism-attachments-staging"
+  s3_bucket_assets_name       = "exercism-v3-assets"
+  s3_bucket_attachments_name  = "exercism-v3-attachments"
+  s3_bucket_icons_name        = "exercism-v3-icons"
+  s3_bucket_logs_name         = "exercism-v3-logs"
+  s3_bucket_submissions_name  = "exercism-v3-submissions"
+  s3_bucket_tooling_jobs_name = "exercism-v3-tooling-jobs"
 
   ecr_tooling_repos = toset([
     "bash-test-runner",
@@ -134,32 +136,59 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
 
+
+module "files" {
+  source = "./files"
+
+  bucket_assets_name       = local.s3_bucket_assets_name
+  bucket_attachments_name  = local.s3_bucket_attachments_name
+  bucket_icons_name        = local.s3_bucket_icons_name
+  bucket_logs_name         = local.s3_bucket_logs_name
+  bucket_submissions_name  = local.s3_bucket_submissions_name
+  bucket_tooling_jobs_name = local.s3_bucket_tooling_jobs_name
+
+  website_protocol = local.website_protocol
+  website_host     = local.website_host
+}
+
+module "anycable" {
+  source = "./anycable"
+
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+}
+
+
 module "webservers" {
   source = "./webservers"
 
-  region                     = var.region
-  ecr_tooling_repos          = local.ecr_tooling_repos
-  website_protocol           = local.website_protocol
-  website_host               = local.website_host
-  s3_assets_bucket_name      = local.s3_assets_bucket_name
-  s3_attachments_bucket_name = local.s3_attachments_bucket_name
+  region            = var.region
+  ecr_tooling_repos = local.ecr_tooling_repos
+  website_protocol  = local.website_protocol
+  website_host      = local.website_host
 
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
-  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
+  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
+  aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
+  aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
+  aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
+  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
   efs_repositories_mount_point                 = local.efs_repositories_mount_point
   route53_zone_main                            = aws_route53_zone.main
   acm_certificate_arn                          = local.acm_certificate_arn
+  aws_redis_url_anycable                       = module.anycable.redis_url
+  aws_ecr_repository_anycable_go               = module.anycable.ecr_repository_go
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -168,8 +197,6 @@ module "webservers" {
   container_memory = 3072
   container_count  = 1
 
-  # TODO: Choose a websockets port for HTTPS
-  # https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy
   http_port       = local.http_port
   websockets_port = local.websockets_port
 }
@@ -183,16 +210,16 @@ module "sidekiq" {
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
-  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
-  aws_iam_policy_access_s3_attachments         = module.webservers.iam_policy_access_s3_attachments
+  aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
+  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
+  aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
-  aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
-  aws_security_group_elasticache_anycable      = module.webservers.security_group_elasticache_anycable
+  aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
+  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
@@ -213,13 +240,13 @@ module "bastion" {
   ecr_tooling_repos = local.ecr_tooling_repos
 
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
-  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
+  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
-  aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq
-  aws_security_group_elasticache_tooling       = aws_security_group.elasticache_tooling
+  aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
+  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_security_group_ssh                       = aws_security_group.ssh
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
@@ -238,8 +265,9 @@ module "tooling_orchestrator" {
   aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
+  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -263,7 +291,7 @@ module "tooling_invoker" {
   # aws_iam_role_ecs_task_execution                        = aws_iam_role.ecs_task_execution
   aws_iam_policy_read_dynamodb_config_arn                  = aws_iam_policy.read_dynamodb_config.arn
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
-  aws_iam_policy_write_s3_bucket_tooling_jobs              = aws_iam_policy.write_s3_bucket_tooling_jobs
+  aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -282,17 +310,19 @@ module "github_deploy" {
 
     module.webservers.ecr_repository_rails.arn,
     module.webservers.ecr_repository_nginx.arn,
-    module.webservers.ecr_repository_anycable_go.arn
+    module.anycable.ecr_repository_go.arn
   ]
-  aws_s3_bucket_name_webservers_assets = module.webservers.s3_bucket_assets.bucket
-  aws_s3_bucket_name_webservers_icons  = module.webservers.s3_bucket_icons.bucket
+  aws_s3_bucket_name_assets = local.s3_bucket_assets_name
+  aws_s3_bucket_name_icons  = local.s3_bucket_icons_name
 }
 
 module "tooling" {
   source = "./tooling"
 
-  region            = var.region
-  ecr_tooling_repos = local.ecr_tooling_repos
+  aws_vpc_main       = aws_vpc.main
+  region             = var.region
+  ecr_tooling_repos  = local.ecr_tooling_repos
+  aws_subnet_publics = aws_subnet.publics
 }
 
 module "language_servers" {
