@@ -6,6 +6,7 @@ variable "aws_iam_policy_read_dynamodb_config" {}
 variable "aws_iam_policy_write_to_cloudwatch" {}
 variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
 variable "aws_iam_role_ecs_task_execution" {}
+variable "aws_security_group_elasticache_tooling_jobs" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

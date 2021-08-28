@@ -66,7 +66,7 @@ resource "aws_dynamodb_table_item" "anycable_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "anycable_redis_url"},
-  "value": {"S": "redis://${module.webservers.anycable_redis_url}"}
+  "value": {"S": "redis://${module.anycable.redis_url}"}
 }
 ITEM
 }
@@ -90,7 +90,7 @@ resource "aws_dynamodb_table_item" "sidekiq_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "sidekiq_redis_url"},
-  "value": {"S": "redis://${module.webservers.sidekiq_redis_url}"}
+  "value": {"S": "redis://${module.sidekiq.redis_url}"}
 }
 ITEM
 }
@@ -102,7 +102,7 @@ resource "aws_dynamodb_table_item" "assets_host" {
   item = <<ITEM
 {
   "id": {"S": "website_assets_host"},
-  "value": {"S": "https://${module.webservers.cloudfront_distribution_assets.domain_name}"}
+  "value": {"S": "https://${module.files.cloudfront_distribution_assets.domain_name}"}
 }
 ITEM
 }
@@ -125,7 +125,7 @@ resource "aws_dynamodb_table_item" "aws_attachments_bucket" {
   item = <<ITEM
 {
   "id": {"S": "aws_attachments_bucket"},
-  "value": {"S": "${local.s3_attachments_bucket_name}"}
+  "value": {"S": "${local.s3_bucket_attachments_name}"}
 }
 ITEM
 }
@@ -137,7 +137,7 @@ resource "aws_dynamodb_table_item" "icons_host" {
   item = <<ITEM
 {
   "id": {"S": "website_icons_host"},
-  "value": {"S": "https://${module.webservers.cloudfront_distribution_icons.domain_name}"}
+  "value": {"S": "https://${module.files.cloudfront_distribution_icons.domain_name}"}
 }
 ITEM
 }
@@ -197,7 +197,7 @@ resource "aws_dynamodb_table_item" "tooling_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "tooling_redis_url"},
-  "value": {"S": "redis://${aws_elasticache_cluster.tooling.cache_nodes.0.address}"}
+  "value": {"S": "redis://${module.tooling.redis_url}"}
 }
 ITEM
 }
@@ -221,7 +221,7 @@ resource "aws_dynamodb_table_item" "aws_submissions_bucket" {
   item = <<ITEM
 {
   "id": {"S": "aws_submissions_bucket"},
-  "value": {"S": "${aws_s3_bucket.submissions.bucket}"}
+  "value": {"S": "${local.s3_bucket_submissions_name}"}
 }
 ITEM
 }
@@ -233,7 +233,7 @@ resource "aws_dynamodb_table_item" "aws_tooling_jobs_bucket" {
   item = <<ITEM
 {
   "id": {"S": "aws_tooling_jobs_bucket"},
-  "value": {"S": "${aws_s3_bucket.tooling_jobs.bucket}"}
+  "value": {"S": "${local.s3_bucket_tooling_jobs_name}"}
 }
 ITEM
 }

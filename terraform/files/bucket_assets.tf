@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "assets" {
-  # TODO - Change this to the real bucket
-  bucket = var.s3_assets_bucket_name
+  bucket = var.bucket_assets_name
   acl    = "private"
 
   cors_rule {
@@ -12,7 +11,7 @@ resource "aws_s3_bucket" "assets" {
   }
 }
 
-data "aws_iam_policy_document" "s3_assets" {
+data "aws_iam_policy_document" "bucket_assets_read" {
   statement {
     actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.assets.arn}/*"]
@@ -24,7 +23,7 @@ data "aws_iam_policy_document" "s3_assets" {
   }
 }
 
-resource "aws_s3_bucket_policy" "assets" {
+resource "aws_s3_bucket_policy" "bucket_assets_read" {
   bucket = aws_s3_bucket.assets.id
-  policy = data.aws_iam_policy_document.s3_assets.json
+  policy = data.aws_iam_policy_document.bucket_assets_read.json
 }

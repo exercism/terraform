@@ -1,9 +1,9 @@
-output "security_group_ecs" {
-  value = aws_security_group.ecs
-}
-
 output "security_group_elasticache" {
   value = aws_security_group.elasticache
+}
+
+output "ecr_repository_go" {
+  value = aws_ecr_repository.go
 }
 
 output "redis_url" {

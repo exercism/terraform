@@ -6,13 +6,12 @@ resource "aws_alb" "webservers" {
   security_groups = [aws_security_group.alb.id]
 
   #access_logs {
-  #  bucket  = aws_s3_bucket.ops_bucket.bucket
+  #  bucket  = aws_s3_bucket.logs_bucket.bucket
   #  prefix  = "alb"
   #  enabled = true
   #}
 
-  # TODO - Turn this on in production
-  enable_deletion_protection = false
+  enable_deletion_protection = true
 }
 
 # Create a target group for the http webservers
