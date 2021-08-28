@@ -46,3 +46,7 @@ output "s3_bucket_icons" {
 output "cloudfront_distribution_icons" {
   value = aws_cloudfront_distribution.icons
 }
+
+output "iam_policy_access_s3_attachments" {
+  value = aws_iam_policy.s3
+}

@@ -185,6 +185,7 @@ module "sidekiq" {
   aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
   aws_iam_policy_access_s3_bucket_submissions  = aws_iam_policy.access_s3_bucket_submissions
   aws_iam_policy_access_s3_bucket_tooling_jobs = aws_iam_policy.access_s3_bucket_tooling_jobs
+  aws_iam_policy_access_s3_attachments         = module.webservers.iam_policy_access_s3_attachments
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_sidekiq       = module.webservers.security_group_elasticache_sidekiq

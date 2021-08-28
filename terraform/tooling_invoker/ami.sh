@@ -2,7 +2,7 @@
 # System packages #
 ###################
 sudo apt-get -y update
-sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config
+sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config slirp4netns
 
 #########################
 # Mount EFS Submissions #
@@ -32,93 +32,57 @@ exit
 #######################
 sudo groupadd exercism
 sudo useradd -g exercism -m -s /bin/bash exercism
+sudo loginctl enable-linger exercism
 
 ###################################
 # Install Docker as non-root user #
 ###################################
-sudo su exercism
+sudo su - exercism
   mkdir ~/install
   cd ~/install/
 
+  export XDG_RUNTIME_DIR=/run/user/$UID
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+
   curl -fsSL https://get.docker.com/rootless | sh
 
-  sed -i '1s/^/export XDG_RUNTIME_DIR=\/home\/exercism\/.docker\/run\n/' ~/.bashrc
+  sed -i '1s/^/\n\n/' ~/.bashrc
+  sed -i '1s/^/export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}\/bus"\n/' ~/.bashrc
+  sed -i '1s/^/export XDG_RUNTIME_DIR=\/run\/user\/$UID\n/' ~/.bashrc
+  sed -i '1s/^/export DOCKER_HOST=unix:\/\/\/run\/user\/$UID\/docker.sock\n/' ~/.bashrc
   sed -i '1s/^/export PATH=\/home\/exercism\/bin:$PATH\n/' ~/.bashrc
-  sed -i '1s/^/export DOCKER_HOST=unix:\/\/\/home\/exercism\/.docker\/run\/docker.sock\n/' ~/.bashrc
+
+  systemctl --user enable docker
 exit
 
-############################
-# Setup Systemd for Docker #
-############################
-sudo su -
-  cat >/etc/systemd/system/docker.service << EOM
-[Unit]
-Description=Docker Application Container Engine (Rootless)
-Documentation=https://docs.docker.com
+# sudo su -
+#   cat >/etc/systemd/system/restart-docker.timer << EOM
+# [Unit]
+# Description=Restart Docker periodically
 
-[Service]
-Environment=PATH=/home/exercism/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Environment=XDG_RUNTIME_DIR=/home/exercism/.docker/run
-Environment=DOCKER_HOST=unix:///home/exercism/.docker/run/docker.sock
-ExecStartPre=rm -rf \${XDG_RUNTIME_DIR}/*
-ExecStart=/home/exercism/bin/dockerd-rootless.sh --experimental
-ExecReload=/bin/kill -s HUP \$MAINPID
-TimeoutSec=0
-RestartSec=2
-Restart=always
-StartLimitBurst=3
-StartLimitInterval=60s
-LimitNOFILE=infinity
-LimitNPROC=infinity
-LimitCORE=infinity
-TasksMax=infinity
-Delegate=yes
-Type=simple
-User=exercism
-Group=exercism
+# [Timer]
+# OnCalendar=hourly
+# Persistent=true
 
-[Install]
-WantedBy=default.target
-EOM
+# [Install]
+# WantedBy=timers.target
+# EOM
 
-  chmod 400 /etc/systemd/system/docker.service
-  systemctl daemon-reload
-  systemctl enable docker.service
+#   cat >/etc/systemd/system/restart-docker.service << EOM
+# [Unit]
+# Description=Restart Docker
 
-  systemctl start docker
-  systemctl enable docker
-exit
+# [Service]
+# Type=oneshot
+# ExecStart=/usr/bin/systemctl --user restart docker.service
+# EOM
 
-sudo su -
-  cat >/etc/systemd/system/restart-docker.timer << EOM
-[Unit]
-Description=Restart Docker periodically
-
-[Timer]
-OnCalendar=hourly
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-EOM
-
-  cat >/etc/systemd/system/restart-docker.service << EOM
-[Unit]
-Description=Restart Docker
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/systemctl try-restart docker.service
-EOM
-
-  chmod 400 /etc/systemd/system/restart-docker.service
-  chmod 400 /etc/systemd/system/restart-docker.timer
-  systemctl daemon-reload
-  systemctl enable restart-docker.timer
-  systemctl start restart-docker.timer
-exit
-
-
+#   chmod 400 /etc/systemd/system/restart-docker.service
+#   chmod 400 /etc/systemd/system/restart-docker.timer
+#   systemctl daemon-reload
+#   systemctl enable restart-docker.timer
+#   systemctl start restart-docker.timer
+# exit
 
 ################
 # Install Ruby #
@@ -132,7 +96,7 @@ sudo su -
   pushd ruby-install-0.7.0/
     make install
   popd
-  RUBY_CONFIGURE_OPTS=--disable-install-doc ruby-install ruby 2.6.6
+  ruby-install ruby 2.6.6 -- --disable-install-rdoc
 
   wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
   tar -xzvf chruby-0.3.9.tar.gz
@@ -141,7 +105,7 @@ sudo su -
   popd
 exit
 
-sudo su exercism
+sudo su - exercism
   sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.bashrc
   sed -i '1s/^/EXERCISM_ENV=production\n/' ~/.bashrc
   source /usr/local/share/chruby/chruby.sh
@@ -286,9 +250,12 @@ EOM
   systemctl enable exercism-invoker.service
 exit
 
-#########################################
-## TEMPORARY: Download Ruby Test Runner #
-#########################################
+#########################
+## Start everything up ##
+#########################
+
+sudo systemctl start exercism-manager.service
+sudo systemctl start exercism-invoker.service
 
 docker logout
 aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com

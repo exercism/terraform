@@ -1,3 +1,4 @@
+/* TODO: Move to top level namespace */
 resource "aws_s3_bucket" "attachments" {
   # TODO - Change this to the real bucket
   bucket = var.s3_attachments_bucket_name

@@ -1,6 +1,19 @@
 # Tooling Invoker
 
-Create an AMI using the script in this direcory (ami.sh).
+Create an AMI using the script in this direcory (ami.sh) with the following base:
+- Ubuntu Server 20.04 LTS (HVM), SSD Volume Type (ami-0194c3e07668a7e36)
+- c5n.large
+- Auto-assign IP: Enable
+- IAM Role: tooling-invoker-ec2
+- Storage: 100GB (General purpose SSD - gp2)
+- Tooling Groups: 
+  - tooling-invoker-ec2
+  - efs-submissions-access
+  - efs-repositories-access
+- Tags:
+  - tooling-representers: all
+  - tooling-test-runners: all
+  - tooling-analyzers: all
 
 Then create a launch template and autoscaling group:
 
