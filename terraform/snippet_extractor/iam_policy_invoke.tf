@@ -11,7 +11,7 @@ resource "aws_iam_policy" "invoke" {
         "execute-api:Invoke"
       ],
       "Resource": [
-        "${aws_api_gateway_resource.main.arn}"
+        "${aws_api_gateway_deployment.production.execution_arn}/${aws_api_gateway_method.post.http_method}/${aws_api_gateway_resource.main.path_part}"
       ]
     }
   ]
