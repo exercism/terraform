@@ -11,7 +11,7 @@ data "template_file" "webservers" {
     nginx_image                  = "${aws_ecr_repository.nginx.repository_url}:latest"
     rails_image                  = "${aws_ecr_repository.rails.repository_url}:latest"
     anycable_go_image            = "${var.aws_ecr_repository_anycable_go.repository_url}:latest"
-    anycable_redis_url           = var.aws_redis_url_anycable
+    anycable_redis_url           = "redis://${var.aws_redis_url_anycable}:6379/1"
     http_port                    = var.http_port
     websockets_port              = var.websockets_port
     region                       = var.region
