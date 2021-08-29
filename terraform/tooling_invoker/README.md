@@ -2,18 +2,19 @@
 
 Create an AMI using the script in this direcory (ami.sh) with the following base:
 - Ubuntu Server 20.04 LTS (HVM), SSD Volume Type (ami-0194c3e07668a7e36)
-- c5n.large
+- t3.medium (Consider c5n.large if burstable fails)
 - Auto-assign IP: Enable
 - IAM Role: tooling-invoker-ec2
 - Storage: 100GB (General purpose SSD - gp2)
-- Tooling Groups: 
-  - tooling-invoker-ec2
-  - efs-submissions-access
-  - efs-repositories-access
 - Tags:
   - tooling-representers: all
   - tooling-test-runners: all
   - tooling-analyzers: all
+- Security Groups: 
+  - tooling-invoker-ec2
+  - efs-submissions-access
+  - efs-repositories-access
+- Keypair: iHiD-v3
 
 Then create a launch template and autoscaling group:
 

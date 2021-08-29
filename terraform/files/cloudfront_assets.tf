@@ -34,7 +34,9 @@ resource "aws_cloudfront_distribution" "assets" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    default_ttl            = 31536000
+    min_ttl                = 31536000
+    default_ttl            = 31536001
+    max_ttl                = 31536002
     compress               = true
   }
   restrictions {

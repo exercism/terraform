@@ -18,7 +18,7 @@ locals {
   websockets_protocol = "wss"
   websockets_port     = 80
 
-  acm_certificate_arn = "arn:aws:acm:eu-west-2:681735686245:certificate/53beb6e3-2d1d-439c-8eeb-62e202e3e463"
+  acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/ec560e0a-f375-4fd7-95c7-969433eed278"
 
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
@@ -193,9 +193,9 @@ module "webservers" {
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
 
-  container_cpu    = 1024
-  container_memory = 3072
-  container_count  = 1
+  container_cpu    = 2048
+  container_memory = 4096
+  container_count  = 3
 
   http_port       = local.http_port
   websockets_port = local.websockets_port
@@ -213,6 +213,7 @@ module "sidekiq" {
   aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
   aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
   aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
+  aws_iam_policy_invoke_api_gateway_snippet_extractor = module.snippet_extractor.iam_policy_invoke
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
@@ -228,8 +229,8 @@ module "sidekiq" {
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
 
-  container_cpu    = 512
-  container_memory = 1024
+  container_cpu    = 1024
+  container_memory = 2048
   container_count  = 1
 }
 

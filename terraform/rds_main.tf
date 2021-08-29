@@ -29,49 +29,56 @@ resource "aws_rds_cluster_parameter_group" "main" {
 
   parameter {
     name  = "collation_server"
-    value = "utf8mb4_general_ci"
+    value = "utf8mb4_unicode_ci"
   }
   parameter {
     name  = "collation_connection"
-    value = "utf8mb4_general_ci"
+    value = "utf8mb4_unicode_ci"
+  }
+
+  parameter {
+    name  = "slow_query_log"
+    value = "1"
   }
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier              = "webservers"
+  cluster_identifier              = "primary"
   engine                          = "aurora-mysql"
-  engine_version                  = "5.7.mysql_aurora.2.08.2"
-  database_name                   = "exercism_v3"
-  master_username                 = "exercism_v3"
-  master_password                 = "exercism_v3"
+  engine_mode                     = "serverless"
+  engine_version                  = "5.7.mysql_aurora.2.07.1"
+  database_name                   = "exercism"
+  master_username                 = "exercism"
+  master_password                 = "exercism"
   port                            = 3306
   availability_zones              = data.aws_availability_zones.available.names
+  backup_retention_period = 21
   vpc_security_group_ids          = [aws_security_group.rds_main.id]
   db_subnet_group_name            = aws_db_subnet_group.main.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main.name
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
-  enabled_cloudwatch_logs_exports = [
-    "error",
-    "slowquery",
-  ]
-  tags = {
-    Name = "webservers"
-  }
 
   # Ignore changes to final_snapshot_identifier, which are caused by the
   # timestamp being regenerated on each run.
   lifecycle {
     ignore_changes = [final_snapshot_identifier]
   }
+
+  scaling_configuration {
+    auto_pause   = false
+    max_capacity = 16
+    min_capacity = 2
+  }
 }
 
-resource "aws_rds_cluster_instance" "main_write_instance" {
-  identifier         = "writer"
-  cluster_identifier = aws_rds_cluster.main.id
-  instance_class     = "db.r5.large"
+# resource "aws_rds_cluster_instance" "main_write_instance" {
+#   identifier         = "writer"
+#   cluster_identifier = aws_rds_cluster.main.id
+#   instance_class     = "db.r5.large"
 
-  # These have to be respecified here as well as in the cluster definition
-  # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
-  engine         = "aurora-mysql"
-  engine_version = "5.7.mysql_aurora.2.08.2"
-}
+#   # These have to be respecified here as well as in the cluster definition
+#   # See https://github.com/terraform-providers/terraform-provider-aws/issues/4779#issuecomment-396901712
+#   engine         = "aurora"
+#   engine_mode    = "serverless"
+#   engine_version = "5.7.mysql_aurora.2.07.1"
+# }

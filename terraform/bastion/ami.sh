@@ -3,6 +3,7 @@
 ###################
 sudo apt-get -y update
 sudo apt-get install -y wget git make unzip uidmap nfs-common libmysqlclient-dev cmake pkg-config
+sudo apt install mysql-client-core-8.0
 
 ################
 # Install Ruby #
@@ -37,8 +38,7 @@ gem install bundler:2.1.4
 # Mount EFS Submissions #
 #########################
 sudo su -
-  # TODO: Add correct fs-xxxx filesystem
-  FILE_SYSTEM_ID="fs-11f0c5e0"
+  FILE_SYSTEM_ID="fs-36ba41c6"
   EFS_MOUNT_POINT="/mnt/efs/submissions"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
@@ -50,7 +50,7 @@ exit
 # Mount EFS Git #
 #################
 sudo su -
-  FILE_SYSTEM_ID="fs-064a13f7"
+  FILE_SYSTEM_ID="fs-37ba41c7"
   EFS_MOUNT_POINT="/mnt/efs/repos"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
@@ -77,3 +77,4 @@ cd /opt/website
 bundle config set deployment 'true'
 bundle config set without 'development test'
 bundle install
+
