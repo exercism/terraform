@@ -22,6 +22,10 @@ resource "aws_iam_role_policy_attachment" "access_s3_bucket_attachments" {
   role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_access_s3_attachments.arn
 }
+resource "aws_iam_role_policy_attachment" "access_s3_bucket_uploads" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = var.aws_iam_policy_access_s3_uploads.arn
+}
 resource "aws_iam_role_policy_attachment" "read_secret_config" {
   role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_read_secret_config.arn

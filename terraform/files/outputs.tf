@@ -2,6 +2,10 @@ output "bucket_attachments_access" {
   value = aws_iam_policy.bucket_attachments_access
 }
 
+output "bucket_uploads_access" {
+  value = aws_iam_policy.bucket_uploads_access
+}
+
 output "bucket_submissions_access" {
   value = aws_iam_policy.bucket_submissions_access
 }
