@@ -1,4 +1,4 @@
-# Start by creating the ALB that attaches to the 
+# Start by creating the ALB that attaches to the
 # relevant public subnets
 resource "aws_alb" "webservers" {
   name            = "webservers"
@@ -92,6 +92,25 @@ resource "aws_alb_listener_rule" "http" {
     }
   }
 }
+
+resource "aws_alb_listener_rule" "api" {
+  listener_arn = aws_alb_listener.http.arn
+  priority = 101
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.http.id
+  }
+
+  condition {
+    host_header {
+      values = [
+        "api.${var.website_host}",
+        "api.exercism.io",
+      ]
+    }
+  }
+}
+
 
 # resource "aws_alb_listener_rule" "websockets" {
 #   listener_arn = aws_alb_listener.webservers.arn
