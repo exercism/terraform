@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "bash,c,cfml,clojure,clojurescript,crystal,coffeescript,common-lisp,cpp,csharp,d,dart,elixir,elm,emacs-lisp,erlang,fortran,fsharp,generic,go,groovy,haskell,j,java,javascript,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,php,prolog,purescript,python,r,racket,raku,red,ruby,reasonml,rust,scala,scheme,sml,swift,tcl,typescript,vimscript,wren,x86-64-assembly"}
+  "languages": {"S": "bash,c,cfml,clojure,clojurescript,crystal,coffeescript,common-lisp,cpp,csharp,d,dart,elixir,elm,emacs-lisp,erlang,fortran,fsharp,go,groovy,haskell,j,java,javascript,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,php,prolog,purescript,python,r,racket,raku,red,ruby,reasonml,rust,scala,scheme,sml,swift,tcl,typescript,vimscript,wren,x86-64-assembly"}
 }
 ITEM
 }
@@ -29,7 +29,7 @@ resource "aws_dynamodb_table_item" "tooling_language_r_all" {
   item = <<ITEM
 {
   "group": {"S": "representers-all"},
-  "languages": {"S": "c,clojure,common-lisp,csharp,elixir,elm,fsharp,j,java,javascript,nim,python,ruby,rust,typescript,wren"}
+  "languages": {"S": "c,clojure,common-lisp,csharp,elixir,elm,fsharp,j,java,javascript,python,ruby,rust,typescript,wren"}
 }
 ITEM
 }
