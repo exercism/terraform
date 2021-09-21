@@ -31,7 +31,7 @@ resource "aws_subnet" "publics" {
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
   availability_zone       = local.az_names[count.index]
   vpc_id                  = aws_vpc.main.id
-  map_public_ip_on_launch = false
+  map_public_ip_on_launch = true
   tags = {
     Name = "v3 ${local.az_names[count.index]}"
   }

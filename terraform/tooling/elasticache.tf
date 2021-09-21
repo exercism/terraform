@@ -6,7 +6,7 @@ resource "aws_elasticache_subnet_group" "jobs" {
 resource "aws_elasticache_cluster" "jobs" {
   cluster_id           = "tooling-jobs"
   engine               = "redis"
-  node_type            = "cache.t3.medium"
+  node_type            = "cache.m5.large"
   num_cache_nodes      = 1
   parameter_group_name = "default.redis6.x"
   engine_version       = "6.0.5"

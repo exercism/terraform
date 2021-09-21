@@ -30,6 +30,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     name = "efs-repositories"
     efs_volume_configuration {
       file_system_id = var.aws_efs_file_system_repositories.id
+      root_directory          = "/"
     }
   }
 
@@ -37,6 +38,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     name = "efs-submissions"
     efs_volume_configuration {
       file_system_id = var.aws_efs_file_system_submissions.id
+      root_directory          = "/"
     }
   }
 }

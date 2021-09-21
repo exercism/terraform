@@ -198,7 +198,7 @@ module "webservers" {
 
   container_cpu    = 2048
   container_memory = 4096
-  container_count  = 3
+  container_count  = 6
 
   http_port       = local.http_port
   websockets_port = local.websockets_port
@@ -297,6 +297,8 @@ module "tooling_invoker" {
   aws_iam_policy_read_dynamodb_config_arn                  = aws_iam_policy.read_dynamodb_config.arn
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
+  aws_security_group_efs_repositories_access          = aws_security_group.efs_repositories_access
+  aws_security_group_efs_submissions_access           = aws_security_group.efs_submissions_access
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

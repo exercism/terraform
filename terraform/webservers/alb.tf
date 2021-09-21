@@ -85,9 +85,7 @@ resource "aws_alb_listener_rule" "http" {
   condition {
     host_header {
       values = [
-        var.website_host,
-        aws_alb.webservers.dns_name,
-        aws_cloudfront_distribution.webservers.domain_name
+        var.website_host
       ]
     }
   }
@@ -95,7 +93,7 @@ resource "aws_alb_listener_rule" "http" {
 
 resource "aws_alb_listener_rule" "api" {
   listener_arn = aws_alb_listener.http.arn
-  priority = 101
+  priority = 102
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.http.id
@@ -105,11 +103,53 @@ resource "aws_alb_listener_rule" "api" {
     host_header {
       values = [
         "api.${var.website_host}",
-        "api.exercism.io",
+        "api.exercism.io"
       ]
     }
   }
 }
+
+resource "aws_alb_listener_rule" "aliases" {
+  listener_arn = aws_alb_listener.http.arn
+  priority = 103
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.http.id
+  }
+
+  condition {
+    host_header {
+      values = [
+        aws_alb.webservers.dns_name,
+        aws_cloudfront_distribution.webservers.domain_name,
+        "www.exercism.org"
+      ]
+    }
+  }
+}
+
+resource "aws_alb_listener_rule" "legacy" {
+  listener_arn = aws_alb_listener.http.arn
+  priority = 104
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.http.id
+  }
+
+  condition {
+    host_header {
+      values = [
+        "exercism.io",
+        "www.exercism.io",
+        "exercism.net",
+        "exercism.lol",
+        "exercism.com"
+      ]
+    }
+  }
+}
+
+
 
 
 # resource "aws_alb_listener_rule" "websockets" {

@@ -13,7 +13,12 @@ resource "aws_cloudfront_distribution" "webservers" {
   aliases = [
     var.website_host,
     "api.${var.website_host}",
-    "api.exercism.io"
+    "api.exercism.io",
+    "exercism.net",
+    "exercism.com",
+    "exercism.io",
+    "www.exercism.io",
+    "www.exercism.org"
   ]
 
   origin {
@@ -57,7 +62,6 @@ resource "aws_cloudfront_distribution" "webservers" {
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate_arn
     ssl_support_method  = "sni-only"
-    # minimum_protocol_version = "TLSv1.2_2019"
   }
 
   #############
