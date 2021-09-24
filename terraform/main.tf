@@ -111,6 +111,7 @@ locals {
     "typescript-analyzer",
     "typescript-representer",
     "typescript-test-runner",
+    "vbnet-test-runner",
     "vimscript-test-runner",
     "wren-representer",
     "wren-test-runner",
