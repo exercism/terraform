@@ -8,6 +8,7 @@ variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
 variable "aws_iam_policy_access_s3_attachments" {}
 variable "aws_iam_policy_access_s3_uploads" {}
 variable "aws_iam_policy_invoke_api_gateway_snippet_extractor" {}
+variable "aws_iam_policy_invoke_api_gateway_lines_of_code_counter" {}
 variable "aws_iam_role_ecs_task_execution" {}
 variable "aws_iam_policy_read_secret_config" {}
 variable "aws_security_group_rds_main" {}
