@@ -16,3 +16,8 @@ resource "aws_iam_role" "lambda" {
 }
 POLICY
 }
+
+resource "aws_iam_role_policy_attachment" "efs" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}

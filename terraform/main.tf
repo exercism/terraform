@@ -258,6 +258,8 @@ module "bastion" {
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
+  aws_iam_policy_invoke_api_gateway_snippet_extractor     = module.snippet_extractor.iam_policy_invoke
+  aws_iam_policy_invoke_api_gateway_lines_of_code_counter = module.lines_of_code_counter.iam_policy_invoke
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -299,8 +301,8 @@ module "tooling_invoker" {
   aws_iam_policy_read_dynamodb_config_arn                  = aws_iam_policy.read_dynamodb_config.arn
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
-  aws_security_group_efs_repositories_access          = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access           = aws_security_group.efs_submissions_access
+  aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
+  aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -372,6 +374,10 @@ module "snippet_extractor" {
 module "lines_of_code_counter" {
   source = "./lines_of_code_counter"
 
-  region         = var.region
-  aws_account_id = data.aws_caller_identity.current.account_id
+  region                                    = var.region
+  aws_account_id                            = data.aws_caller_identity.current.account_id
+  aws_subnet_publics                        = aws_subnet.publics
+  aws_efs_mount_target_submissions          = aws_efs_mount_target.submissions
+  aws_efs_file_system_submissions           = aws_efs_file_system.submissions
+  aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
 }
