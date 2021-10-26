@@ -62,5 +62,11 @@ resource "aws_ecs_service" "sidekiq" {
     # TODO: Can this be false?
     assign_public_ip = true
   }
+
+  # lifecycle {
+  #   ignore_changes = [
+  #     task_definition
+  #   ]
+  # }
 }
 
