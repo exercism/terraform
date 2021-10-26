@@ -1,30 +1,5 @@
 [
   {
-    "name": "log_router",
-    "image": "906394416424.dkr.ecr.eu-west-2.amazonaws.com/aws-for-fluent-bit:latest",
-    "essential": true,
-    "firelensConfiguration": {
-      "type": "fluentbit",
-      "options": {
-        "enable-ecs-log-metadata": "true"
-      }
-    },
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${log_group_name}",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "tooling-orchestrators"
-      }
-    },
-    "cpu": 0,
-    "user": "0",
-    "mountPoints": [],
-    "portMappings": [],
-    "volumesFrom": [],
-    "environment": [ ]
-  },
-  {
     "name": "nginx",
     "image": "${nginx_image}",
     "essential": true,
@@ -36,12 +11,11 @@
     ],
 
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver":"awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "nginx/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "nginx/"
       }
     },
     "cpu": 0,
@@ -56,12 +30,11 @@
     "essential": true,
 
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver":"awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "application/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "application/"
       }
     },
     "cpu": 0,

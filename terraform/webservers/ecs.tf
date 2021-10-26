@@ -78,4 +78,10 @@ resource "aws_ecs_service" "webservers" {
   depends_on = [
     aws_alb_listener.http
   ]
+
+  # lifecycle {
+  #   ignore_changes = [
+  #     task_definition
+  #   ]
+  # }
 }

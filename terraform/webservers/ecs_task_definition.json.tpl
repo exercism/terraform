@@ -1,30 +1,5 @@
 [
   {
-    "name": "log_router",
-    "image": "906394416424.dkr.ecr.eu-west-2.amazonaws.com/aws-for-fluent-bit:latest",
-    "essential": true,
-    "firelensConfiguration": {
-      "type": "fluentbit",
-      "options": {
-        "enable-ecs-log-metadata": "true"
-      }
-    },
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${log_group_name}",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "webservers"
-      }
-    },
-    "cpu": 0,
-    "user": "0",
-    "mountPoints": [],
-    "portMappings": [],
-    "volumesFrom": [],
-    "environment": [ ]
-  },
-  {
     "name": "nginx",
     "image": "${nginx_image}",
     "essential": true,
@@ -36,12 +11,11 @@
     ],
 
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver":"awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "nginx/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "nginx/"
       }
     },
     "cpu": 0,
@@ -56,12 +30,11 @@
     "essential": true,
 
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver": "awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "puma/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "puma/"
       }
     },
     "mountPoints": [
@@ -78,7 +51,16 @@
     "user": "0",
     "portMappings": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [],
+    "healthCheck": {
+      "command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:3000/health-check || exit 1"
+      ],
+      "timeout": 2,
+      "interval": 30,
+      "startPeriod": 300
+    }
   },
   {
     "name": "anycable_ruby",
@@ -90,12 +72,11 @@
     "entryPoint": ["bundle", "exec", "anycable"],
 
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver": "awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "anycable-ruby/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "anycable-ruby/"
       }
     },
     "cpu": 0,
@@ -117,12 +98,11 @@
       {"name": "ANYCABLE_DEBUG", "value": "true"}
     ],
     "logConfiguration": {
-      "logDriver":"awsfirelens",
+      "logDriver":"awslogs",
       "options": {
-        "Name": "cloudwatch",
-        "region": "${region}",
-        "log_group_name": "${log_group_name}",
-        "log_stream_prefix": "anycable-go/"
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "anycable-go/"
       }
     },
     "cpu": 0,
