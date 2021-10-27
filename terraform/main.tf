@@ -218,8 +218,6 @@ module "sidekiq" {
   aws_iam_policy_access_s3_bucket_tooling_jobs            = module.files.bucket_tooling_jobs_access
   aws_iam_policy_access_s3_attachments                    = module.files.bucket_attachments_access
   aws_iam_policy_access_s3_uploads                        = module.files.bucket_uploads_access
-  aws_iam_policy_invoke_api_gateway_snippet_extractor     = module.snippet_extractor.iam_policy_invoke
-  aws_iam_policy_invoke_api_gateway_lines_of_code_counter = module.lines_of_code_counter.iam_policy_invoke
   aws_iam_policy_read_secret_config                       = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution                         = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_anycable                 = module.anycable.security_group_elasticache
@@ -246,20 +244,18 @@ module "bastion" {
   region            = var.region
   ecr_tooling_repos = local.ecr_tooling_repos
 
-  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
-  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
-  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
-  aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
-  aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
-  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
-  aws_security_group_ssh                       = aws_security_group.ssh
-  aws_security_group_rds_main                  = aws_security_group.rds_main
-  aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_submissions              = aws_efs_file_system.submissions
-  aws_iam_policy_invoke_api_gateway_snippet_extractor     = module.snippet_extractor.iam_policy_invoke
-  aws_iam_policy_invoke_api_gateway_lines_of_code_counter = module.lines_of_code_counter.iam_policy_invoke
+  aws_iam_policy_read_dynamodb_config                     = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_access_s3_bucket_submissions             = module.files.bucket_submissions_access
+  aws_iam_policy_access_s3_bucket_tooling_jobs            = module.files.bucket_tooling_jobs_access
+  aws_iam_policy_read_secret_config                       = aws_iam_policy.read_secret_config
+  aws_security_group_efs_repositories_access              = aws_security_group.efs_repositories_access
+  aws_security_group_efs_submissions_access               = aws_security_group.efs_submissions_access
+  aws_security_group_elasticache_sidekiq                  = module.sidekiq.security_group_elasticache
+  aws_security_group_elasticache_tooling_jobs             = module.tooling.security_group_elasticache_jobs
+  aws_security_group_ssh                                  = aws_security_group.ssh
+  aws_security_group_rds_main                             = aws_security_group.rds_main
+  aws_efs_file_system_repositories                        = aws_efs_file_system.repositories
+  aws_efs_file_system_submissions                         = aws_efs_file_system.submissions
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -378,6 +374,6 @@ module "lines_of_code_counter" {
   aws_account_id                            = data.aws_caller_identity.current.account_id
   aws_subnet_publics                        = aws_subnet.publics
   aws_efs_mount_target_submissions          = aws_efs_mount_target.submissions
-  aws_efs_file_system_submissions           = aws_efs_file_system.submissions
+  aws_efs_access_point_submissions           = aws_efs_access_point.submissions
   aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
 }

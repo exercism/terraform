@@ -2,7 +2,7 @@ variable "region" {}
 variable "aws_account_id" {}
 variable "aws_subnet_publics" {}
 variable "aws_efs_mount_target_submissions" {}
-variable "aws_efs_file_system_submissions" {}
+variable "aws_efs_access_point_submissions" {}
 variable "aws_security_group_efs_submissions_access" {}
 
 provider "aws" {

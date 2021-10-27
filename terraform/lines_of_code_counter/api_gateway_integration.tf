@@ -12,7 +12,7 @@ resource "aws_api_gateway_method" "post" {
   rest_api_id   = aws_api_gateway_rest_api.main.id
   resource_id   = aws_api_gateway_resource.main.id
   http_method   = "POST"
-  authorization = "AWS_IAM"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_method_settings" "post_production" {
@@ -49,3 +49,4 @@ resource "aws_api_gateway_deployment" "production" {
    rest_api_id = aws_api_gateway_rest_api.main.id
    stage_name  = "production"
 }
+

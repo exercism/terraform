@@ -5,7 +5,7 @@ resource "aws_lambda_function" "main" {
   image_uri     = "${aws_ecr_repository.lines_of_code_counter.repository_url}:production"
 
   file_system_config {
-    arn              = aws_efs_access_point.submissions.arn
+    arn              = var.aws_efs_access_point_submissions.arn
     local_mount_path = "/mnt/submissions"
   }
 
@@ -27,21 +27,3 @@ resource "aws_lambda_permission" "apigw_lambda" {
   source_arn = "${aws_api_gateway_rest_api.main.execution_arn}/*/*/*"
 }
 
-# EFS access point used by lambda file system
-resource "aws_efs_access_point" "submissions" {
-  file_system_id = var.aws_efs_file_system_submissions.id
-
-  root_directory {
-    path = "/mnt/submissions"
-    creation_info {
-      owner_gid   = 1000
-      owner_uid   = 1000
-      permissions = "555"
-    }
-  }
-
-  posix_user {
-    gid = 1000
-    uid = 1000
-  }
-}

@@ -12,8 +12,6 @@ variable "aws_security_group_elasticache_sidekiq" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
 variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
-variable "aws_iam_policy_invoke_api_gateway_snippet_extractor" {}
-variable "aws_iam_policy_invoke_api_gateway_lines_of_code_counter" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

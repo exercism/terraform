@@ -79,9 +79,9 @@ resource "aws_ecs_service" "webservers" {
     aws_alb_listener.http
   ]
 
-  # lifecycle {
-  #   ignore_changes = [
-  #     task_definition
-  #   ]
-  # }
+  lifecycle {
+    ignore_changes = [
+      task_definition
+    ]
+  }
 }
