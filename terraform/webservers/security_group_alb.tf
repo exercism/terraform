@@ -10,13 +10,6 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-#   ingress {
-#     protocol    = "tcp"
-#     from_port   = var.websockets_port
-#     to_port     = var.websockets_port
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
   lifecycle {
     create_before_destroy = true
   }

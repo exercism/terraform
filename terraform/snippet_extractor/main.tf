@@ -1,5 +1,6 @@
 variable "region" {}
 variable "aws_account_id" {}
+variable "aws_alb_listener_internal" {}
 
 provider "aws" {
   region  = var.region
