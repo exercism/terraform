@@ -121,7 +121,8 @@ locals {
 
 
   ecr_lambda_repos = toset([
-    "snippet-extractor"
+    "snippet-extractor",
+    "lines-of-code-counter"
   ])
 
   ecr_language_server_repos = toset([
@@ -209,26 +210,25 @@ module "sidekiq" {
 
   region = var.region
 
-  aws_ecr_repository_webserver_rails                  = module.webservers.ecr_repository_rails
-  aws_iam_policy_document_assume_role_ecs             = data.aws_iam_policy_document.assume_role_ecs
-  aws_iam_policy_read_dynamodb_config                 = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_write_to_cloudwatch                  = aws_iam_policy.write_to_cloudwatch
-  aws_iam_policy_access_s3_bucket_submissions         = module.files.bucket_submissions_access
-  aws_iam_policy_access_s3_bucket_tooling_jobs        = module.files.bucket_tooling_jobs_access
-  aws_iam_policy_access_s3_attachments                = module.files.bucket_attachments_access
-  aws_iam_policy_access_s3_uploads                    = module.files.bucket_uploads_access
-  aws_iam_policy_invoke_api_gateway_snippet_extractor = module.snippet_extractor.iam_policy_invoke
-  aws_iam_policy_read_secret_config                   = aws_iam_policy.read_secret_config
-  aws_iam_role_ecs_task_execution                     = aws_iam_role.ecs_task_execution
-  aws_security_group_elasticache_anycable             = module.anycable.security_group_elasticache
-  aws_security_group_efs_repositories_access          = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access           = aws_security_group.efs_submissions_access
-  aws_security_group_rds_main                         = aws_security_group.rds_main
-  aws_security_group_elasticache_tooling_jobs         = module.tooling.security_group_elasticache_jobs
-  aws_efs_file_system_repositories                    = aws_efs_file_system.repositories
-  aws_efs_file_system_submissions                     = aws_efs_file_system.submissions
-  efs_submissions_mount_point                         = local.efs_submissions_mount_point
-  efs_repositories_mount_point                        = local.efs_repositories_mount_point
+  aws_ecr_repository_webserver_rails           = module.webservers.ecr_repository_rails
+  aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
+  aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
+  aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
+  aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
+  aws_iam_policy_access_s3_uploads             = module.files.bucket_uploads_access
+  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
+  aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
+  aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
+  aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
+  aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
+  aws_security_group_rds_main                  = aws_security_group.rds_main
+  aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
+  aws_efs_file_system_repositories             = aws_efs_file_system.repositories
+  aws_efs_file_system_submissions              = aws_efs_file_system.submissions
+  efs_submissions_mount_point                  = local.efs_submissions_mount_point
+  efs_repositories_mount_point                 = local.efs_repositories_mount_point
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -297,8 +297,8 @@ module "tooling_invoker" {
   aws_iam_policy_read_dynamodb_config_arn                  = aws_iam_policy.read_dynamodb_config.arn
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
-  aws_security_group_efs_repositories_access          = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access           = aws_security_group.efs_submissions_access
+  aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
+  aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -311,6 +311,7 @@ module "github_deploy" {
 
   aws_ecr_repo_arns = [
     module.snippet_extractor.ecr_repository_snippet_extractor.arn,
+    module.lines_of_code_counter.ecr_repository_lines_of_code_counter.arn,
 
     module.tooling_orchestrator.ecr_repository_application.arn,
     module.tooling_orchestrator.ecr_repository_nginx.arn,
@@ -362,6 +363,19 @@ module "git_server" {
 module "snippet_extractor" {
   source = "./snippet_extractor"
 
-  region         = var.region
-  aws_account_id = data.aws_caller_identity.current.account_id
+  region                    = var.region
+  aws_account_id            = data.aws_caller_identity.current.account_id
+  aws_alb_listener_internal = aws_alb_listener.internal
+}
+
+module "lines_of_code_counter" {
+  source = "./lines_of_code_counter"
+
+  region                                    = var.region
+  aws_account_id                            = data.aws_caller_identity.current.account_id
+  aws_subnet_publics                        = aws_subnet.publics
+  aws_efs_mount_target_submissions          = aws_efs_mount_target.submissions
+  aws_efs_access_point_submissions          = aws_efs_access_point.submissions
+  aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
+  aws_alb_listener_internal                 = aws_alb_listener.internal
 }

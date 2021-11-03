@@ -30,7 +30,3 @@ resource "aws_iam_role_policy_attachment" "read_secret_config" {
   role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_read_secret_config.arn
 }
-resource "aws_iam_role_policy_attachment" "invoke_snippet_extractor" {
-  role       = aws_iam_role.ecs.name
-  policy_arn = var.aws_iam_policy_invoke_api_gateway_snippet_extractor.arn
-}
