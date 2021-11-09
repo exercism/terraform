@@ -37,6 +37,14 @@ variable "container_cpu" {}
 variable "container_memory" {}
 variable "container_count" {}
 
+variable "service_puma_cpu" {}
+variable "service_puma_memory" {}
+variable "service_puma_count" {}
+
+variable "service_anycable_cpu" {}
+variable "service_anycable_memory" {}
+variable "service_anycable_count" {}
+
 provider "aws" {
   region  = var.region
 }

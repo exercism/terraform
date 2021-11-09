@@ -1,17 +1,15 @@
 # ###
 # Set up the cluster
 # ###
-resource "aws_ecs_cluster" "webservers" {
-  name = "webservers"
+resource "aws_ecs_cluster" "webservers_split" {
+  name = "webservers_split"
 }
-data "template_file" "webservers" {
-  template = file("./webservers/ecs_task_definition.json.tpl")
+data "template_file" "puma" {
+  template = file("./webservers/ecs_task_definition_puma.json.tpl")
 
   vars = {
     nginx_image                  = "${aws_ecr_repository.nginx.repository_url}:latest"
     rails_image                  = "${aws_ecr_repository.rails.repository_url}:latest"
-    anycable_go_image            = "${var.aws_ecr_repository_anycable_go.repository_url}:latest"
-    anycable_redis_url           = "redis://${var.aws_redis_url_anycable}:6379/1"
     http_port                    = var.http_port
     websockets_port              = var.websockets_port
     region                       = var.region
@@ -20,13 +18,13 @@ data "template_file" "webservers" {
     efs_repositories_mount_point = var.efs_repositories_mount_point
   }
 }
-resource "aws_ecs_task_definition" "webservers" {
-  family                   = "webservers"
+resource "aws_ecs_task_definition" "puma" {
+  family                   = "puma"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.service_puma_cpu
   memory                   = var.service_puma_memory
-  container_definitions    = data.template_file.webservers.rendered
+  container_definitions    = data.template_file.puma.rendered
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
@@ -46,11 +44,11 @@ resource "aws_ecs_task_definition" "webservers" {
   }
 }
 
-resource "aws_ecs_service" "webservers" {
-  name             = "webservers"
-  cluster          = aws_ecs_cluster.webservers.id
-  task_definition  = aws_ecs_task_definition.webservers.arn
-  desired_count    = var.container_count
+resource "aws_ecs_service" "puma" {
+  name             = "puma"
+  cluster          = aws_ecs_cluster.webservers_split.id
+  task_definition  = aws_ecs_task_definition.puma.arn
+  desired_count    = var.service_puma_count
   launch_type      = "FARGATE"
   platform_version = "1.4.0"
 
@@ -70,18 +68,20 @@ resource "aws_ecs_service" "webservers" {
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.http.id
+    target_group_arn = aws_alb_target_group.puma.id
     container_name   = "nginx"
     container_port   = var.http_port
   }
 
   depends_on = [
-    aws_alb_listener.http
+    aws_alb_listener.webservers_split
   ]
 
   lifecycle {
-    ignore_changes = [
-      task_definition
-    ]
+    create_before_destroy = true
+  #   ignore_changes = [
+  #     task_definition
+  #   ]
   }
 }
+

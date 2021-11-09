@@ -201,6 +201,14 @@ module "webservers" {
   container_memory = 4096
   container_count  = 6
 
+  service_puma_cpu    = 2048
+  service_puma_memory = 4096
+  service_puma_count  = 1
+
+  service_anycable_cpu    = 2048
+  service_anycable_memory = 4096
+  service_anycable_count  = 1
+
   http_port       = local.http_port
   websockets_port = local.websockets_port
 }

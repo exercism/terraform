@@ -94,9 +94,9 @@ resource "aws_alb_listener_rule" "aliases" {
   condition {
     host_header {
       values = [
-        aws_alb.webservers.dns_name,
         aws_cloudfront_distribution.webservers.domain_name,
-        "www.exercism.org"
+        "www.exercism.org",
+        aws_alb.webservers.dns_name
       ]
     }
   }
