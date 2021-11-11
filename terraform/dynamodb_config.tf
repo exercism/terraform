@@ -318,3 +318,15 @@ resource "aws_dynamodb_table_item" "github_bot_username" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "opensearch_host" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "opensearch_host"},
+  "value": {"S": "${aws_elasticsearch_domain.general.endpoint}"}
+}
+ITEM
+}
