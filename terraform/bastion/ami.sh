@@ -34,30 +34,6 @@ chruby ruby-2.6.6
 
 gem install bundler:2.1.4
 
-#########################
-# Mount EFS Submissions #
-#########################
-sudo su -
-  FILE_SYSTEM_ID="fs-36ba41c6"
-  EFS_MOUNT_POINT="/mnt/efs/submissions"
-  mkdir -p "${EFS_MOUNT_POINT}"
-  test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
-  retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
-  chmod a+w /mnt/efs/submissions
-exit
-
-#################
-# Mount EFS Git #
-#################
-sudo su -
-  FILE_SYSTEM_ID="fs-37ba41c7"
-  EFS_MOUNT_POINT="/mnt/efs/repos"
-  mkdir -p "${EFS_MOUNT_POINT}"
-  test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
-  retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
-  chmod a+w /mnt/efs/repos
-exit
-
 ###################
 # Install website #
 ###################
@@ -67,7 +43,7 @@ sudo su -
 
   # TODO: Pull this from AWS's Git thing
   cd $DIR/..
-  git clone https://github.com/exercism/v3-website.git website
+  git clone https://github.com/exercism/website.git website
 
   chown -R ubuntu:ubuntu $DIR
   chmod 700 $DIR

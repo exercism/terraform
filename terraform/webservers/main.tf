@@ -15,10 +15,12 @@ variable "aws_security_group_rds_main" {}
 variable "aws_security_group_efs_repositories_access" {}
 variable "aws_security_group_efs_submissions_access" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
+variable "aws_security_group_es_general" {}
 variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
 variable "aws_redis_url_anycable" {}
 variable "aws_ecr_repository_anycable_go" {}
+variable "aws_ecr_repository_anycable_go_pro" {}
 
 variable "efs_submissions_mount_point" {}
 variable "efs_repositories_mount_point" {}
@@ -37,9 +39,13 @@ variable "container_cpu" {}
 variable "container_memory" {}
 variable "container_count" {}
 
-variable "service_puma_cpu" {}
-variable "service_puma_memory" {}
-variable "service_puma_count" {}
+variable "service_api_cpu" {}
+variable "service_api_memory" {}
+variable "service_api_count" {}
+
+variable "service_website_cpu" {}
+variable "service_website_memory" {}
+variable "service_website_count" {}
 
 variable "service_anycable_cpu" {}
 variable "service_anycable_memory" {}

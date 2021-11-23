@@ -8,9 +8,8 @@ resource "aws_alb" "webservers" {
   enable_deletion_protection = true
 }
 
-# Create a target group for the http webservers
-resource "aws_alb_target_group" "http" {
-  name        = "webservers-http"
+resource "aws_alb_target_group" "website" {
+  name        = "webservers-website"
   port        = var.http_port
   protocol    = "HTTP"
   vpc_id      = var.aws_vpc_main.id
@@ -24,7 +23,46 @@ resource "aws_alb_target_group" "http" {
     healthy_threshold   = 2
     unhealthy_threshold = 10
     interval            = 5
-    timeout             = 4
+    timeout             = 2
+  }
+}
+
+resource "aws_alb_target_group" "api" {
+  name        = "webservers-api"
+  port        = var.http_port
+  protocol    = "HTTP"
+  vpc_id      = var.aws_vpc_main.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+
+  health_check {
+    path = "/health-check"
+
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    interval            = 5
+    timeout             = 2
+  }
+}
+
+
+resource "aws_alb_target_group" "anycable" {
+  name        = "webservers-anycable"
+  port        = var.http_port
+  protocol    = "HTTP"
+  vpc_id      = var.aws_vpc_main.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+
+  health_check {
+    path = "/cable/health"
+
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    interval            = 5
+    timeout             = 2
   }
 }
 
@@ -48,29 +86,28 @@ resource "aws_alb_listener" "http" {
   }
 }
 
-resource "aws_alb_listener_rule" "http" {
+resource "aws_alb_listener_rule" "anycable" {
   listener_arn = aws_alb_listener.http.arn
-  priority = 100
+  priority     = 90
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.http.id
+    target_group_arn = aws_alb_target_group.anycable.id
   }
 
   condition {
-    host_header {
-      values = [
-        var.website_host
-      ]
+    path_pattern {
+      values = ["/cable", "/cable/*"]
     }
   }
 }
 
-resource "aws_alb_listener_rule" "api" {
+# TODO: Rename the TF
+resource "aws_alb_listener_rule" "api_subdomain" {
   listener_arn = aws_alb_listener.http.arn
-  priority = 102
+  priority     = 91
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.http.id
+    target_group_arn = aws_alb_target_group.api.id
   }
 
   condition {
@@ -83,12 +120,55 @@ resource "aws_alb_listener_rule" "api" {
   }
 }
 
-resource "aws_alb_listener_rule" "aliases" {
+# TODO: Rename the TF
+resource "aws_alb_listener_rule" "api_subdirectory" {
   listener_arn = aws_alb_listener.http.arn
-  priority = 103
+  priority     = 92
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.http.id
+    target_group_arn = aws_alb_target_group.api.id
+  }
+
+  condition {
+    host_header {
+      values = [
+        var.website_host,
+        aws_alb.webservers.dns_name
+      ]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api", "/api/*"]
+    }
+  }
+}
+
+resource "aws_alb_listener_rule" "website" {
+  listener_arn = aws_alb_listener.http.arn
+  priority     = 93
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.website.id
+  }
+
+  condition {
+    host_header {
+      values = [
+        var.website_host,
+        aws_alb.webservers.dns_name
+      ]
+    }
+  }
+}
+
+resource "aws_alb_listener_rule" "aliases" {
+  listener_arn = aws_alb_listener.http.arn
+  priority     = 103
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.website.id
   }
 
   condition {
@@ -96,7 +176,6 @@ resource "aws_alb_listener_rule" "aliases" {
       values = [
         aws_cloudfront_distribution.webservers.domain_name,
         "www.exercism.org",
-        aws_alb.webservers.dns_name
       ]
     }
   }
@@ -104,10 +183,10 @@ resource "aws_alb_listener_rule" "aliases" {
 
 resource "aws_alb_listener_rule" "legacy" {
   listener_arn = aws_alb_listener.http.arn
-  priority = 104
+  priority     = 104
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.http.id
+    target_group_arn = aws_alb_target_group.website.id
   }
 
   condition {
@@ -122,3 +201,11 @@ resource "aws_alb_listener_rule" "legacy" {
     }
   }
 }
+
+  # condition {
+  #   http_header {
+  #     http_header_name = "X-Forwarded-For"
+  #     values           = ["217.31.189.43"]
+  #   }
+  # }
+

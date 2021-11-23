@@ -15,7 +15,7 @@
       "options": {
         "awslogs-region": "${region}",
         "awslogs-group": "${log_group_name}",
-        "awslogs-stream-prefix": "nginx/"
+        "awslogs-stream-prefix": "${log_group_prefix}"
       }
     },
     "cpu": 0,
@@ -34,7 +34,7 @@
       "options": {
         "awslogs-region": "${region}",
         "awslogs-group": "${log_group_name}",
-        "awslogs-stream-prefix": "puma/"
+        "awslogs-stream-prefix": "${log_group_prefix}"
       }
     },
     "mountPoints": [

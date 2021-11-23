@@ -185,6 +185,7 @@ module "webservers" {
   aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
+  aws_security_group_es_general                = aws_security_group.es_general
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
@@ -193,6 +194,7 @@ module "webservers" {
   acm_certificate_arn                          = local.acm_certificate_arn
   aws_redis_url_anycable                       = module.anycable.redis_url
   aws_ecr_repository_anycable_go               = module.anycable.ecr_repository_go
+  aws_ecr_repository_anycable_go_pro               = module.anycable.ecr_repository_go_pro
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -201,13 +203,17 @@ module "webservers" {
   container_memory = 4096
   container_count  = 6
 
-  service_puma_cpu    = 2048
-  service_puma_memory = 4096
-  service_puma_count  = 1
+  service_website_cpu    = 1024
+  service_website_memory = 2048
+  service_website_count  = 3
+
+  service_api_cpu    = 1024
+  service_api_memory = 2048
+  service_api_count  = 3
 
   service_anycable_cpu    = 2048
   service_anycable_memory = 4096
-  service_anycable_count  = 1
+  service_anycable_count  = 6
 
   http_port       = local.http_port
   websockets_port = local.websockets_port
@@ -233,6 +239,7 @@ module "sidekiq" {
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
+  aws_security_group_es_general                = aws_security_group.es_general
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point

@@ -7,7 +7,7 @@ resource "aws_elasticsearch_domain" "general" {
     dedicated_master_count   = 0
 
     instance_count = 2
-    instance_type  = "t3.small.elasticsearch"
+    instance_type  = "t3.medium.elasticsearch"
 
     warm_enabled = false
 
@@ -20,7 +20,7 @@ resource "aws_elasticsearch_domain" "general" {
   ebs_options {
     ebs_enabled = true
     iops = 0
-    volume_size = 10
+    volume_size = 20
     volume_type = "gp2"
   }
 

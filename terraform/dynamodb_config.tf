@@ -326,7 +326,7 @@ resource "aws_dynamodb_table_item" "opensearch_host" {
   item = <<ITEM
 {
   "id": {"S": "opensearch_host"},
-  "value": {"S": "${aws_elasticsearch_domain.general.endpoint}"}
+  "value": {"S": "https://${aws_elasticsearch_domain.general.endpoint}"}
 }
 ITEM
 }
