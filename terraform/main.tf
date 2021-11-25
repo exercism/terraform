@@ -32,6 +32,7 @@ locals {
   s3_bucket_uploads_name      = "exercism-uploads"
 
   ecr_tooling_repos = toset([
+    "abap-test-runner",
     "bash-analyzer",
     "bash-test-runner",
     "c-test-runner",

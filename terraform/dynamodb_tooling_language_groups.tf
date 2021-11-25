@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "bash,c,cfml,clojure,clojurescript,crystal,coffeescript,common-lisp,cpp,csharp,d,dart,elixir,elm,emacs-lisp,erlang,fortran,fsharp,go,groovy,haskell,j,java,javascript,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,php,prolog,purescript,python,r,racket,raku,red,ruby,reasonml,rust,scala,scheme,sml,swift,tcl,typescript,vbnet,vimscript,wren,x86-64-assembly"}
+  "languages": {"S": "abap,bash,c,cfml,clojure,clojurescript,crystal,coffeescript,common-lisp,cpp,csharp,d,dart,elixir,elm,emacs-lisp,erlang,fortran,fsharp,go,groovy,haskell,j,java,javascript,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,php,prolog,purescript,python,r,racket,raku,red,ruby,reasonml,rust,scala,scheme,sml,swift,tcl,typescript,vbnet,vimscript,wren,x86-64-assembly"}
 }
 ITEM
 }
