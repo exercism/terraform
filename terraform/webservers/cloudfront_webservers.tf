@@ -63,6 +63,11 @@ resource "aws_cloudfront_distribution" "webservers" {
     acm_certificate_arn = var.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
+  # logging_config {
+  #   bucket          = "exercism-v3-logs.s3.amazonaws.com"
+  #   include_cookies = false
+  #   prefix          = "cloudfront-apex/"
+  # }
 
   #############
   # Plausible #

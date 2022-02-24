@@ -64,6 +64,7 @@ resource "aws_ecs_service" "sidekiq" {
   }
 
   lifecycle {
+    create_before_destroy = true
     ignore_changes = [
       task_definition
     ]

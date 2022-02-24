@@ -88,7 +88,7 @@ resource "aws_alb_listener" "http" {
 
 resource "aws_alb_listener_rule" "anycable" {
   listener_arn = aws_alb_listener.http.arn
-  priority     = 90
+  priority     = 91
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.anycable.id
@@ -104,7 +104,7 @@ resource "aws_alb_listener_rule" "anycable" {
 # TODO: Rename the TF
 resource "aws_alb_listener_rule" "api_subdomain" {
   listener_arn = aws_alb_listener.http.arn
-  priority     = 91
+  priority     = 92
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.api.id
@@ -123,7 +123,7 @@ resource "aws_alb_listener_rule" "api_subdomain" {
 # TODO: Rename the TF
 resource "aws_alb_listener_rule" "api_subdirectory" {
   listener_arn = aws_alb_listener.http.arn
-  priority     = 92
+  priority     = 93
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.api.id
@@ -147,7 +147,7 @@ resource "aws_alb_listener_rule" "api_subdirectory" {
 
 resource "aws_alb_listener_rule" "website" {
   listener_arn = aws_alb_listener.http.arn
-  priority     = 93
+  priority     = 94
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.website.id

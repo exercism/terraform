@@ -77,9 +77,9 @@ resource "aws_ecs_service" "website" {
 
   lifecycle {
     create_before_destroy = true
-  #   ignore_changes = [
-  #     task_definition
-  #   ]
+    ignore_changes = [
+      task_definition
+    ]
   }
 }
 

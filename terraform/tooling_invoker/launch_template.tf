@@ -1,9 +1,11 @@
 resource "aws_launch_template" "main" {
   image_id                = "ami-03c207961a2d90a8e"
-  instance_type           = "t3.medium"
+  instance_type           = "t3.small"
   key_name                = "iHiD-v3"
   name                    = "Tooling-Invokers"
   tags                    = {}
+  description = "Reduce to small machines"
+  ebs_optimized = false
 
   vpc_security_group_ids = [
     var.aws_security_group_efs_repositories_access.id,

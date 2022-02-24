@@ -38,3 +38,4 @@ sudo ./svc.sh install
 
 # Last step, run it!
 ./run.sh
+

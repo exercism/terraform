@@ -214,7 +214,7 @@ module "webservers" {
 
   service_anycable_cpu    = 2048
   service_anycable_memory = 4096
-  service_anycable_count  = 6
+  service_anycable_count  = 3
 
   http_port       = local.http_port
   websockets_port = local.websockets_port
@@ -325,6 +325,8 @@ module "github_deploy" {
   source = "./github_deploy"
 
   region = var.region
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
 
   aws_ecr_repo_arns = [
     module.snippet_extractor.ecr_repository_snippet_extractor.arn,

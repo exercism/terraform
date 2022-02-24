@@ -22,7 +22,14 @@
     "user": "0",
     "mountPoints": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [],
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 1048576,
+        "hardLimit": 1048576
+      }
+    ]
   },
   {
     "name": "anycable_ruby",
@@ -70,7 +77,14 @@
     "cpu": 0,
     "user": "0",
     "mountPoints": [],
-    "volumesFrom": []
+    "volumesFrom": [],
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 1048576,
+        "hardLimit": 1048576
+      }
+    ]
   }
 ]
 

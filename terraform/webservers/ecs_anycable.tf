@@ -25,6 +25,7 @@ resource "aws_ecs_task_definition" "anycable" {
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
+  skip_destroy = true
 }
 
 resource "aws_ecs_service" "anycable" {
@@ -59,9 +60,9 @@ resource "aws_ecs_service" "anycable" {
   ]
 
   lifecycle {
-    # ignore_changes = [
-    #   task_definition
-    # ]
+    create_before_destroy = true
+    ignore_changes = [
+      task_definition
+    ]
   }
 }
-

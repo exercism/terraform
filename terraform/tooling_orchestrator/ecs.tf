@@ -51,4 +51,12 @@ resource "aws_ecs_service" "tooling_orchestrators" {
   depends_on = [
     aws_alb_listener.http
   ]
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      task_definition
+    ]
+  }
+
 }

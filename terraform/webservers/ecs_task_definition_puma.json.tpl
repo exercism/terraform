@@ -22,7 +22,14 @@
     "user": "0",
     "mountPoints": [],
     "volumesFrom": [],
-    "environment": []
+    "environment": [],
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 1048576,
+        "hardLimit": 1048576
+      }
+    ]
   },
   {
     "name": "puma",
@@ -57,6 +64,13 @@
     ],
     "volumesFrom": [],
     "environment": [],
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 1048576,
+        "hardLimit": 1048576
+      }
+    ],
     "healthCheck": {
       "command": [
         "CMD-SHELL",

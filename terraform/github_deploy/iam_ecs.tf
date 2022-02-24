@@ -1,4 +1,3 @@
-
 # TODO: Limit the resources here in the same 
 # way we do for ECR.
 resource "aws_iam_user_policy" "ecs" {

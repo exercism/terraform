@@ -6,6 +6,8 @@ variable "region" {}
 variable "aws_ecr_repo_arns" {}
 variable "aws_s3_bucket_name_assets" {}
 variable "aws_s3_bucket_name_icons" {}
+variable "aws_iam_policy_read_dynamodb_config" {}
+variable "aws_iam_policy_read_secret_config" {}
 
 data "aws_caller_identity" "current" {}
 

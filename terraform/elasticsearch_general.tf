@@ -63,10 +63,10 @@ resource "aws_elasticsearch_domain" "general" {
     internal_user_database_enabled = false
   }
 
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.cloudsearch_general.arn
-    log_type                 = "INDEX_SLOW_LOGS"
-  }
+  # log_publishing_options {
+  #   cloudwatch_log_group_arn = aws_cloudwatch_log_group.cloudsearch_general.arn
+  #   log_type                 = "INDEX_SLOW_LOGS"
+  # }
 
   access_policies = <<POLICY
     {

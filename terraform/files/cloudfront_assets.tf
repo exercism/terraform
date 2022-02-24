@@ -23,10 +23,11 @@ resource "aws_cloudfront_distribution" "assets" {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_assets_origin_id
+    response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
 
     forwarded_values {
       query_string = false
-      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
+      # headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
 
       cookies {
         forward = "none"
