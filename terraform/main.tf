@@ -115,6 +115,7 @@ locals {
     "typescript-test-runner",
     "vbnet-test-runner",
     "vimscript-test-runner",
+    "wasm-test-runner",
     "wren-representer",
     "wren-test-runner",
     "x86-64-assembly-test-runner"
