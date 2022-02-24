@@ -21,7 +21,9 @@ resource "aws_iam_policy" "ecr" {
                 "ecr:DescribeImageScanFindings"
             ],
             "Resource": [
-              ${join(",", formatlist("\"arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/%s\"", var.ecr_tooling_repos))}
+              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-test-runner",
+              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-representer",
+              "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-analyzer"
             ]
         }, {
             "Effect": "Allow",
