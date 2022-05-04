@@ -330,3 +330,27 @@ resource "aws_dynamodb_table_item" "opensearch_host" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "snippet_generator_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "snippet_generator_url"},
+  "value": {"S": "https://internal.exercism.org/extract_snippet"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "lines_of_code_counter_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "lines_of_code_counter_url"},
+  "value": {"S": "https://internal.exercism.org/count_lines_of_code"}
+}
+ITEM
+}
