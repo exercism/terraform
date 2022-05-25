@@ -113,6 +113,7 @@ locals {
     "typescript-analyzer",
     "typescript-representer",
     "typescript-test-runner",
+    "unison-test-runner",
     "vbnet-test-runner",
     "vimscript-test-runner",
     "wasm-test-runner",
