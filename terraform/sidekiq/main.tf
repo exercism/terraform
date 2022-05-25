@@ -26,6 +26,7 @@ variable "aws_subnet_publics" {}
 variable "container_cpu" {}
 variable "container_memory" {}
 variable "container_count" {}
+variable "monitor_port" {}
 
 provider "aws" {
   region  = var.region

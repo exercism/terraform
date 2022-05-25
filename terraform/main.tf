@@ -253,7 +253,8 @@ module "sidekiq" {
 
   container_cpu    = 1024
   container_memory = 2048
-  container_count  = 1
+  container_count  = 2
+  monitor_port     = 3333
 }
 
 module "bastion" {
@@ -331,6 +332,7 @@ module "github_deploy" {
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
 
   aws_ecr_repo_arns = [
+    module.sidekiq.ecr_repository_monitor.arn,
     module.snippet_extractor.ecr_repository_snippet_extractor.arn,
     module.lines_of_code_counter.ecr_repository_lines_of_code_counter.arn,
 

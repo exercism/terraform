@@ -9,6 +9,8 @@ data "template_file" "sidekiq" {
 
   vars = {
     rails_image        = "${var.aws_ecr_repository_webserver_rails.repository_url}:latest"
+    monitor_image      = "${aws_ecr_repository.sidekiq_monitor.repository_url}:latest"
+    monitor_port         = var.monitor_port
     region             = var.region
     log_group_name     = aws_cloudwatch_log_group.sidekiq.name
     efs_submissions_mount_point  = var.efs_submissions_mount_point
@@ -62,6 +64,13 @@ resource "aws_ecs_service" "sidekiq" {
     # TODO: Can this be false?
     assign_public_ip = true
   }
+
+  load_balancer {
+    target_group_arn = aws_alb_target_group.http.id
+    container_name   = "monitor"
+    container_port   = var.monitor_port
+  }
+
 
   lifecycle {
     create_before_destroy = true

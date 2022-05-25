@@ -2,7 +2,7 @@
   {
     "name": "sidekiq",
     "image": "${rails_image}",
-    "essential": true,
+    "essential": false,
     "environment": [
       {"name": "RAILS_ENV", "value": "production"}
     ],
@@ -37,6 +37,30 @@
         "hardLimit": 1048576
       }
     ]
+  },
+  {
+    "name": "monitor",
+    "image": "${monitor_image}",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": ${monitor_port},
+        "protocol": "tcp"
+      }
+    ],
+
+    "logConfiguration": {
+      "logDriver":"awslogs",
+      "options": {
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_name}",
+        "awslogs-stream-prefix": "monitor/"
+      }
+    },
+    "cpu": 0,
+    "user": "0",
+    "mountPoints": [],
+    "volumesFrom": [],
+    "environment": []
   }
 ]
-
