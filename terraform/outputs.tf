@@ -4,11 +4,6 @@ output "webservers-cf-hostname" {
 output "webservers-alb_hostname" {
   value = module.webservers.alb_hostname
 }
-
 output "anycable_redis_url" {
   value = module.anycable.redis_url
-}
-
-output "tooling-orchestrator-alb_hostname" {
-  value = module.tooling_orchestrator.alb_hostname
 }
