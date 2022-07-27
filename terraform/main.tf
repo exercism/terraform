@@ -44,6 +44,7 @@ locals {
     "clojure-test-runner",
     "clojurescript-test-runner",
     "crystal-test-runner",
+    "cobol-test-runner",
     "coffeescript-test-runner",
     "common-lisp-analyzer",
     "common-lisp-representer",
