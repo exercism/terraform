@@ -23,13 +23,14 @@ locals {
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
 
-  s3_bucket_assets_name       = "exercism-v3-assets"
-  s3_bucket_attachments_name  = "exercism-v3-attachments"
-  s3_bucket_icons_name        = "exercism-v3-icons"
-  s3_bucket_logs_name         = "exercism-v3-logs"
-  s3_bucket_submissions_name  = "exercism-v3-submissions"
-  s3_bucket_tooling_jobs_name = "exercism-v3-tooling-jobs"
-  s3_bucket_uploads_name      = "exercism-uploads"
+  s3_bucket_assets_name           = "exercism-v3-assets"
+  s3_bucket_attachments_name      = "exercism-v3-attachments"
+  s3_bucket_icons_name            = "exercism-v3-icons"
+  s3_bucket_logs_name             = "exercism-v3-logs"
+  s3_bucket_submissions_name      = "exercism-v3-submissions"
+  s3_bucket_tooling_jobs_name     = "exercism-v3-tooling-jobs"
+  s3_bucket_uploads_name          = "exercism-uploads"
+  s3_bucket_tracks_dashboard_name = "tracks.exercism.io"
 
   ecr_tooling_repos = toset([
     "abap-test-runner",
@@ -200,7 +201,7 @@ module "webservers" {
   acm_certificate_arn                          = local.acm_certificate_arn
   aws_redis_url_anycable                       = module.anycable.redis_url
   aws_ecr_repository_anycable_go               = module.anycable.ecr_repository_go
-  aws_ecr_repository_anycable_go_pro               = module.anycable.ecr_repository_go_pro
+  aws_ecr_repository_anycable_go_pro           = module.anycable.ecr_repository_go_pro
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -330,9 +331,9 @@ module "tooling_invoker" {
 module "github_deploy" {
   source = "./github_deploy"
 
-  region = var.region
-  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
-  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
+  region                              = var.region
+  aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config
+  aws_iam_policy_read_secret_config   = aws_iam_policy.read_secret_config
 
   aws_ecr_repo_arns = [
     module.sidekiq.ecr_repository_monitor.arn,
@@ -346,8 +347,9 @@ module "github_deploy" {
     module.webservers.ecr_repository_nginx.arn,
     module.anycable.ecr_repository_go.arn
   ]
-  aws_s3_bucket_name_assets = local.s3_bucket_assets_name
-  aws_s3_bucket_name_icons  = local.s3_bucket_icons_name
+  aws_s3_bucket_name_assets           = local.s3_bucket_assets_name
+  aws_s3_bucket_name_icons            = local.s3_bucket_icons_name
+  aws_s3_bucket_name_tracks_dashboard = local.s3_bucket_tracks_dashboard_name
 }
 
 module "tooling" {
