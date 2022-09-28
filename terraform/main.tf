@@ -81,6 +81,7 @@ locals {
     "javascript-analyzer",
     "javascript-representer",
     "javascript-test-runner",
+    "jq-test-runner",
     "julia-test-runner",
     "kotlin-test-runner",
     "lfe-test-runner",
