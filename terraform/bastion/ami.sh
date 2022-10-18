@@ -54,3 +54,9 @@ bundle config set deployment 'true'
 bundle config set without 'development test'
 bundle install
 
+#################
+# Setup aliases #
+#################
+echo "alias rails-c='cd /opt/website/ && git pull && bundle exec rails c -e production -- --noreadline'" >> ~/.bash_aliases
+echo "alias rails-db='cd /opt/website/ && git pull && bundle exec rails dbconsole -p -e production'" >> ~/.bash_aliases 
+source ~/.bashrc
