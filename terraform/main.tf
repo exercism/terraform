@@ -18,7 +18,8 @@ locals {
   websockets_protocol = "wss"
   websockets_port     = 80
 
-  acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/ec560e0a-f375-4fd7-95c7-969433eed278"
+  acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/a68be00b-70bc-48d1-84eb-5741fb1c0066"
+  forum_acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/050200a9-85a7-4ddf-8854-a32748456352"
 
   efs_submissions_mount_point  = "/mnt/efs/submissions"
   efs_repositories_mount_point = "/mnt/efs/repos"
@@ -408,3 +409,14 @@ module "lines_of_code_counter" {
   aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
   aws_alb_listener_internal                 = aws_alb_listener.internal
 }
+
+module "discourse" {
+  source = "./discourse"
+
+  region = var.region
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+  acm_certificate_arn = local.forum_acm_certificate_arn
+}
+
+

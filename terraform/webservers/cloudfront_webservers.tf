@@ -62,6 +62,7 @@ resource "aws_cloudfront_distribution" "webservers" {
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate_arn
     ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
   # logging_config {
   #   bucket          = "exercism-v3-logs.s3.amazonaws.com"

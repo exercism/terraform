@@ -46,7 +46,7 @@ resource "aws_rds_cluster" "main" {
   cluster_identifier              = "primary"
   engine                          = "aurora-mysql"
   engine_mode                     = "serverless"
-  engine_version                  = "5.7.mysql_aurora.2.07.1"
+  engine_version                  = "5.7.mysql_aurora.2.08.3"
   database_name                   = "exercism"
   master_username                 = "exercism"
   master_password                 = "exercism"
