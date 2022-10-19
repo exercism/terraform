@@ -93,6 +93,7 @@ locals {
     "ocaml-test-runner",
     "perl5-test-runner",
     "php-test-runner",
+    "pony-test-runner",
     "prolog-test-runner",
     "purescript-test-runner",
     "python-analyzer",
