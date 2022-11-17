@@ -36,6 +36,7 @@ locals {
   ecr_tooling_repos = toset([
     "abap-test-runner",
     "awk-test-runner",
+    "ballerina-test-runner",
     "bash-analyzer",
     "bash-test-runner",
     "c-test-runner",
