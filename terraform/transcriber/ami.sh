@@ -23,4 +23,5 @@ sudo su -
   pip install tensorflow==2.9.2
   pip install pyannote.audio
   pip install speechbrain
+  wget https://gist.githubusercontent.com/ErikSchierboom/9c8f53525e650c15a10c72c0b9c6aefb/raw/23411a7f0104aa0577ef68f5e030ed92fce27a19/transcribe.py
 exit
