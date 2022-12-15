@@ -34,6 +34,7 @@ locals {
   s3_bucket_tracks_dashboard_name = "tracks.exercism.io"
 
   ecr_tooling_repos = toset([
+    "8th-test-runner",
     "abap-test-runner",
     "awk-test-runner",
     "ballerina-test-runner",
