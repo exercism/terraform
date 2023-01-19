@@ -125,6 +125,7 @@ locals {
     "typescript-test-runner",
     "unison-test-runner",
     "vbnet-test-runner",
+    "vlang-test-runner",
     "vimscript-test-runner",
     "wasm-test-runner",
     "wren-representer",
