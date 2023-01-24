@@ -88,6 +88,7 @@ resource "aws_elasticsearch_domain" "general" {
 
 resource "aws_cloudwatch_log_group" "cloudsearch_general" {
   name = "cloudsearch-general"
+  retention_in_days = 1
 }
 
 resource "aws_cloudwatch_log_resource_policy" "cloudsearch_general" {
