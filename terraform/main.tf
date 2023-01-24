@@ -130,7 +130,8 @@ locals {
     "wasm-test-runner",
     "wren-representer",
     "wren-test-runner",
-    "x86-64-assembly-test-runner"
+    "x86-64-assembly-test-runner",
+    "zig-test-runner"
   ])
 
 
