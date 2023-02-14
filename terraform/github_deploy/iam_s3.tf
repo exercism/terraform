@@ -7,7 +7,6 @@ resource "aws_iam_user_policy" "s3" {
     "Version": "2012-10-17",
     "Statement": [
       {
-        "Sid": "GithubDeployS3ListPolicy",
         "Effect": "Allow",
         "Action": ["s3:ListBucket"],
         "Resource": [
@@ -16,7 +15,6 @@ resource "aws_iam_user_policy" "s3" {
           "arn:aws:s3:::${var.aws_s3_bucket_name_tracks_dashboard}"
         ]
       }, {
-        "Sid": "GithubDeployS3ReadWritePolicy",
         "Effect": "Allow",
         "Action": [
           "s3:GetObject",
@@ -28,6 +26,12 @@ resource "aws_iam_user_policy" "s3" {
           "arn:aws:s3:::${var.aws_s3_bucket_name_icons}/*",
           "arn:aws:s3:::${var.aws_s3_bucket_name_tracks_dashboard}/*"
         ]
+      }, {
+        "Effect": "Allow",
+        "Action": [
+          "cloudfront:CreateInvalidation"
+        ],
+        "Resource": "${var.cloudfront_distribution_icons.arn}"
       }
     ]
 }

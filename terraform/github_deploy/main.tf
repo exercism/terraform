@@ -10,6 +10,8 @@ variable "aws_s3_bucket_name_tracks_dashboard" {}
 variable "aws_iam_policy_read_dynamodb_config" {}
 variable "aws_iam_policy_read_secret_config" {}
 
+variable "cloudfront_distribution_icons" {}
+
 data "aws_caller_identity" "current" {}
 
 locals {

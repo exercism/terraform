@@ -355,10 +355,13 @@ module "github_deploy" {
     module.webservers.ecr_repository_rails.arn,
     module.webservers.ecr_repository_nginx.arn,
     module.anycable.ecr_repository_go.arn
+
   ]
   aws_s3_bucket_name_assets           = local.s3_bucket_assets_name
   aws_s3_bucket_name_icons            = local.s3_bucket_icons_name
   aws_s3_bucket_name_tracks_dashboard = local.s3_bucket_tracks_dashboard_name
+
+  cloudfront_distribution_icons = module.files.cloudfront_distribution_icons
 }
 
 module "tooling" {
