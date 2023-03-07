@@ -29,7 +29,7 @@ resource "aws_dynamodb_table_item" "tooling_language_r_all" {
   item = <<ITEM
 {
   "group": {"S": "representers-all"},
-  "languages": {"S": "c,clojure,common-lisp,csharp,elixir,elm,fsharp,j,java,javascript,python,ruby,rust,typescript,wren"}
+  "languages": {"S": "c,clojure,common-lisp,csharp,elixir,elm,fsharp,j,java,javascript,php,python,ruby,rust,typescript,wren"}
 }
 ITEM
 }
