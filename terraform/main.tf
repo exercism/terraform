@@ -96,6 +96,7 @@ locals {
     "ocaml-test-runner",
     "perl5-test-runner",
     "pharo-smalltalk-test-runner",
+    "php-representer",
     "php-test-runner",
     "pony-test-runner",
     "prolog-test-runner",
