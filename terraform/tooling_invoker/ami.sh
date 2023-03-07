@@ -271,7 +271,7 @@ sudo systemctl start exercism-invoker.service
 docker logout
 aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
 
-docker pull exercism/elixir-test-runner:production
+# docker pull exercism/ruby-test-runner:production
 
 #ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
 
