@@ -45,6 +45,10 @@ sudo groupadd exercism
 sudo useradd -g exercism -m -s /bin/bash exercism
 sudo loginctl enable-linger exercism
 
+sudo su
+  echo "exercism ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/shutdown
+exit
+
 ###################################
 # Install Docker as non-root user #
 ###################################
@@ -222,9 +226,9 @@ EOM
   systemctl enable exercism-manager.service
 exit
 
-#####################################
-# Setup Systemd for tooling worker #
-#####################################
+############################
+# Setup Systemd for canary #
+############################
 sudo su -
   cat >/etc/systemd/system/exercism-invoker.service << EOM
 [Unit]
@@ -261,12 +265,51 @@ EOM
   systemctl enable exercism-invoker.service
 exit
 
+############################
+# Setup Systemd for canary #
+############################
+sudo su -
+  cat >/etc/systemd/system/exercism-canary.service << EOM
+[Unit]
+Description=Exercism Tooling Canary
+After=network.target
+
+# Keep restarting the service forever
+StartLimitIntervalSec=0
+StartLimitBurst=0
+
+[Service]
+Restart=always
+
+# Sleep for 30s before restarting the service
+RestartSec=30
+User=exercism
+WorkingDirectory=/opt/tooling-invoker
+ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
+ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/canary
+SyslogIdentifier=tooling-canary
+
+[Install]
+WantedBy=multi-user.target
+EOM
+chmod 544 /etc/systemd/system/exercism-canary.service
+
+mkdir /etc/systemd/system/exercism-canary.service.d
+cat >/etc/systemd/system/exercism-canary.service.d/env.conf << EOM
+[Service]
+Environment="EXERCISM_ENV=production"
+EOM
+  chmod 544 /etc/systemd/system/exercism-canary.service.d/env.conf
+  systemctl enable exercism-canary.service
+exit
+
 #########################
 ## Start everything up ##
 #########################
 
 sudo systemctl start exercism-manager.service
 sudo systemctl start exercism-invoker.service
+sudo systemctl start exercism-canary.service
 
 docker logout
 aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
