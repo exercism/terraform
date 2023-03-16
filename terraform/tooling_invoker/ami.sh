@@ -226,9 +226,9 @@ EOM
   systemctl enable exercism-manager.service
 exit
 
-############################
-# Setup Systemd for canary #
-############################
+#####################################
+# Setup Systemd for tooling invoker #
+#####################################
 sudo su -
   cat >/etc/systemd/system/exercism-invoker.service << EOM
 [Unit]
