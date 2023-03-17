@@ -57,6 +57,6 @@ bundle install
 #################
 # Setup aliases #
 #################
-echo "alias rails-c='cd /opt/website/ && git pull && bundle exec rails c -e production -- --noreadline'" >> ~/.bash_aliases
-echo "alias rails-db='cd /opt/website/ && git pull && bundle exec rails dbconsole -p -e production'" >> ~/.bash_aliases 
+echo "alias rails-c='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails c -e production -- --noreadline'" >> ~/.bash_aliases
+echo "alias rails-db='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails dbconsole -p -e production'" >> ~/.bash_aliases 
 source ~/.bashrc
