@@ -47,6 +47,7 @@ locals {
     "clojure-representer",
     "clojure-test-runner",
     "clojurescript-test-runner",
+    "crystal-representer",
     "crystal-test-runner",
     "cobol-test-runner",
     "coffeescript-test-runner",
