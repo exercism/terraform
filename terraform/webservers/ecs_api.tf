@@ -1,10 +1,8 @@
 # ###
 # Set up the cluster
 # ###
-data "template_file" "api_puma" {
-  template = file("./webservers/ecs_task_definition_puma.json.tpl")
-
-  vars = {
+locals {
+  api_container_definitions = templatefile("./webservers/ecs_task_definition_puma.json.tpl", {
     nginx_image                  = "${aws_ecr_repository.nginx.repository_url}:latest"
     rails_image                  = "${aws_ecr_repository.rails.repository_url}:latest"
     http_port                    = var.http_port
@@ -14,7 +12,7 @@ data "template_file" "api_puma" {
     log_group_prefix     = "api"
     efs_submissions_mount_point  = var.efs_submissions_mount_point
     efs_repositories_mount_point = var.efs_repositories_mount_point
-  }
+  })
 }
 resource "aws_ecs_task_definition" "api" {
   family                   = "api"
@@ -22,7 +20,7 @@ resource "aws_ecs_task_definition" "api" {
   network_mode             = "awsvpc"
   cpu                      = var.service_api_cpu
   memory                   = var.service_api_memory
-  container_definitions    = data.template_file.api_puma.rendered
+  container_definitions    = local.api_container_definitions
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}

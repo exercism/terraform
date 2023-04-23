@@ -1,6 +1,6 @@
 resource "aws_launch_template" "main" {
-  image_id                = "ami-03c207961a2d90a8e"
-  instance_type           = "t4g.small"
+  image_id                = "ami-0b8768870a5bbf431"
+  instance_type           = "t3.small"
   key_name                = "iHiD-v3"
   name                    = "Tooling-Invokers"
   tags                    = {}

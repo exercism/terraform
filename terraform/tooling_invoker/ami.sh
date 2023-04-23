@@ -45,6 +45,9 @@ sudo groupadd exercism
 sudo useradd -g exercism -m -s /bin/bash exercism
 sudo loginctl enable-linger exercism
 
+#############################################
+# Allow the canary to shut down the machine #
+#############################################
 sudo su
   echo "exercism ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/shutdown
 exit
@@ -312,9 +315,8 @@ sudo systemctl start exercism-invoker.service
 sudo systemctl start exercism-canary.service
 
 docker logout
-aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 591712695352.dkr.ecr.eu-west-2.amazonaws.com
-
-docker pull exercism/ruby-test-runner:production
+aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 681735686245.dkr.ecr.eu-west-2.amazonaws.com
+docker pull 681735686245.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:production
 
 #ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
 

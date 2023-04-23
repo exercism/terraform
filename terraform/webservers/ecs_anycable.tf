@@ -1,10 +1,8 @@
 # ###
 # Set up the cluster
 # ###
-data "template_file" "anycable" {
-  template = file("./webservers/ecs_task_definition_anycable.json.tpl")
-
-  vars = {
+locals {
+  anycable_container_definitions = templatefile("./webservers/ecs_task_definition_anycable.json.tpl", {
     nginx_image        = "${aws_ecr_repository.nginx.repository_url}:latest"
     rails_image        = "${aws_ecr_repository.rails.repository_url}:latest"
     anycable_go_image  = "${var.aws_ecr_repository_anycable_go_pro.repository_url}:latest"
@@ -13,7 +11,7 @@ data "template_file" "anycable" {
     region             = var.region
     log_group_name     = aws_cloudwatch_log_group.webservers.name
     log_group_prefix     = "anycable"
-  }
+  })
 }
 resource "aws_ecs_task_definition" "anycable" {
   family                   = "anycable"
@@ -21,7 +19,7 @@ resource "aws_ecs_task_definition" "anycable" {
   network_mode             = "awsvpc"
   cpu                      = var.service_anycable_cpu
   memory                   = var.service_anycable_memory
-  container_definitions    = data.template_file.anycable.rendered
+  container_definitions    = local.anycable_container_definitions
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
