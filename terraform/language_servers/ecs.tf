@@ -5,16 +5,14 @@
 resource "aws_ecs_cluster" "language_servers" {
   name = "language-servers"
 }
-data "template_file" "language_servers" {
-  template = file("./language_servers/ecs_task_definition.json.tpl")
-
-  vars = {
+locals {
+  container_definition = templatefile("./language_servers/ecs_task_definition.json.tpl", {
     ruby_ls_image   = "${aws_ecr_repository.language_servers["ruby-language-server"].repository_url}:latest"
     proxy_image     = "${aws_ecr_repository.proxy.repository_url}:latest"
     websockets_port = var.websockets_port
     region          = var.region
     log_group_name  = aws_cloudwatch_log_group.language_servers.name
-  }
+  })
 }
 resource "aws_ecs_task_definition" "language_servers" {
   family                   = "language-servers"
@@ -22,7 +20,7 @@ resource "aws_ecs_task_definition" "language_servers" {
   network_mode             = "awsvpc"
   cpu                      = var.container_cpu
   memory                   = var.container_memory
-  container_definitions    = data.template_file.language_servers.rendered
+  container_definitions    = local.container_definition
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}

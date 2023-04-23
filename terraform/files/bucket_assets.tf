@@ -11,6 +11,17 @@ resource "aws_s3_bucket" "assets" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+  
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
 }
 
 data "aws_iam_policy_document" "bucket_assets_read" {

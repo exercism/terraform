@@ -222,7 +222,7 @@ module "webservers" {
 
   service_website_cpu    = 1024
   service_website_memory = 2048
-  service_website_count  = 3
+  service_website_count  = 6
 
   service_api_cpu    = 1024
   service_api_memory = 2048
@@ -230,7 +230,7 @@ module "webservers" {
 
   service_anycable_cpu    = 2048
   service_anycable_memory = 4096
-  service_anycable_count  = 3
+  service_anycable_count  = 6
 
   http_port       = local.http_port
   websockets_port = local.websockets_port

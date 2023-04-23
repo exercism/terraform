@@ -1,6 +1,17 @@
 resource "aws_s3_bucket" "tooling_jobs" {
   bucket = var.bucket_tooling_jobs_name
   acl    = "private"
+  
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
 }
 
 resource "aws_iam_policy" "bucket_tooling_jobs_write" {
