@@ -139,6 +139,7 @@ locals {
 
 
   ecr_lambda_repos = toset([
+    "chatgpt-proxy",
     "snippet-extractor",
     "lines-of-code-counter"
   ])
@@ -348,6 +349,7 @@ module "github_deploy" {
 
   aws_ecr_repo_arns = [
     module.sidekiq.ecr_repository_monitor.arn,
+    module.chatgpt_proxy.ecr_repository_chatgpt_proxy.arn,
     module.snippet_extractor.ecr_repository_snippet_extractor.arn,
     module.lines_of_code_counter.ecr_repository_lines_of_code_counter.arn,
 
@@ -400,6 +402,15 @@ module "language_servers" {
 
 module "git_server" {
   source = "./git_server"
+}
+
+module "chatgpt_proxy" {
+  source = "./chatgpt_proxy"
+
+  region                    = var.region
+  aws_account_id            = data.aws_caller_identity.current.account_id
+  aws_alb_listener_internal = aws_alb_listener.internal
+  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
 }
 
 module "snippet_extractor" {

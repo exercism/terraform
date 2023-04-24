@@ -31,7 +31,9 @@ resource "aws_iam_user_policy" "ecr" {
         "iam:ListRoles",
         "lambda:UpdateFunctionCode",
         "lambda:CreateFunction",
-        "lambda:UpdateFunctionConfiguration"
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:GetFunction",
+        "lambda:GetFunctionConfiguration"
       ],
       "Resource": "${aws_lambda_function.main.arn}"
     }

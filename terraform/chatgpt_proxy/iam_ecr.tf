@@ -1,5 +1,5 @@
 resource "aws_iam_user_policy" "ecr" {
-  name = "lines-of-code-counter-ecr"
+  name = "chatgpt-proxy-ecr"
   user = local.username
 
   policy = <<EOF
@@ -17,7 +17,7 @@ resource "aws_iam_user_policy" "ecr" {
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload"
       ],
-      "Resource": "${aws_ecr_repository.lines_of_code_counter.arn}"
+      "Resource": "${aws_ecr_repository.chatgpt_proxy.arn}"
     }, {
       "Sid": "GithubDeployECRAuthTokenPolicy",
       "Effect": "Allow",

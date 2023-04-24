@@ -331,6 +331,18 @@ resource "aws_dynamodb_table_item" "opensearch_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "chatgpt_proxy_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "chatgpt_proxy_url"},
+  "value": {"S": "https://internal.exercism.org/ask_chatgpt"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "snippet_generator_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
