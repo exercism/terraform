@@ -366,3 +366,27 @@ resource "aws_dynamodb_table_item" "lines_of_code_counter_url" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "paypal_api_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "paypal_api_url"},
+  "value": {"S": "https://api-m.paypal.com"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "paypal_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "paypal_url"},
+  "value": {"S": "https://www.paypal.com"}
+}
+ITEM
+}
