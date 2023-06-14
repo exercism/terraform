@@ -6,7 +6,7 @@
     "environment": [
       {"name": "RAILS_ENV", "value": "production"}
     ],
-    "entryPoint": ["bundle", "exec", "sidekiq"],
+    "entryPoint": ["bundle", "exec", "bin/start_sidekiq"],
 
     "logConfiguration": {
       "logDriver":"awslogs",

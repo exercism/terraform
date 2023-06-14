@@ -18,7 +18,7 @@ locals {
   websockets_protocol = "wss"
   websockets_port     = 80
 
-  acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/a68be00b-70bc-48d1-84eb-5741fb1c0066"
+  acm_certificate_arn       = "arn:aws:acm:us-east-1:681735686245:certificate/a68be00b-70bc-48d1-84eb-5741fb1c0066"
   forum_acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/050200a9-85a7-4ddf-8854-a32748456352"
 
   efs_submissions_mount_point  = "/mnt/efs/submissions"
@@ -32,6 +32,10 @@ locals {
   s3_bucket_tooling_jobs_name     = "exercism-v3-tooling-jobs"
   s3_bucket_uploads_name          = "exercism-uploads"
   s3_bucket_tracks_dashboard_name = "tracks.exercism.io"
+
+  github_repos = toset([
+    "website",
+  ])
 
   ecr_tooling_repos = toset([
     "8th-test-runner",
@@ -407,10 +411,11 @@ module "git_server" {
 module "chatgpt_proxy" {
   source = "./chatgpt_proxy"
 
-  region                    = var.region
-  aws_account_id            = data.aws_caller_identity.current.account_id
-  aws_alb_listener_internal = aws_alb_listener.internal
-  aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
+  region                              = var.region
+  aws_account_id                      = data.aws_caller_identity.current.account_id
+  aws_alb_listener_internal           = aws_alb_listener.internal
+  aws_iam_policy_read_secret_config   = aws_iam_policy.read_secret_config
+  aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config
 }
 
 module "snippet_extractor" {
@@ -436,9 +441,9 @@ module "lines_of_code_counter" {
 module "discourse" {
   source = "./discourse"
 
-  region = var.region
-  aws_vpc_main       = aws_vpc.main
-  aws_subnet_publics = aws_subnet.publics
+  region              = var.region
+  aws_vpc_main        = aws_vpc.main
+  aws_subnet_publics  = aws_subnet.publics
   acm_certificate_arn = local.forum_acm_certificate_arn
 }
 

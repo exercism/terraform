@@ -30,6 +30,13 @@ brew install terraform
 - Give them no permissions (these will be set by terraform)
 - Set programatic access and save the keys to add to GitHub
 
+### Create a CodeCommit user
+
+- Create an IAM user called `code-commit-replicator`
+- Give them no permissions (these will be set by terraform)
+- Set programatic access and save the keys to add to GitHub
+
+
 ### Create state bucket
 
 Terraform state is stored in s3.
@@ -67,6 +74,8 @@ Create a policy called `terraform-iam` with the following JSON:
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
+                "iam:GetUser",
+                "iam:GetUserPolicy",
                 "iam:GetRole",
                 "iam:UpdateAssumeRolePolicy",
                 "iam:GetPolicyVersion",

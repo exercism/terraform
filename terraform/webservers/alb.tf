@@ -147,7 +147,7 @@ resource "aws_alb_listener_rule" "api_subdirectory" {
 
 resource "aws_alb_listener_rule" "website" {
   listener_arn = aws_alb_listener.http.arn
-  priority     = 94
+  priority     = 95
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.website.id

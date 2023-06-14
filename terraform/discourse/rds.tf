@@ -19,7 +19,7 @@ resource "aws_rds_cluster" "discourse" {
   backup_retention_period = 21
   vpc_security_group_ids          = [aws_security_group.rds_discourse.id]
   db_subnet_group_name            = aws_db_subnet_group.discourse.name
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.discourse.name
+  db_cluster_parameter_group_name = "default.aurora-postgresql11"
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
 
   # Ignore changes to final_snapshot_identifier, which are caused by the
