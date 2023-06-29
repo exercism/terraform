@@ -9,3 +9,11 @@ output "security_group_elasticache_jobs" {
 output "redis_url" {
   value = aws_elasticache_cluster.jobs.cache_nodes.0.address
 }
+
+output "aws_cloudwatch_jobs_log_group" {
+  value = aws_cloudwatch_log_group.tooling_jobs
+}
+
+output "aws_cloudwatch_jobs_log_stream" {
+  value = aws_cloudwatch_log_stream.tooling_jobs_general
+}

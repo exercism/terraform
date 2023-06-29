@@ -390,3 +390,27 @@ resource "aws_dynamodb_table_item" "paypal_url" {
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "tooling_cloudwatch_jobs_log_group_name" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+  item       = <<ITEM
+{
+  "id": {"S": "tooling_cloudwatch_jobs_log_group_name"},
+  "value": {"S": "${module.tooling.aws_cloudwatch_jobs_log_group.name}"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "tooling_cloudwatch_jobs_log_stream_name" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+  item       = <<ITEM
+{
+  "id": {"S": "tooling_cloudwatch_jobs_log_stream_name"},
+  "value": {"S": "${module.tooling.aws_cloudwatch_jobs_log_stream.name}"}
+}
+ITEM
+}
+
+

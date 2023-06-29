@@ -339,6 +339,7 @@ module "tooling_invoker" {
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
   aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
+aws_cloudwatch_log_group_jobs = module.tooling.aws_cloudwatch_jobs_log_group
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
