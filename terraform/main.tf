@@ -104,6 +104,7 @@ locals {
     "php-representer",
     "php-test-runner",
     "pony-test-runner",
+    "powershell-test-runner",
     "prolog-test-runner",
     "purescript-test-runner",
     "python-analyzer",
