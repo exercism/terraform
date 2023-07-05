@@ -31,16 +31,8 @@ resource "aws_iam_policy" "ecr" {
           "ecr:GetAuthorizationToken"
       ],
       "Resource": ["*"]
-    }, {
-      "Action": [
-        "logs:PutLogEvents",
-        "logs:DescribeLogStreams"
-      ],
-      "Resource": "${var.aws_cloudwatch_log_group_jobs.arn}",
-      "Effect": "Allow"
     }
   ]
 }
 EOF
 }
-

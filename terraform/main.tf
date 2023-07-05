@@ -173,6 +173,7 @@ module "files" {
   bucket_submissions_name  = local.s3_bucket_submissions_name
   bucket_tooling_jobs_name = local.s3_bucket_tooling_jobs_name
   bucket_uploads_name      = local.s3_bucket_uploads_name
+  webservers_alb_hostname = module.webservers.alb_hostname
 
   website_protocol = local.website_protocol
   website_host     = local.website_host
@@ -287,6 +288,7 @@ module "bastion" {
   aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
   aws_iam_policy_access_s3_bucket_submissions  = module.files.bucket_submissions_access
   aws_iam_policy_access_s3_bucket_tooling_jobs = module.files.bucket_tooling_jobs_access
+  aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
@@ -340,7 +342,7 @@ module "tooling_invoker" {
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
   aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
-aws_cloudwatch_log_group_jobs = module.tooling.aws_cloudwatch_jobs_log_group
+aws_cloudwatch_log_stream_jobs_general = module.tooling.aws_cloudwatch_log_stream_jobs_general
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics

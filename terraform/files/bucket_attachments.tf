@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "attachments" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
-  
+
   server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false

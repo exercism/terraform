@@ -1,9 +1,9 @@
 resource "aws_autoscaling_group" "main" {
   name = "Tooling Invokers"
 
-  min_size         = 18
-  desired_capacity = 20
-  max_size         = 22
+  min_size         = 10
+  desired_capacity = 12
+  max_size         = 15
   max_instance_lifetime = 86400
 
   default_cooldown   = 900

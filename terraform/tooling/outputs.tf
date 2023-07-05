@@ -14,6 +14,6 @@ output "aws_cloudwatch_jobs_log_group" {
   value = aws_cloudwatch_log_group.tooling_jobs
 }
 
-output "aws_cloudwatch_jobs_log_stream" {
+output "aws_cloudwatch_log_stream_jobs_general" {
   value = aws_cloudwatch_log_stream.tooling_jobs_general
 }

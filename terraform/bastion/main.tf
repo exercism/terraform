@@ -3,6 +3,7 @@ variable "ecr_tooling_repos" {}
 variable "aws_iam_policy_read_dynamodb_config" {}
 variable "aws_iam_policy_access_s3_bucket_submissions" {}
 variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
+variable "aws_iam_policy_access_s3_attachments" {}
 variable "aws_iam_policy_read_secret_config" {}
 variable "aws_security_group_efs_repositories_access" {}
 variable "aws_security_group_efs_submissions_access" {}

@@ -20,22 +20,26 @@ sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config s
 # Mount EFS Submissions #
 #########################
 sudo su -
+
   FILE_SYSTEM_ID="fs-36ba41c6"
   EFS_MOUNT_POINT="/mnt/efs/submissions"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev,ro 0 0\n" >> /etc/fstab
   retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+
 exit
 
 #################
 # Mount EFS Git #
 #################
 sudo su -
+
   FILE_SYSTEM_ID="fs-37ba41c7"
   EFS_MOUNT_POINT="/mnt/efs/repos"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
   retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+
 exit
 
 #######################
@@ -44,6 +48,15 @@ exit
 sudo groupadd exercism
 sudo useradd -g exercism -m -s /bin/bash exercism
 sudo loginctl enable-linger exercism
+
+##############################
+# Set up permissions for efs #
+##############################
+sudo groupadd -g 2222 exercism-git
+sudo usermod -a -G exercism-git root
+sudo usermod -a -G exercism-git exercism
+sudo usermod -a -G exercism-git ubuntu
+sudo git config --system --add safe.directory '*'
 
 #############################################
 # Allow the canary to shut down the machine #
@@ -71,6 +84,7 @@ sudo su - exercism
   sed -i '1s/^/export PATH=\/home\/exercism\/bin:$PATH\n/' ~/.bashrc
 
   systemctl --user enable docker
+
 exit
 
 # sudo su -
@@ -109,12 +123,12 @@ sudo su -
   mkdir ~/install
   cd ~/install
 
-  wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz
-  tar -xzvf ruby-install-0.7.0.tar.gz
-  pushd ruby-install-0.7.0/
+  wget -O ruby-install-0.9.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.9.1.tar.gz
+  tar -xzvf ruby-install-0.9.1.tar.gz
+  pushd ruby-install-0.9.1/
     make install
   popd
-  ruby-install ruby 2.6.6 -- --disable-install-rdoc
+  ruby-install ruby 3.2.1 -- --disable-install-rdoc
 
   wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
   tar -xzvf chruby-0.3.9.tar.gz
@@ -124,37 +138,43 @@ sudo su -
 exit
 
 sudo su - exercism
-  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 2.6.6\n/' ~/.bashrc
+  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 3.2.1\n/' ~/.bashrc
   sed -i '1s/^/EXERCISM_ENV=production\n/' ~/.bashrc
   source /usr/local/share/chruby/chruby.sh
-  chruby ruby-2.6.6
+  chruby ruby-3.2.1
 
-  gem install bundler:2.1.4
+  gem install bundler:2.4.12
 exit
 
 ###############
 # Install AWS #
 ###############
 sudo su -
+
+  cd ~/install
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
   sudo ./aws/install
+
 exit
 
 ########################
 # Setup Jobs Directory #
 ########################
 sudo su -
+
   DIR="/opt/jobs"
   mkdir $DIR
   chown exercism:exercism $DIR
   chmod 700 $DIR
+
 exit
 
 ###########################
 # Install tooling invoker #
 ###########################
 sudo su -
+
   DIR="/opt/tooling-invoker"
   mkdir $DIR
 
@@ -165,10 +185,13 @@ sudo su -
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
 
-  su exercism
-    cd /opt/tooling-invoker
-    bundle install
-  exit
+exit
+
+sudo su - exercism
+
+  cd /opt/tooling-invoker
+  bundle install
+
 exit
 
 ###########################
@@ -184,17 +207,18 @@ sudo su -
 
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
+exit
 
-  su exercism
-    cd /opt/tooling-manager
-    bundle install
-  exit
+sudo su - exercism
+  cd /opt/tooling-manager
+  bundle install
 exit
 
 #####################################
 # Setup Systemd for tooling manager #
 #####################################
 sudo su -
+
   cat >/etc/systemd/system/exercism-manager.service << EOM
 [Unit]
 Description=Exercism Tooling Manager
@@ -211,8 +235,8 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-manager
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
+ExecStartPre=/usr/local/bin/chruby-exec ruby-3.2.1 -- ./bin/update
+ExecStart=/usr/local/bin/chruby-exec ruby-3.2.1 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-manager
 
 [Install]
@@ -249,8 +273,8 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-invoker
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/start
+ExecStartPre=/usr/local/bin/chruby-exec ruby-3.2.1 -- ./bin/update
+ExecStart=/usr/local/bin/chruby-exec ruby-3.2.1 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-invoker
 
 [Install]
@@ -268,71 +292,19 @@ EOM
   systemctl enable exercism-invoker.service
 exit
 
-############################
-# Setup Systemd for canary #
-############################
-sudo su -
-  cat >/etc/systemd/system/exercism-canary.service << EOM
-[Unit]
-Description=Exercism Tooling Canary
-After=network.target
-
-# Keep restarting the service forever
-StartLimitIntervalSec=0
-StartLimitBurst=0
-
-[Service]
-Restart=always
-
-# Sleep for 30s before restarting the service
-RestartSec=30
-User=exercism
-WorkingDirectory=/opt/tooling-invoker
-ExecStartPre=/usr/local/bin/chruby-exec ruby-2.6.6 -- ./bin/update
-ExecStart=/usr/local/bin/chruby-exec ruby-2.6.6 -- bundle exec ruby bin/canary
-SyslogIdentifier=tooling-canary
-
-[Install]
-WantedBy=multi-user.target
-EOM
-chmod 544 /etc/systemd/system/exercism-canary.service
-
-mkdir /etc/systemd/system/exercism-canary.service.d
-cat >/etc/systemd/system/exercism-canary.service.d/env.conf << EOM
-[Service]
-Environment="EXERCISM_ENV=production"
-EOM
-  chmod 544 /etc/systemd/system/exercism-canary.service.d/env.conf
-  systemctl enable exercism-canary.service
-exit
-
 #########################
 ## Start everything up ##
 #########################
 
 sudo systemctl start exercism-manager.service
 sudo systemctl start exercism-invoker.service
-sudo systemctl start exercism-canary.service
 
-docker logout
-aws ecr get-login-password --region eu-west-2 | docker login -u AWS --password-stdin 681735686245.dkr.ecr.eu-west-2.amazonaws.com
-docker pull 681735686245.dkr.ecr.eu-west-2.amazonaws.com/ruby-test-runner:production
+############
+# CLEAN UP #
+############
+# Watch this until it's finished everything:
+sudo journalctl -u exercism-manager.service -f
 
-#ln -s $CONTAINER_DIR /opt/containers/ruby-test-runner/current
-
-##############################
-## TEMPORARY: Run the worker #
-##############################
-#su -l exercism
-#  cd /opt/tooling-invoker
-#  git fetch && git reset --hard origin/master && EXERCISM_ENV=production bundle exec bin/worker
-#exit
-
-##############################
-## TEMPORARY: Run the manager #
-##############################
-#su -l exercism
-#  cd /opt/tooling-manager
-#  git fetch && git reset --hard origin/main && EXERCISM_ENV=production bundle exec bin/manager
-#exit
-
+# Now stop the manager and remove the "ready" file
+sudo systemctl stop exercism-manager.service
+rm /home/exercism/.tooling-manager-ready

@@ -1,6 +1,6 @@
 resource "aws_launch_template" "main" {
-  image_id      = "ami-0b8768870a5bbf431"
-  instance_type = "t3.small"
+  image_id      = "ami-0f15a7fc3ebb968fd"
+  instance_type = "t3.medium"
   key_name      = "iHiD-v3"
   name          = "Tooling-Invokers"
   tags          = {}
@@ -31,7 +31,7 @@ resource "aws_launch_template" "main" {
       delete_on_termination = "true"
       encrypted             = "false"
       iops                  = 0
-      snapshot_id           = "snap-0c3a82077cd06df9c"
+      snapshot_id           = "snap-04b6e1ea0ec84d2e3"
       volume_size           = 130
       volume_type           = "gp2"
     }

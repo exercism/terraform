@@ -1,20 +1,22 @@
 # Tooling Invoker
 
 Create an AMI using the script in this direcory (ami.sh) with the following base:
-- Ubuntu Server 20.04 LTS (HVM), SSD Volume Type (ami-0194c3e07668a7e36)
-- t3.medium (Consider c5n.large if burstable fails)
-- Auto-assign IP: Enable
-- IAM Role: tooling-invoker-ec2
-- Storage: 100GB (General purpose SSD - gp2)
+- Name: Whatever
 - Tags:
   - tooling-representers: all
   - tooling-test-runners: all
   - tooling-analyzers: all
-- Security Groups: 
+- Ubuntu Server 22.04 LTS (HVM), SSD Volume Type (ami-0eb260c4d5475b901)
+- t3.medium
+- Keypair: iHiD-v3
+- v3 vpc
+- Auto-assign IP: Enable
+- Security Groups:
   - tooling-invoker-ec2
   - efs-submissions-access
   - efs-repositories-access
-- Keypair: iHiD-v3
+- Storage: 130GB (General purpose SSD - gp2)
+- IAM Profile: tooling-invoker-ec2
 
 Then create a launch template and autoscaling group:
 
@@ -38,7 +40,7 @@ https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws/late
 
 Tooling Invokers need the following security_groups:
 - tooling-invoker-ec2
-- efs-submissions-access 
+- efs-submissions-access
 
 - The EFS should be mounted at /mnt/efs/submissions.
 - It should be readonly
