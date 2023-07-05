@@ -419,7 +419,7 @@ resource "aws_dynamodb_table_item" "mongodb_url" {
   item       = <<ITEM
 {
   "id": {"S": "mongodb_url"},
-  "value": {"S": "exercism:exercism@${aws_docdb_cluster.general.endpoint}:${aws_docdb_cluster.general.port}/?replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"}
+  "value": {"S": "mongodb://exercism:exercism@${aws_docdb_cluster.general.endpoint}:${aws_docdb_cluster.general.port}/?replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"}
 }
 ITEM
 }
