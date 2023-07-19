@@ -451,12 +451,8 @@ module "image_generator" {
   region                                    = var.region
   aws_account_id                            = data.aws_caller_identity.current.account_id
   aws_subnet_publics                        = aws_subnet.publics
-  aws_efs_mount_target_submissions          = aws_efs_mount_target.submissions
-  aws_efs_access_point_submissions          = aws_efs_access_point.submissions
-  aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
   aws_alb_listener_internal                 = aws_alb_listener.internal
 }
-
 
 module "discourse" {
   source = "./discourse"
