@@ -6,8 +6,6 @@ resource "aws_lambda_function" "main" {
 
   vpc_config {
     subnet_ids         = var.aws_subnet_publics.*.id
-    security_group_ids = [var.aws_security_group_efs_submissions_access.id]
+    security_group_ids = [var.aws_security_group_default.id]
   }
-
-  depends_on = [var.aws_efs_mount_target_submissions]
 }

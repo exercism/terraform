@@ -2,6 +2,7 @@ variable "region" {}
 variable "aws_account_id" {}
 variable "aws_subnet_publics" {}
 variable "aws_alb_listener_internal" {}
+variable "aws_security_group_default" {}
 
 provider "aws" {
   region  = var.region

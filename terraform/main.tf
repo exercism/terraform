@@ -143,11 +143,10 @@ locals {
     "zig-test-runner"
   ])
 
-
   ecr_lambda_repos = toset([
     "chatgpt-proxy",
     "snippet-extractor",
-    "lines-of-code-counter"
+    "lines-of-code-counter",
     "image-generator"
   ])
 
@@ -370,8 +369,8 @@ module "github_deploy" {
     module.webservers.ecr_repository_rails.arn,
     module.webservers.ecr_repository_nginx.arn,
     module.anycable.ecr_repository_go.arn
-
   ]
+
   aws_s3_bucket_name_assets           = local.s3_bucket_assets_name
   aws_s3_bucket_name_icons            = local.s3_bucket_icons_name
   aws_s3_bucket_name_tracks_dashboard = local.s3_bucket_tracks_dashboard_name
@@ -452,6 +451,7 @@ module "image_generator" {
   aws_account_id                            = data.aws_caller_identity.current.account_id
   aws_subnet_publics                        = aws_subnet.publics
   aws_alb_listener_internal                 = aws_alb_listener.internal
+aws_security_group_default = aws_security_group.default
 }
 
 module "discourse" {
