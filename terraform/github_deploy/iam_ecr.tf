@@ -19,7 +19,7 @@ resource "aws_iam_user_policy" "ecr" {
             "ecr:CompleteLayerUpload"
         ],
         "Resource": [
-          ${join(",", formatlist("\"%s\"", var.aws_ecr_repo_arns))}
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*"
         ]
     }, {
         "Sid": "GithubDeployECRAuthTokenPolicy",
