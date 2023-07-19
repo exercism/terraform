@@ -8,7 +8,7 @@ resource "aws_alb_listener_rule" "main" {
 
   condition {
     path_pattern {
-      values = ["/generate_solution_image"]
+      values = ["/generate_image"]
     }
   }
 }
