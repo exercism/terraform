@@ -57,6 +57,7 @@ resource "aws_rds_cluster" "main" {
   db_subnet_group_name            = aws_db_subnet_group.main.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main.name
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
+  deletion_protection = true
 
   # Ignore changes to final_snapshot_identifier, which are caused by the
   # timestamp being regenerated on each run.
@@ -66,8 +67,8 @@ resource "aws_rds_cluster" "main" {
 
   scaling_configuration {
     auto_pause   = false
-    max_capacity = 16
-    min_capacity = 4
+    max_capacity = 8
+    min_capacity = 8
   }
 }
 

@@ -358,10 +358,10 @@ module "github_deploy" {
 
   aws_ecr_repo_arns = [
     module.sidekiq.ecr_repository_monitor.arn,
-    module.chatgpt_proxy.ecr_repository_chatgpt_proxy.arn,
-    module.snippet_extractor.ecr_repository_snippet_extractor.arn,
-    module.lines_of_code_counter.ecr_repository_lines_of_code_counter.arn,
-    module.image_generator.ecr_repository_image_generator.arn,
+    module.chatgpt_proxy.ecr_repository.arn,
+    module.snippet_extractor.ecr_repository.arn,
+    module.lines_of_code_counter.ecr_repository.arn,
+    module.image_generator.ecr_repository.arn,
 
     module.tooling_orchestrator.ecr_repository_application.arn,
     module.tooling_orchestrator.ecr_repository_nginx.arn,
