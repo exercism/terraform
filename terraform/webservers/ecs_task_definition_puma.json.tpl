@@ -14,7 +14,7 @@
       "logDriver":"awslogs",
       "options": {
         "awslogs-region": "${region}",
-        "awslogs-group": "${log_group_name}",
+        "awslogs-group": "${nginx_log_group_name}",
         "awslogs-stream-prefix": "${log_group_prefix}"
       }
     },
@@ -40,7 +40,7 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-region": "${region}",
-        "awslogs-group": "${log_group_name}",
+        "awslogs-group": "${puma_log_group_name}",
         "awslogs-stream-prefix": "${log_group_prefix}"
       }
     },

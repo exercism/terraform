@@ -12,7 +12,9 @@ resource "aws_iam_user_policy" "write_to_codecommit" {
     "Effect": "Allow",
     "Action": [
       "codecommit:GitPull",
-      "codecommit:GitPush"
+      "codecommit:GitPush",
+      "codecommit:ListRepositories",
+      "codecommit:CreateRepository"
     ],
     "Resource": "*"
   }]
