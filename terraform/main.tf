@@ -107,6 +107,7 @@ locals {
     "powershell-test-runner",
     "prolog-test-runner",
     "purescript-test-runner",
+    "pyret-test-runner",
     "python-analyzer",
     "python-representer",
     "python-test-runner",
