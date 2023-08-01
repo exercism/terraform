@@ -8,8 +8,9 @@ locals {
     http_port                    = var.http_port
     websockets_port              = var.websockets_port
     region                       = var.region
-    log_group_name               = aws_cloudwatch_log_group.webservers.name
-    log_group_prefix     = "api"
+    puma_log_group_name          = aws_cloudwatch_log_group.puma.name
+    nginx_log_group_name         = aws_cloudwatch_log_group.nginx.name
+    log_group_prefix             = "api"
     efs_submissions_mount_point  = var.efs_submissions_mount_point
     efs_repositories_mount_point = var.efs_repositories_mount_point
   })
