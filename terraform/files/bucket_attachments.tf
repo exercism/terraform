@@ -1,12 +1,22 @@
 resource "aws_s3_bucket" "attachments" {
   bucket = var.bucket_attachments_name
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "attachments" {
+  bucket = aws_s3_bucket.attachments.id
+
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  # TODO: Change this to private when going via cloudfront
-  acl = "public-read"
+resource "aws_s3_bucket_acl" "attachments" {
+  bucket = aws_s3_bucket.attachments.id
+  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_cors_configuration" "attachments" {
+  bucket = aws_s3_bucket.attachments.id
 
   cors_rule {
     allowed_headers = ["*"]
@@ -15,21 +25,23 @@ resource "aws_s3_bucket" "attachments" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
+resource "aws_s3_bucket_server_side_encryption_configuration" "attachments" {
+  bucket = aws_s3_bucket.attachments.id
 
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  rule {
+    bucket_key_enabled = false
+
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 
 }
 
 resource "aws_iam_policy" "bucket_attachments_access" {
-  name = "s3-bucket-attachments-access"
+  name        = "s3-bucket-attachments-access"
   path        = "/"
   description = "Access s3 attachments"
 
@@ -58,7 +70,7 @@ EOF
 
 
 
-  # TODO: Add for cloudfront
+# TODO: Add for cloudfront
 # data "aws_iam_policy_document" "s3_attachments" {
 #   statement {
 #     actions   = ["s3:GetObject"]

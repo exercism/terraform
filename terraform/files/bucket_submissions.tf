@@ -1,12 +1,23 @@
 resource "aws_s3_bucket" "submissions" {
   bucket = var.bucket_submissions_name
-  acl    = "private"
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "submissions" {
+  bucket = aws_s3_bucket.submissions.id
+
+  versioning_configuration {
+    status = "Enabled"
   }
-  
-  server_side_encryption_configuration {
+}
+
+resource "aws_s3_bucket_acl" "submissions" {
+  bucket = aws_s3_bucket.submissions.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "submissions" {
+  bucket = aws_s3_bucket.submissions.id
+
     rule {
       bucket_key_enabled = false
 
@@ -14,7 +25,6 @@ resource "aws_s3_bucket" "submissions" {
         sse_algorithm = "AES256"
       }
     }
-  }
 
 }
 

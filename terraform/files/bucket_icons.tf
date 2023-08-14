@@ -1,6 +1,14 @@
 resource "aws_s3_bucket" "icons" {
   bucket = var.bucket_icons_name
+}
+
+resource "aws_s3_bucket_acl" "icons" {
+  bucket = aws_s3_bucket.icons.id
   acl    = "private"
+}
+
+resource "aws_s3_bucket_cors_configuration" "icons" {
+  bucket = aws_s3_bucket.icons.id
 
   cors_rule {
     allowed_headers = ["*"]
@@ -9,15 +17,18 @@ resource "aws_s3_bucket" "icons" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+}
 
-  server_side_encryption_configuration {
+resource "aws_s3_bucket_server_side_encryption_configuration" "icons" {
+  bucket = aws_s3_bucket.icons.id
+
+
     rule {
       bucket_key_enabled = false
 
       apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
-    }
   }
 
 
