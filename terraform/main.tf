@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
 }
@@ -174,7 +174,7 @@ module "files" {
   bucket_submissions_name  = local.s3_bucket_submissions_name
   bucket_tooling_jobs_name = local.s3_bucket_tooling_jobs_name
   bucket_uploads_name      = local.s3_bucket_uploads_name
-  webservers_alb_hostname = module.webservers.alb_hostname
+  webservers_alb_hostname  = module.webservers.alb_hostname
 
   website_protocol = local.website_protocol
   website_host     = local.website_host
@@ -343,7 +343,7 @@ module "tooling_invoker" {
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
   aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
   aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
-aws_cloudwatch_log_stream_jobs_general = module.tooling.aws_cloudwatch_log_stream_jobs_general
+  aws_cloudwatch_log_stream_jobs_general                   = module.tooling.aws_cloudwatch_log_stream_jobs_general
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -447,11 +447,13 @@ module "lines_of_code_counter" {
 module "image_generator" {
   source = "./image_generator"
 
-  region                                    = var.region
-  aws_account_id                            = data.aws_caller_identity.current.account_id
-  aws_subnet_publics                        = aws_subnet.publics
-  aws_alb_listener_internal                 = aws_alb_listener.internal
-aws_security_group_default = aws_security_group.default
+  region                              = var.region
+  aws_account_id                      = data.aws_caller_identity.current.account_id
+  aws_subnet_publics                  = aws_subnet.publics
+  aws_alb_listener_internal           = aws_alb_listener.internal
+  aws_vpc_main                        = aws_vpc.main
+  aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config
+  aws_security_group_default          = aws_security_group.default
 }
 
 module "discourse" {

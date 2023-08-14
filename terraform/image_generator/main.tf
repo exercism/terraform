@@ -1,8 +1,10 @@
 variable "region" {}
+variable "aws_vpc_main" {}
 variable "aws_account_id" {}
 variable "aws_subnet_publics" {}
 variable "aws_alb_listener_internal" {}
 variable "aws_security_group_default" {}
+variable "aws_iam_policy_read_dynamodb_config" {}
 
 provider "aws" {
   region  = var.region

@@ -6,6 +6,7 @@ resource "aws_alb" "webservers" {
   security_groups = [aws_security_group.alb.id]
 
   enable_deletion_protection = true
+  xff_header_processing_mode = "preserve"
 }
 
 resource "aws_alb_target_group" "website" {
