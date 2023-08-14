@@ -22,3 +22,8 @@ resource "aws_iam_role_policy_attachment" "efs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "read_dynamodb_config" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = var.aws_iam_policy_read_dynamodb_config.arn
+}
+

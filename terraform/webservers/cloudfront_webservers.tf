@@ -5,11 +5,13 @@ data "aws_cloudfront_origin_request_policy" "Managed-UserAgentRefererHeaders" {
 locals {
   origin_id_alb       = "ALB-${aws_alb.webservers.name}"
   origin_id_plausible = "plausible.io"
+  origin_id_image_generator = "image-generator"
 }
 
 resource "aws_cloudfront_distribution" "webservers" {
   enabled         = true
   is_ipv6_enabled = true
+
   aliases = [
     var.website_host,
     "api.${var.website_host}",
@@ -46,8 +48,9 @@ resource "aws_cloudfront_distribution" "webservers" {
         forward = "all"
       }
     }
-
     viewer_protocol_policy = "redirect-to-https"
+    compress = false
+
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
@@ -89,6 +92,7 @@ resource "aws_cloudfront_distribution" "webservers" {
     path_pattern           = "/usage/js/script.js"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
+    compress = false
     viewer_protocol_policy = "https-only"
     target_origin_id       = local.origin_id_plausible
 
@@ -110,6 +114,7 @@ resource "aws_cloudfront_distribution" "webservers" {
     path_pattern           = "/usage/api/event"
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods         = ["GET", "HEAD"]
+    compress = false
     viewer_protocol_policy = "https-only"
     target_origin_id       = local.origin_id_plausible
 
@@ -126,6 +131,33 @@ resource "aws_cloudfront_distribution" "webservers" {
       lambda_arn   = aws_lambda_function.plausible.qualified_arn
       include_body = false
     }
+  }
+
+  ####################
+  # Generated images #
+  ####################
+  origin {
+    domain_name = "jndbzzcsm7f5srkgo7ktdsapnu0pjsbr.lambda-url.eu-west-2.on.aws"
+    origin_id   = local.origin_id_image_generator
+
+    custom_origin_config {
+      http_port              = "80"
+      https_port             = "443"
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/tracks/*/exercises/*/solutions/*.png"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    compress = true
+    viewer_protocol_policy = "redirect-to-https"
+    target_origin_id       = local.origin_id_image_generator
+
+    cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+    origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
   }
 }
 
