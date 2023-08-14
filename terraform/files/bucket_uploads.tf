@@ -3,38 +3,48 @@
 # was not created by it and is in a weird zone.
 resource "aws_s3_bucket" "uploads" {
   provider = aws.eu_west_1
-  bucket = var.bucket_uploads_name
+  bucket   = var.bucket_uploads_name
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "uploads" {
+  provider = aws.eu_west_1
+  bucket   = aws_s3_bucket.uploads.id
+
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  # TODO: Change this to private when going via cloudfront
-  acl = "private"
+# TODO: Add this back in
+# resource "aws_s3_bucket_acl" "uploads" {
+#   bucket = aws_s3_bucket.uploads.id
+#   acl    = "private"
+# }
 
-  # TODO: Add this back in
-  # cors_rule {
-  #   allowed_headers = ["*"]
-  #   allowed_methods = ["HEAD", "GET"]
-  #   allowed_origins = ["${var.website_protocol}://${var.website_host}"]
-  #   expose_headers  = ["ETag"]
-  #   max_age_seconds = 3000
-  # }
-  
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
+# TODO: Add this back in
+# cors_rule {
+#   allowed_headers = ["*"]
+#   allowed_methods = ["HEAD", "GET"]
+#   allowed_origins = ["${var.website_protocol}://${var.website_host}"]
+#   expose_headers  = ["ETag"]
+#   max_age_seconds = 3000
+# }
 
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "uploads" {
+  provider = aws.eu_west_1
+  bucket   = aws_s3_bucket.uploads.id
+
+  rule {
+    bucket_key_enabled = false
+
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
 }
 
 resource "aws_iam_policy" "bucket_uploads_access" {
-  name = "s3-bucket-uploads-access"
+  name        = "s3-bucket-uploads-access"
   path        = "/"
   description = "Access s3 uploads"
 

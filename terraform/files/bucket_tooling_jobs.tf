@@ -1,17 +1,22 @@
 resource "aws_s3_bucket" "tooling_jobs" {
   bucket = var.bucket_tooling_jobs_name
-  acl    = "private"
-  
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
+}
 
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_acl" "tooling_jobs" {
+  bucket = aws_s3_bucket.tooling_jobs.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "tooling_jobs" {
+  bucket = aws_s3_bucket.tooling_jobs.id
+
+  rule {
+    bucket_key_enabled = false
+
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
 }
 
 resource "aws_iam_policy" "bucket_tooling_jobs_write" {
@@ -26,7 +31,7 @@ resource "aws_iam_policy" "bucket_tooling_jobs_write" {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
       "Resource": ["${aws_s3_bucket.tooling_jobs.arn}"]
-    }, 
+    },
     {
       "Effect": "Allow",
       "Action": [
@@ -53,7 +58,7 @@ resource "aws_iam_policy" "bucket_tooling_jobs_access" {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
       "Resource": ["${aws_s3_bucket.tooling_jobs.arn}"]
-    }, 
+    },
     {
       "Effect": "Allow",
       "Action": [
