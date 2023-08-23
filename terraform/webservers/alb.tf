@@ -10,10 +10,11 @@ resource "aws_alb" "webservers" {
 }
 
 resource "aws_alb_target_group" "website" {
+  vpc_id      = var.aws_vpc_main.id
+
   name        = "webservers-website"
   port        = var.http_port
   protocol    = "HTTP"
-  vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
 
   deregistration_delay = 10
@@ -29,10 +30,11 @@ resource "aws_alb_target_group" "website" {
 }
 
 resource "aws_alb_target_group" "api" {
+  vpc_id      = var.aws_vpc_main.id
+
   name        = "webservers-api"
   port        = var.http_port
   protocol    = "HTTP"
-  vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
 
   deregistration_delay = 10
@@ -47,12 +49,12 @@ resource "aws_alb_target_group" "api" {
   }
 }
 
-
 resource "aws_alb_target_group" "anycable" {
+  vpc_id      = var.aws_vpc_main.id
+
   name        = "webservers-anycable"
   port        = var.http_port
   protocol    = "HTTP"
-  vpc_id      = var.aws_vpc_main.id
   target_type = "ip"
 
   deregistration_delay = 10
@@ -79,7 +81,7 @@ resource "aws_alb_listener" "http" {
     fixed_response {
       content_type = "text/plain"
       message_body = ""
-      status_code  = 429 # We use a 429 as this is exclusivily to block bots
+      status_code  = 429 # We use a 429 as this is exclusively to block bots
     }
   }
   lifecycle {
@@ -87,18 +89,41 @@ resource "aws_alb_listener" "http" {
   }
 }
 
+# Block any SPI access
+resource "aws_alb_listener_rule" "block_spi" {
+  listener_arn = aws_alb_listener.http.arn
+  priority     = 90
+
+  condition {
+    path_pattern {
+      values = ["/spi", "/spi/*"]
+    }
+  }
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = ""
+      status_code  = 429 # We use a 429 as this is exclusively to block bots
+    }
+  }
+}
+
 resource "aws_alb_listener_rule" "anycable" {
   listener_arn = aws_alb_listener.http.arn
   priority     = 91
-  action {
-    type             = "forward"
-    target_group_arn = aws_alb_target_group.anycable.id
-  }
 
   condition {
     path_pattern {
       values = ["/cable", "/cable/*"]
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.anycable.id
   }
 }
 
@@ -106,10 +131,6 @@ resource "aws_alb_listener_rule" "anycable" {
 resource "aws_alb_listener_rule" "api_subdomain" {
   listener_arn = aws_alb_listener.http.arn
   priority     = 92
-  action {
-    type             = "forward"
-    target_group_arn = aws_alb_target_group.api.id
-  }
 
   condition {
     host_header {
@@ -118,6 +139,11 @@ resource "aws_alb_listener_rule" "api_subdomain" {
         "api.exercism.io"
       ]
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.api.id
   }
 }
 
@@ -131,6 +157,12 @@ resource "aws_alb_listener_rule" "api_subdirectory" {
   }
 
   condition {
+    path_pattern {
+      values = ["/api", "/api/*"]
+    }
+  }
+
+  condition {
     host_header {
       values = [
         var.website_host,
@@ -138,13 +170,8 @@ resource "aws_alb_listener_rule" "api_subdirectory" {
       ]
     }
   }
-
-  condition {
-    path_pattern {
-      values = ["/api", "/api/*"]
-    }
-  }
 }
+
 
 resource "aws_alb_listener_rule" "website" {
   listener_arn = aws_alb_listener.http.arn

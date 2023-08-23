@@ -212,6 +212,7 @@ module "webservers" {
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_security_group_es_general                = aws_security_group.es_general
+  aws_security_group_internal_alb              = aws_security_group.internal_alb
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
   aws_efs_file_system_submissions              = aws_efs_file_system.submissions
   efs_submissions_mount_point                  = local.efs_submissions_mount_point
@@ -221,6 +222,7 @@ module "webservers" {
   aws_redis_url_anycable                       = module.anycable.redis_url
   aws_ecr_repository_anycable_go               = module.anycable.ecr_repository_go
   aws_ecr_repository_anycable_go_pro           = module.anycable.ecr_repository_go_pro
+  aws_alb_listener_internal                    = aws_alb_listener.internal
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -449,7 +451,7 @@ module "image_generator" {
 
   region                              = var.region
   aws_account_id                      = data.aws_caller_identity.current.account_id
-  aws_subnet_publics                  = aws_subnet.publics
+  aws_subnet_lambda                  = aws_subnet.lambda
   aws_alb_listener_internal           = aws_alb_listener.internal
   aws_vpc_main                        = aws_vpc.main
   aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config

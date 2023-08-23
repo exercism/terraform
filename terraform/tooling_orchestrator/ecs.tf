@@ -36,7 +36,6 @@ resource "aws_ecs_service" "tooling_orchestrators" {
     security_groups = [aws_security_group.ecs.id]
     subnets         = var.aws_subnet_publics.*.id
 
-    # TODO: Can this be false?
     assign_public_ip = true
   }
 

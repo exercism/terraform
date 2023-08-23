@@ -43,7 +43,6 @@ resource "aws_ecs_service" "anycable" {
     ]
     subnets = var.aws_subnet_publics.*.id
 
-    # TODO: Can this be false?
     assign_public_ip = true
   }
 

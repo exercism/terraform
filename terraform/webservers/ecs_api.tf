@@ -60,12 +60,17 @@ resource "aws_ecs_service" "api" {
     ]
     subnets = var.aws_subnet_publics.*.id
 
-    # TODO: Can this be false?
     assign_public_ip = true
   }
 
   load_balancer {
     target_group_arn = aws_alb_target_group.api.id
+    container_name   = "nginx"
+    container_port   = var.http_port
+  }
+
+  load_balancer {
+    target_group_arn = aws_alb_target_group.spi.id
     container_name   = "nginx"
     container_port   = var.http_port
   }

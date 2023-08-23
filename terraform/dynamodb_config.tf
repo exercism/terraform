@@ -46,7 +46,6 @@ resource "aws_dynamodb_table_item" "websockets_url" {
 ITEM
 }
 
-# TODO: Change this so it's a seperately protected thing
 resource "aws_dynamodb_table_item" "spi_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -54,7 +53,7 @@ resource "aws_dynamodb_table_item" "spi_url" {
   item = <<ITEM
 {
   "id": {"S": "spi_url"},
-  "value": {"S": "${module.webservers.alb_hostname}"}
+  "value": {"S": "https://internal.exercism.org"}
 }
 ITEM
 }
@@ -102,7 +101,7 @@ resource "aws_dynamodb_table_item" "assets_host" {
   item = <<ITEM
 {
   "id": {"S": "website_assets_host"},
-  "value": {"S": "https://${module.files.cloudfront_distribution_assets.domain_name}"}
+  "value": {"S": "https://assets.exercism.org"}
 }
 ITEM
 }
@@ -137,7 +136,7 @@ resource "aws_dynamodb_table_item" "icons_host" {
   item = <<ITEM
 {
   "id": {"S": "website_icons_host"},
-  "value": {"S": "https://${module.files.cloudfront_distribution_icons.domain_name}"}
+  "value": {"S": "https://assets.exercism.org"}
 }
 ITEM
 }

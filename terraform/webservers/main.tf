@@ -16,11 +16,13 @@ variable "aws_security_group_efs_repositories_access" {}
 variable "aws_security_group_efs_submissions_access" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
 variable "aws_security_group_es_general" {}
+variable "aws_security_group_internal_alb" {}
 variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_submissions" {}
 variable "aws_redis_url_anycable" {}
 variable "aws_ecr_repository_anycable_go" {}
 variable "aws_ecr_repository_anycable_go_pro" {}
+variable "aws_alb_listener_internal" {}
 
 variable "efs_submissions_mount_point" {}
 variable "efs_repositories_mount_point" {}

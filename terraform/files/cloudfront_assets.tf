@@ -1,6 +1,11 @@
 locals {
   webservers_origin_id = "webservers"
-  s3_assets_origin_id = "assets"
+  s3_assets_origin_id  = "assets"
+  s3_images_origin_id  = "images"
+}
+
+variable images_ordered_cache_behavior_paths { 
+  default = ["images", "exercises", "key-features", "meta", "placeholders", "tracks"]
 }
 
 resource "aws_cloudfront_origin_access_identity" "assets" {
@@ -10,15 +15,8 @@ resource "aws_cloudfront_origin_access_identity" "assets" {
 resource "aws_cloudfront_distribution" "assets" {
   enabled         = true
   is_ipv6_enabled = true
-
-  origin {
-    domain_name = aws_s3_bucket.assets.bucket_regional_domain_name
-    origin_id   = local.s3_assets_origin_id
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.assets.cloudfront_access_identity_path
-    }
-  }
+  http_version    = "http2and3"
+  aliases         = ["assets.exercism.org"]
 
   origin {
     domain_name = var.webservers_alb_hostname
@@ -31,6 +29,21 @@ resource "aws_cloudfront_distribution" "assets" {
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"]
     }
   }
+
+  origin {
+    domain_name = aws_s3_bucket.assets.bucket_regional_domain_name
+    origin_id   = local.s3_assets_origin_id
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.assets.cloudfront_access_identity_path
+    }
+  }
+
+  origin {
+    domain_name = aws_s3_bucket.icons.bucket_regional_domain_name
+    origin_id   = local.s3_images_origin_id
+  }
+
 
   ordered_cache_behavior {
     path_pattern     = "/rails/*"
@@ -53,10 +66,26 @@ resource "aws_cloudfront_distribution" "assets" {
     viewer_protocol_policy = "allow-all"
   }
 
+
+  dynamic "ordered_cache_behavior" {
+    for_each = var.images_ordered_cache_behavior_paths
+
+    content {
+      path_pattern     = "/${ordered_cache_behavior.value}/*"
+      allowed_methods  = ["GET", "HEAD", "OPTIONS" ]
+      cached_methods   = ["GET", "HEAD"]
+      target_origin_id = local.s3_images_origin_id
+      cache_policy_id  = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+
+      viewer_protocol_policy = "redirect-to-https"
+      compress               = true
+    }
+  }
+
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_assets_origin_id
+    allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = local.s3_assets_origin_id
     response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
 
     forwarded_values {
@@ -81,7 +110,9 @@ resource "aws_cloudfront_distribution" "assets" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:681735686245:certificate/80adfa11-56c7-48d8-bb54-e9c646430fe2"
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
   }
 }
 

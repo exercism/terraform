@@ -7,15 +7,21 @@ resource "aws_security_group" "ecs" {
     protocol        = "tcp"
     from_port       = var.http_port
     to_port         = var.http_port
-    security_groups = [aws_security_group.alb.id]
+    security_groups = [
+      aws_security_group.alb.id,
+      var.aws_security_group_internal_alb.id
+    ]
   }
 
-  ingress {
-    protocol        = "tcp"
-    from_port       = var.websockets_port
-    to_port         = var.websockets_port
-    security_groups = [aws_security_group.alb.id]
-  }
+  # Websockets port is currently the same as http port
+  # So this block isn't necessary
+  #
+  # ingress {
+  #   protocol        = "tcp"
+  #   from_port       = var.websockets_port
+  #   to_port         = var.websockets_port
+  #   security_groups = [aws_security_group.alb.id]
+  # }
 
   # TODO - Change this to just have access to what it
   # needs - which I think is ECR. It shouldn't need to 
