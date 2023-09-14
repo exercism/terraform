@@ -25,3 +25,7 @@ output "cloudfront_distribution_assets" {
 output "cloudfront_distribution_icons" {
   value = aws_cloudfront_distribution.icons
 }
+
+output "iam_policy_invalidate_cloudfront_assets" {
+  value = aws_iam_policy.invalidate_cloudfront_assets
+}

@@ -106,6 +106,30 @@ resource "aws_dynamodb_table_item" "assets_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "avatars_host" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "website_avatars_host"},
+  "value": {"S": "https://assets.exercism.org/avatars"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "website_assets_cloudfront_distribution_id" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "website_assets_cloudfront_distribution_id"},
+  "value": {"S": "${module.files.cloudfront_distribution_assets.id}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "aws_attachments_region" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key

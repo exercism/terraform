@@ -1,5 +1,5 @@
-resource "aws_iam_role" "lambda" {
-  name = "image-generator"
+resource "aws_iam_role" "events_lambda" {
+  name = local.events_function_name
 
   assume_role_policy = <<POLICY
 {
@@ -18,12 +18,11 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "vpc_access" {
-  role       = aws_iam_role.lambda.name
+  role       = aws_iam_role.events_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 resource "aws_iam_role_policy_attachment" "read_dynamodb_config" {
-  role       = aws_iam_role.lambda.name
+  role       = aws_iam_role.events_lambda.name
   policy_arn = var.aws_iam_policy_read_dynamodb_config.arn
 }
-

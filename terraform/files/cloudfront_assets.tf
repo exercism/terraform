@@ -4,7 +4,7 @@ locals {
   s3_images_origin_id  = "images"
 }
 
-variable images_ordered_cache_behavior_paths { 
+variable images_ordered_cache_behavior_paths {
   default = ["images", "exercises", "key-features", "meta", "placeholders", "tracks"]
 }
 
@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "assets" {
     forwarded_values {
       query_string = true
 
-      cookies {
+      cookies{
         forward = "none"
       }
     }
@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "assets" {
     max_ttl                = 86400
     compress               = true
     viewer_protocol_policy = "allow-all"
-  }
+ }
 
 
   dynamic "ordered_cache_behavior" {
@@ -80,6 +80,16 @@ resource "aws_cloudfront_distribution" "assets" {
       viewer_protocol_policy = "redirect-to-https"
       compress               = true
     }
+  }
+
+   ordered_cache_behavior {
+     path_pattern           = "/avatars/*"
+     allowed_methods        = [ "GET", "HEAD" ]
+     cached_methods         = [ "GET", "HEAD" ]
+     target_origin_id       = "webservers"
+     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+     viewer_protocol_policy = "redirect-to-https"
+      compress               = true
   }
 
   default_cache_behavior {
@@ -115,4 +125,5 @@ resource "aws_cloudfront_distribution" "assets" {
     ssl_support_method       = "sni-only"
   }
 }
+
 
