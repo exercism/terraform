@@ -83,6 +83,7 @@ locals {
     "fsharp-test-runner",
     "gleam-test-runner",
     "go-analyzer",
+    "go-representer",
     "go-test-runner",
     "groovy-test-runner",
     "haskell-test-runner",
