@@ -306,6 +306,7 @@ module "bastion" {
   aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
   aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
+  aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_ssh                       = aws_security_group.ssh
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_security_group_es_general                = aws_security_group.es_general

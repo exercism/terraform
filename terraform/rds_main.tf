@@ -46,22 +46,27 @@ resource "aws_rds_cluster_parameter_group" "main_v8" {
   parameter {
     name = "performance_schema"
     value = "1"
+    apply_method = "pending-reboot"
   }
   parameter {
     name = "performance-schema-consumer-events-waits-current"
     value = "ON"
+    apply_method = "pending-reboot"
   }
   parameter {
     name = "performance-schema-instrument"
     value = "wait/%=ON"
+    apply_method = "pending-reboot"
   }
   parameter {
     name = "performance_schema_consumer_global_instrumentation"
     value = "1"
+    apply_method = "pending-reboot"
   }
   parameter {
     name = "performance_schema_consumer_thread_instrumentation"
     value = "1"
+    apply_method = "pending-reboot"
   }
 }
 
