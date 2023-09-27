@@ -64,6 +64,7 @@ locals {
     "common-lisp-representer",
     "common-lisp-test-runner",
     "cpp-test-runner",
+    "cpp-representer",
     "csharp-analyzer",
     "csharp-representer",
     "csharp-test-runner",
