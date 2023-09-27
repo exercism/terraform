@@ -56,6 +56,7 @@ locals {
     "clojure-representer",
     "clojure-test-runner",
     "clojurescript-test-runner",
+    "crystal-analyzer",
     "crystal-representer",
     "crystal-test-runner",
     "cobol-test-runner",
