@@ -144,6 +144,7 @@ locals {
     "vbnet-test-runner",
     "vlang-test-runner",
     "vimscript-test-runner",
+    "wasm-representer",
     "wasm-test-runner",
     "wren-representer",
     "wren-test-runner",
