@@ -250,7 +250,7 @@ module "webservers" {
 
   service_anycable_cpu    = 2048
   service_anycable_memory = 4096
-  service_anycable_count  = 6
+  service_anycable_count  = 3
 
   http_port       = local.http_port
   websockets_port = local.websockets_port
@@ -288,7 +288,7 @@ module "sidekiq" {
 
   container_cpu    = 1024
   container_memory = 2048
-  container_count  = 2
+  container_count  = 5
   monitor_port     = 3333
 }
 
@@ -488,4 +488,23 @@ module "discourse" {
   acm_certificate_arn = local.forum_acm_certificate_arn
 }
 
+module "training_room" {
+  source = "./training_room"
+  region            = var.region
+
+  aws_iam_policy_read_dynamodb_config          = aws_iam_policy.read_dynamodb_config
+  aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
+  aws_iam_policy_document_assume_role_ecs      = data.aws_iam_policy_document.assume_role_ecs
+  aws_iam_policy_write_to_cloudwatch           = aws_iam_policy.write_to_cloudwatch
+
+  aws_vpc_main       = aws_vpc.main
+  aws_subnet_publics = aws_subnet.publics
+  aws_account_id                      = data.aws_caller_identity.current.account_id
+
+  container_cpu    = 512
+  container_memory = 1024
+  container_count  = 1
+
+  http_port       = local.http_port
+}
 

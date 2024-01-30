@@ -1,15 +1,18 @@
 resource "aws_security_group" "ecs" {
-  name        = "sidekiq-ecs"
-  description = "allow outbound access"
+  name        = "training-room-ecs"
+  description = "allow inbound access from the ALB only"
   vpc_id      = var.aws_vpc_main.id
 
   ingress {
     protocol        = "tcp"
-    from_port       = var.monitor_port
-    to_port         = var.monitor_port
+    from_port       = var.http_port
+    to_port         = var.http_port
     security_groups = [aws_security_group.alb.id]
   }
 
+  # TODO - Change this to just have access to what it
+  # needs - which I think is ECR. It shouldn't need to 
+  # be pinging out to the internet.
   egress {
     from_port   = 0
     to_port     = 0
@@ -24,8 +27,5 @@ resource "aws_security_group" "ecs" {
     ]
     protocol = "-1"
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
+

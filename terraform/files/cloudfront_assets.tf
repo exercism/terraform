@@ -11,6 +11,9 @@ variable images_ordered_cache_behavior_paths {
 resource "aws_cloudfront_origin_access_identity" "assets" {
   comment = "Original Access Identity for assets"
 }
+data "aws_cloudfront_cache_policy" "CachingOptimized" {
+  name = "Managed-CachingOptimized"
+}
 
 resource "aws_cloudfront_distribution" "assets" {
   enabled         = true
@@ -75,7 +78,7 @@ resource "aws_cloudfront_distribution" "assets" {
       allowed_methods  = ["GET", "HEAD", "OPTIONS" ]
       cached_methods   = ["GET", "HEAD"]
       target_origin_id = local.s3_images_origin_id
-      cache_policy_id  = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
 
       viewer_protocol_policy = "redirect-to-https"
       compress               = true
@@ -87,7 +90,7 @@ resource "aws_cloudfront_distribution" "assets" {
      allowed_methods        = [ "GET", "HEAD" ]
      cached_methods         = [ "GET", "HEAD" ]
      target_origin_id       = "webservers"
-     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
      viewer_protocol_policy = "redirect-to-https"
       compress               = true
   }
@@ -96,7 +99,7 @@ resource "aws_cloudfront_distribution" "assets" {
     allowed_methods            = ["GET", "HEAD", "OPTIONS"]
     cached_methods             = ["GET", "HEAD"]
     target_origin_id           = local.s3_assets_origin_id
-    response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
+    response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd" // CORS-With-Preflight
 
     forwarded_values {
       query_string = false

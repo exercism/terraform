@@ -7,6 +7,9 @@ locals {
 # the resources defined in this terraform
 resource "aws_vpc" "main" {
   cidr_block           = "10.1.0.0/16"
+  assign_generated_ipv6_cidr_block = true
+       # ipv6_cidr_block                      = "2a05:d01c:69d:9b00::/56"
+       # ipv6_ipam_pool_id = ""
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
@@ -25,6 +28,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_subnet" "publics" {
   count                   = local.az_count
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+       ipv6_cidr_block                                = "2a05:d01c:69d:9b00::/56"
   availability_zone       = local.az_names[count.index]
   vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
@@ -52,6 +56,7 @@ resource "aws_subnet" "lambda" {
   vpc_id                  = aws_vpc.main.id
 
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 4)
+       ipv6_cidr_block                                = "2a05:d01c:d38:b600::/56"
   availability_zone       = local.az_names[0]
   tags = {
     Name = "V3 Lambda (private)"

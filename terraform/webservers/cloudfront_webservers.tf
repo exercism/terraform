@@ -1,6 +1,15 @@
 data "aws_cloudfront_origin_request_policy" "Managed-UserAgentRefererHeaders" {
   name = "Managed-UserAgentRefererHeaders"
 }
+data "aws_cloudfront_cache_policy" "CachingDisabled" {
+  name = "Managed-CachingDisabled"
+}
+data "aws_cloudfront_cache_policy" "CachingOptimized" {
+  name = "Managed-CachingOptimized"
+}
+data "aws_cloudfront_origin_request_policy" "AllViewerExceptHostHeader" {
+  name = "Managed-AllViewerExceptHostHeader"
+}
 
 locals {
   origin_id_alb       = "ALB-${aws_alb.webservers.name}"
@@ -149,15 +158,15 @@ resource "aws_cloudfront_distribution" "webservers" {
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/tracks/*/exercises/*/solutions/*.png"
+    path_pattern           = "/tracks/*/exercises/*/solutions/*.jpg"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     compress = true
     viewer_protocol_policy = "redirect-to-https"
     target_origin_id       = local.origin_id_image_generator
 
-    cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+    cache_policy_id = data.aws_cloudfront_cache_policy.CachingDisabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewerExceptHostHeader.id
   }
   ordered_cache_behavior {
       path_pattern           = "/site.webmanifest"
@@ -168,9 +177,8 @@ resource "aws_cloudfront_distribution" "webservers" {
       viewer_protocol_policy = "redirect-to-https"
       target_origin_id       = local.origin_id_alb
 
-      cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
     }
-
 }
 
 resource "aws_lambda_function" "plausible" {

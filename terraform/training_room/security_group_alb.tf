@@ -1,12 +1,12 @@
 resource "aws_security_group" "alb" {
-  name        = "discourse-alb"
+  name        = "training-room"
   description = "controls access to the ALB"
   vpc_id      = var.aws_vpc_main.id
 
   ingress {
     protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    from_port   = var.http_port
+    to_port     = var.http_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -29,4 +29,3 @@ resource "aws_security_group" "alb" {
     protocol = "-1"
   }
 }
-

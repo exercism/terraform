@@ -8,7 +8,7 @@ data "aws_route53_zone" "main" {
 
 resource "aws_alb" "internal" {
   name            = "internal"
-  internal           = true
+  internal        = true
   subnets         = aws_subnet.publics.*.id
   security_groups = [aws_security_group.internal_alb.id]
 
@@ -19,7 +19,7 @@ resource "aws_alb_listener" "internal" {
   load_balancer_arn = aws_alb.internal.id
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn = aws_acm_certificate_validation.internal_alb.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.internal_alb.certificate_arn
 
   default_action {
     type = "fixed-response"
@@ -57,6 +57,14 @@ resource "aws_security_group" "internal_alb" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port = 0
+    to_port   = 0
+    ipv6_cidr_blocks = [
+      "::/0",
+    ]
+    protocol = "-1"
   }
 
   lifecycle {
