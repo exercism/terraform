@@ -118,17 +118,30 @@ resource "aws_dynamodb_table_item" "avatars_host" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "assets_cloudfront_distribution_id" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "assets_cloudfront_distribution_id"},
+  "value": {"S": "${module.files.cloudfront_distribution_assets.id}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "website_assets_cloudfront_distribution_id" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "website_assets_cloudfront_distribution_id"},
-  "value": {"S": "${module.files.cloudfront_distribution_assets.id}"}
+  "id": {"S": "website_cloudfront_distribution_id"},
+  "value": {"S": "${module.webservers.cloudfront_distribution_webservers.id}"}
 }
 ITEM
 }
+
 
 resource "aws_dynamodb_table_item" "aws_attachments_region" {
   table_name = aws_dynamodb_table.config.name

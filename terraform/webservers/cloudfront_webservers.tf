@@ -165,7 +165,7 @@ resource "aws_cloudfront_distribution" "webservers" {
     viewer_protocol_policy = "redirect-to-https"
     target_origin_id       = local.origin_id_image_generator
 
-    cache_policy_id = data.aws_cloudfront_cache_policy.CachingDisabled.id
+    cache_policy_id = data.aws_cloudfront_cache_policy.CachingOptimized.id
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewerExceptHostHeader.id
   }
   ordered_cache_behavior {

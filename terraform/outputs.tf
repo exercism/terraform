@@ -1,5 +1,5 @@
 output "webservers-cf-hostname" {
-  value = module.webservers.cloudfront_distribution_webservers_hostname
+  value = module.webservers.cloudfront_distribution_webservers.domain_name
 }
 output "webservers-alb_hostname" {
   value = module.webservers.alb_hostname
