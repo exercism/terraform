@@ -12,8 +12,8 @@ data "aws_cloudfront_origin_request_policy" "AllViewerExceptHostHeader" {
 }
 
 locals {
-  origin_id_alb       = "ALB-${aws_alb.webservers.name}"
-  origin_id_plausible = "plausible.io"
+  origin_id_alb             = "ALB-${aws_alb.webservers.name}"
+  origin_id_plausible       = "plausible.io"
   origin_id_image_generator = "image-generator"
 }
 
@@ -58,11 +58,11 @@ resource "aws_cloudfront_distribution" "webservers" {
       }
     }
     viewer_protocol_policy = "redirect-to-https"
-    compress = false
+    compress               = false
 
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
   }
 
   restrictions {
@@ -72,8 +72,8 @@ resource "aws_cloudfront_distribution" "webservers" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.acm_certificate_arn
+    ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
   # logging_config {
@@ -101,7 +101,7 @@ resource "aws_cloudfront_distribution" "webservers" {
     path_pattern           = "/usage/js/script.js"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    compress = false
+    compress               = false
     viewer_protocol_policy = "https-only"
     target_origin_id       = local.origin_id_plausible
 
@@ -123,7 +123,7 @@ resource "aws_cloudfront_distribution" "webservers" {
     path_pattern           = "/usage/api/event"
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods         = ["GET", "HEAD"]
-    compress = false
+    compress               = false
     viewer_protocol_policy = "https-only"
     target_origin_id       = local.origin_id_plausible
 
@@ -157,28 +157,35 @@ resource "aws_cloudfront_distribution" "webservers" {
     }
   }
 
+  dynamic "ordered_cache_behavior" {
+    for_each = tolist([
+      "/tracks/*/exercises/*/solutions/*.jpg",
+      "/profiles/*.jpg"
+    ])
+    content {
+      path_pattern           = ordered_cache_behavior.value
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = true
+      viewer_protocol_policy = "redirect-to-https"
+      target_origin_id       = local.origin_id_image_generator
+
+      cache_policy_id          = data.aws_cloudfront_cache_policy.CachingOptimized.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewerExceptHostHeader.id
+    }
+  }
+
   ordered_cache_behavior {
-    path_pattern           = "/tracks/*/exercises/*/solutions/*.jpg"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    compress = true
+    path_pattern    = "/site.webmanifest"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods  = ["GET", "HEAD"]
+    compress        = true
+
     viewer_protocol_policy = "redirect-to-https"
-    target_origin_id       = local.origin_id_image_generator
+    target_origin_id       = local.origin_id_alb
 
     cache_policy_id = data.aws_cloudfront_cache_policy.CachingOptimized.id
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewerExceptHostHeader.id
   }
-  ordered_cache_behavior {
-      path_pattern           = "/site.webmanifest"
-      allowed_methods        = [ "GET", "HEAD" ]
-      cached_methods         = [ "GET", "HEAD" ]
-      compress               = true
-
-      viewer_protocol_policy = "redirect-to-https"
-      target_origin_id       = local.origin_id_alb
-
-      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
-    }
 }
 
 resource "aws_lambda_function" "plausible" {

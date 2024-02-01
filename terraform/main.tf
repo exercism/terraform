@@ -271,6 +271,7 @@ module "sidekiq" {
   aws_iam_policy_access_s3_uploads             = module.files.bucket_uploads_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_policy_invalidate_cloudfront_assets = module.files.iam_policy_invalidate_cloudfront_assets
+  aws_iam_policy_invalidate_cloudfront_webservers = module.webservers.iam_policy_invalidate_cloudfront_webservers
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access

@@ -34,3 +34,7 @@ resource "aws_iam_role_policy_attachment" "invalidate_cloudfront_assets" {
   role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_invalidate_cloudfront_assets.arn
 }
+resource "aws_iam_role_policy_attachment" "invalidate_cloudfront_webservers" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = var.aws_iam_policy_invalidate_cloudfront_webservers.arn
+}

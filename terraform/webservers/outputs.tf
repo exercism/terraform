@@ -19,3 +19,6 @@ output "ecr_repository_nginx" {
   value = aws_ecr_repository.nginx
 }
 
+output "iam_policy_invalidate_cloudfront_webservers" {
+  value = aws_iam_policy.invalidate_cloudfront_webservers
+}
