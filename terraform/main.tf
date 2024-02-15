@@ -83,6 +83,7 @@ locals {
     "fortran-test-runner",
     "fsharp-representer",
     "fsharp-test-runner",
+    "gdscript-test-runner",
     "gleam-test-runner",
     "go-analyzer",
     "go-representer",
