@@ -52,6 +52,7 @@ locals {
     "c-test-runner",
     "c-representer",
     "cfml-test-runner",
+    "chapel-test-runner",
     "clojure-analyzer",
     "clojure-representer",
     "clojure-test-runner",
