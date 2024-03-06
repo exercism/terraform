@@ -81,6 +81,7 @@ locals {
     "emacs-lisp-test-runner",
     "erlang-analyzer",
     "erlang-test-runner",
+    "euphoria-test-runner",
     "fortran-test-runner",
     "fsharp-representer",
     "fsharp-test-runner",
