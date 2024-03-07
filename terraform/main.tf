@@ -137,6 +137,7 @@ locals {
     "scala-test-runner",
     "scheme-test-runner",
     "sml-test-runner",
+    "sqlite-test-runner",
     "stub-analyzer",
     "swift-test-runner",
     "tcl-test-runner",
