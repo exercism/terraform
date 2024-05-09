@@ -28,7 +28,8 @@ resource "aws_internet_gateway" "main" {
 resource "aws_subnet" "publics" {
   count                   = local.az_count
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
-       ipv6_cidr_block                                = "2a05:d01c:69d:9b00::/56"
+  # ipv6_cidr_block              = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 0, count.index)
+  # ipv6_cidr_block                                = "2a05:d01c:69d:9b00::/56"
   availability_zone       = local.az_names[count.index]
   vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true

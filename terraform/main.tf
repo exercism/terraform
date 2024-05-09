@@ -161,7 +161,8 @@ locals {
     "chatgpt-proxy",
     "snippet-extractor",
     "lines-of-code-counter",
-    "image-generator"
+    "image-generator",
+    "translator"
   ])
 
   ecr_language_server_repos = toset([
@@ -381,6 +382,7 @@ module "github_deploy" {
     module.snippet_extractor.ecr_repository.arn,
     module.lines_of_code_counter.ecr_repository.arn,
     module.image_generator.ecr_repository.arn,
+    module.translator.ecr_repository.arn,
 
     module.tooling_orchestrator.ecr_repository_application.arn,
     module.tooling_orchestrator.ecr_repository_nginx.arn,
@@ -484,6 +486,18 @@ module "image_generator" {
   aws_alb_listener_internal           = aws_alb_listener.internal
   aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config
 }
+
+module "translator" {
+  source = "./translator"
+
+  region                              = var.region
+  aws_vpc_main                        = aws_vpc.main
+  aws_account_id                      = data.aws_caller_identity.current.account_id
+  aws_subnet_lambda                  = aws_subnet.lambda
+  aws_alb_listener_internal           = aws_alb_listener.internal
+  aws_iam_policy_read_dynamodb_config = aws_iam_policy.read_dynamodb_config
+}
+
 
 module "discourse" {
   source = "./discourse"

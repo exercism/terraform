@@ -17,7 +17,7 @@ sudo su -
   pushd ruby-install-0.8.3/
     make install
   popd
-  RUBY_CONFIGURE_OPTS=--disable-install-doc ruby-install ruby 3.1.0
+  RUBY_CONFIGURE_OPTS=--disable-install-doc ruby-install ruby-3.3.0
 
   wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
   tar -xzvf chruby-0.3.9.tar.gz
@@ -26,13 +26,13 @@ sudo su -
   popd
 exit
 
-sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 3.1.0\n/' ~/.bashrc
+sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 3.3.0\n/' ~/.bashrc
 sed -i '1s/^/EXERCISM_ENV=production\n/' ~/.bashrc
 sed -i '1s/^/RAILS_ENV=production\n/' ~/.bashrc
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-3.1.0
+chruby ruby-3.3.0
 
-gem install bundler:2.3.4
+gem install bundler:2.3.7
 
 ###################
 # Install website #
@@ -52,6 +52,7 @@ exit
 cd /opt/website
 bundle config set deployment 'true'
 bundle config set without 'development test'
+gem install propshaft
 bundle install
 
 #################
@@ -60,3 +61,4 @@ bundle install
 echo "alias rails-c='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails c -e production -- --noreadline'" >> ~/.bash_aliases
 echo "alias rails-db='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails dbconsole -p -e production'" >> ~/.bash_aliases 
 source ~/.bashrc
+

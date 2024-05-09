@@ -10,7 +10,7 @@ Right now, I manually have to make the EC2 machine and register it.
 - Ubuntu Server 20.04 LTS (HVM),
 - x86
 - SSD Volume Type (ami-0194c3e07668a7e36)
-- t3a-small
+- t3-small
 
 Key is iHiD-v3
 

@@ -21,7 +21,8 @@ resource "aws_iam_user_policy" "ecr" {
         "${module.chatgpt_proxy.ecr_repository.arn}",
         "${module.image_generator.ecr_repository.arn}",
         "${module.lines_of_code_counter.ecr_repository.arn}",
-        "${module.snippet_extractor.ecr_repository.arn}"
+        "${module.snippet_extractor.ecr_repository.arn}",
+        "${module.translator.ecr_repository.arn}"
       ]
     }, {
       "Sid": "GithubDeployECRAuthTokenPolicy",
@@ -44,7 +45,8 @@ resource "aws_iam_user_policy" "ecr" {
         "${module.chatgpt_proxy.lambda_function.arn}",
         "${module.image_generator.lambda_function.arn}",
         "${module.lines_of_code_counter.lambda_function.arn}",
-        "${module.snippet_extractor.lambda_function.arn}"
+        "${module.snippet_extractor.lambda_function.arn}",
+        "${module.translator.lambda_function.arn}"
       ]
     }
   ]
