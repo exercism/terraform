@@ -124,6 +124,7 @@ locals {
     "python-test-runner",
     "r-test-runner",
     "racket-test-runner",
+    "raku-representer",
     "raku-test-runner",
     "reasonml-test-runner",
     "red-test-runner",
