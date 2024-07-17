@@ -93,6 +93,7 @@ locals {
     "groovy-test-runner",
     "haskell-test-runner",
     "haxe-test-runner",
+    "idris-test-runner",
     "j-representer",
     "j-test-runner",
     "java-analyzer",
