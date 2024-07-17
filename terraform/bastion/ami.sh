@@ -60,5 +60,11 @@ bundle install
 #################
 echo "alias rails-c='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails c -e production -- --noreadline'" >> ~/.bash_aliases
 echo "alias rails-db='cd /opt/website/ && git pull && RAILS_LOG_LEVEL=debug bundle exec rails dbconsole -p -e production'" >> ~/.bash_aliases 
+echo "alias grpc-cleanup='cd /opt/website && grpc_path=$(bundle show --paths grpc)/src/ruby/ext/grpc && make -C $grpc_path clean && rm -rf $grpc_path/{libs,objs}'" >> ~/.bash_aliases
 source ~/.bashrc
+
+#################
+# Setup crontab #
+#################
+echo '0 0 * * * grpc-cleanup' | sudo crontab -u root -
 
