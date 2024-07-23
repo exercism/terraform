@@ -52,6 +52,7 @@ locals {
     "batch-test-runner",
     "c-test-runner",
     "c-representer",
+    "cairo-test-runner",
     "cfml-test-runner",
     "chapel-test-runner",
     "clojure-analyzer",
