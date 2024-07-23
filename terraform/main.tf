@@ -49,6 +49,7 @@ locals {
     "ballerina-test-runner",
     "bash-analyzer",
     "bash-test-runner",
+    "batch-test-runner",
     "c-test-runner",
     "c-representer",
     "cfml-test-runner",
