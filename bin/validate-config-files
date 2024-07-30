@@ -2,9 +2,7 @@
 
 set -eo pipefail
 
-for dir in $(find terraform -type d -mindepth 1); do
-  pushd "${dir}" > /dev/null
-  terraform init -backend=false
-  terraform validate
-  popd > /dev/null
-done
+pushd terraform > /dev/null
+terraform init -backend=false
+terraform validate
+popd > /dev/null
