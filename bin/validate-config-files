@@ -2,7 +2,6 @@
 
 set -eo pipefail
 
-pushd terraform > /dev/null
+cd terraform
 terraform init -backend=false
 terraform validate
-popd > /dev/null
