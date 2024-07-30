@@ -159,7 +159,7 @@ locals {
     "wren-representer",
     "wren-test-runner",
     "x86-64-assembly-test-runner",
-    "yamlscript-test-runner
+    "yamlscript-test-runner",
     "zig-test-runner"
   ])
 
