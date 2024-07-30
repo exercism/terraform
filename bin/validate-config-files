@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd terraform
+terraform init -backend=false
+terraform validate

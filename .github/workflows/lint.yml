@@ -1,0 +1,24 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  files:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@651471c36a6092792c552e8b1bef71e592b462d8
+
+      - name: Validate configuration files
+        run: bin/validate-config-files
