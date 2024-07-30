@@ -1,3 +1,4 @@
 .terraform/
 .terraform.bk
 terraform/.terraform.tfstate.lock.info
+.terraform.lock.hcl
