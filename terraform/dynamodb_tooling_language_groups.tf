@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "8th,abap,arm64-assembly,awk,ballerina,bash,batch,c,cairo,cobol,cfml,chapel,clojure,clojurescript,crystal,coffeescript,common-lisp,cpp,csharp,d,dart,elixir,elm,emacs-lisp,erlang,euphoria,fortran,fsharp,gdscript,gleam,go,groovy,haskell,haxe,idris,j,java,javascript,jq,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,pharo-smalltalk,phix,php,pony,powershell,prolog,purescript,pyret,python,r,racket,raku,red,ruby,reasonml,rust,scala,scheme,sml,sqlite,swift,tcl,typescript,unison,vbnet,vlang,vimscript,wasm,wren,x86-64-assembly,yamlscript,zig"}
+  "languages": {"S": "8th,abap,arm64-assembly,awk,ballerina,bash,batch,bla,c,cairo,cfml,chapel,clojure,clojurescript,cobol,coffeescript,common-lisp,cpp,crystal,csharp,d,dart,elixir,elm,emacs-lisp,erlang,euphoria,fortran,fsharp,gdscript,gleam,go,groovy,haskell,haxe,idris,j,java,javascript,jq,julia,kotlin,lfe,lua,mips,nim,ocaml,perl5,pharo-smalltalk,phix,php,pony,powershell,prolog,purescript,pyret,python,r,racket,raku,reasonml,red,ruby,rust,scala,scheme,sml,sqlite,swift,tcl,typescript,unison,vbnet,vimscript,vlang,wasm,wren,x86-64-assembly,yamlscript,zig"}
 }
 ITEM
 }
