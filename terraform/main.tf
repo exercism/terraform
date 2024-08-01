@@ -117,6 +117,7 @@ locals {
     "perl5-analyzer",
     "perl5-test-runner",
     "pharo-smalltalk-test-runner",
+    "phix-test-runner",
     "php-representer",
     "php-test-runner",
     "pony-test-runner",
