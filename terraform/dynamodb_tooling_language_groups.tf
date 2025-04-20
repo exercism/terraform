@@ -41,7 +41,7 @@ resource "aws_dynamodb_table_item" "tooling_language_a_all" {
   item = <<ITEM
 {
   "group": {"S": "analyzers-all"},
-  "languages": {"S": "bash,clojure,common-lisp,crystal,csharp,elixir,elm,erlang,go,java,javascript,nim,perl5,python,ruby,rust,scala,typescript"}
+  "languages": {"S": "bash,clojure,common-lisp,crystal,csharp,elixir,elm,erlang,go,java,javascript,nim,perl5,python,ruby,rust,scala,swift,typescript"}
 }
 ITEM
 }
