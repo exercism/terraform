@@ -6,15 +6,18 @@ variable "aws_iam_policy_access_s3_bucket_tooling_jobs" {}
 variable "aws_iam_policy_access_s3_attachments" {}
 variable "aws_iam_policy_read_secret_config" {}
 variable "aws_security_group_efs_repositories_access" {}
-variable "aws_security_group_efs_submissions_access" {}
+variable "aws_security_group_efs_cache_access" {}
+variable "aws_security_group_efs_tooling_jobs_access" {}
 variable "aws_security_group_ssh" {}
 variable "aws_security_group_rds_main" {}
+variable "aws_security_group_elasticache_cache" {}
 variable "aws_security_group_elasticache_sidekiq" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
 variable "aws_security_group_elasticache_anycable" {}
 variable "aws_security_group_es_general" {}
 variable "aws_efs_file_system_repositories" {}
-variable "aws_efs_file_system_submissions" {}
+variable "aws_efs_file_system_cache" {}
+variable "aws_efs_file_system_tooling_jobs" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

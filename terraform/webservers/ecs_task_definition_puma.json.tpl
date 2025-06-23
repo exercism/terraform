@@ -50,8 +50,12 @@
         "sourceVolume": "efs-repositories"
       },
       {
-        "containerPath": "${efs_submissions_mount_point}",
-        "sourceVolume": "efs-submissions"
+        "containerPath": "${efs_cache_mount_point}",
+        "sourceVolume": "efs-cache"
+      },
+      {
+        "containerPath": "${efs_tooling_jobs_mount_point}",
+        "sourceVolume": "efs-tooling-jobs"
       }
     ],
     "cpu": 0,

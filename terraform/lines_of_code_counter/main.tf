@@ -1,10 +1,11 @@
 variable "region" {}
 variable "aws_account_id" {}
 variable "aws_subnet_publics" {}
-variable "aws_efs_mount_target_submissions" {}
-variable "aws_efs_access_point_submissions" {}
-variable "aws_security_group_efs_submissions_access" {}
+variable "aws_efs_mount_target_tooling_jobs" {}
+variable "aws_efs_access_point_tooling_jobs" {}
+variable "aws_security_group_efs_tooling_jobs_access" {}
 variable "aws_alb_listener_internal" {}
+variable "efs_tooling_jobs_mount_point" {}
 
 provider "aws" {
   region  = var.region

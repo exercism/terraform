@@ -13,19 +13,23 @@ variable "aws_security_group_elasticache_anycable" {}
 variable "aws_security_group_elasticache_sidekiq" {}
 variable "aws_security_group_rds_main" {}
 variable "aws_security_group_efs_repositories_access" {}
-variable "aws_security_group_efs_submissions_access" {}
+variable "aws_security_group_efs_cache_access" {}
+variable "aws_security_group_efs_tooling_jobs_access" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
 variable "aws_security_group_es_general" {}
 variable "aws_security_group_internal_alb" {}
 variable "aws_efs_file_system_repositories" {}
-variable "aws_efs_file_system_submissions" {}
+variable "aws_efs_file_system_cache" {}
+variable "aws_efs_file_system_tooling_jobs" {}
 variable "aws_redis_url_anycable" {}
 variable "aws_ecr_repository_anycable_go" {}
 variable "aws_ecr_repository_anycable_go_pro" {}
 variable "aws_alb_listener_internal" {}
 
-variable "efs_submissions_mount_point" {}
+variable "efs_cache_mount_point" {}
 variable "efs_repositories_mount_point" {}
+variable "efs_tooling_jobs_mount_point" {}
+
 variable "route53_zone_main" {}
 variable "acm_certificate_arn" {}
 
@@ -36,10 +40,6 @@ variable "website_protocol" {}
 variable "website_host" {}
 variable "http_port" {}
 variable "websockets_port" {}
-
-variable "container_cpu" {}
-variable "container_memory" {}
-variable "container_count" {}
 
 variable "service_api_cpu" {}
 variable "service_api_memory" {}

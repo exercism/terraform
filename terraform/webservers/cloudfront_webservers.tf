@@ -21,6 +21,8 @@ resource "aws_cloudfront_distribution" "webservers" {
   enabled         = true
   is_ipv6_enabled = true
 
+  web_acl_id   = "arn:aws:wafv2:us-east-1:681735686245:global/webacl/CreatedByCloudFront-57aa465d/8d01fb38-fc78-484b-bd9b-1505e5f37cbf" 
+
   aliases = [
     var.website_host,
     "api.${var.website_host}",
@@ -29,7 +31,8 @@ resource "aws_cloudfront_distribution" "webservers" {
     "exercism.com",
     "exercism.io",
     "www.exercism.io",
-    "www.exercism.org"
+    "www.exercism.org",
+    "bootcamp.exercism.org"
   ]
 
   origin {
@@ -48,17 +51,16 @@ resource "aws_cloudfront_distribution" "webservers" {
     allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.origin_id_alb
+    cache_policy_id = aws_cloudfront_cache_policy.main.id
+    origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
+    compress = true
 
-    forwarded_values {
-      query_string = true
-      headers      = ["*"]
-
-      cookies {
-        forward = "all"
-      }
-    }
     viewer_protocol_policy = "redirect-to-https"
-    compress               = false
+
+    function_association {
+      event_type = "viewer-request"
+      function_arn = aws_cloudfront_function.set_x_if_none_match.arn
+    }
 
     min_ttl     = 0
     default_ttl = 0
@@ -201,3 +203,53 @@ resource "aws_lambda_function" "plausible" {
   source_code_hash = filebase64sha256("lambda_functions/plausible/function.zip")
 }
 
+resource "aws_cloudfront_cache_policy" "main" {
+  name = "WebserversCachePolicy"
+
+  default_ttl = 300
+  max_ttl     = 3600
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config {
+      cookie_behavior = "whitelist"
+      cookies {
+        items = ["_exercism_user_id"]
+      }
+    }
+    headers_config {
+      header_behavior = "whitelist"
+      headers {
+        items = ["Host", "Turbo-Frame"]
+      }
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+
+    enable_accept_encoding_brotli = true
+    enable_accept_encoding_gzip   = true
+  }
+}
+
+resource "aws_cloudfront_function" "set_x_if_none_match" {
+  name    = "set-x-if-none-match"
+  runtime = "cloudfront-js-2.0"
+
+  comment = "Copies If-None-Match to X-If-None-Match so origin can access it when cookies are forwarded"
+
+  publish = true
+
+  code = <<EOF
+function handler(event) {
+  var request = event.request;
+  var headers = request.headers;
+
+  if (headers['if-none-match']) {
+    headers['x-if-none-match'] = headers['if-none-match'];
+  }
+
+  return request;
+}
+EOF
+}

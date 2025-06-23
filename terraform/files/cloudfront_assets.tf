@@ -101,21 +101,43 @@ resource "aws_cloudfront_distribution" "assets" {
     target_origin_id           = local.s3_assets_origin_id
     response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd" // CORS-With-Preflight
 
-    forwarded_values {
+    /*forwarded_values {
       query_string = false
       # headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
 
       cookies {
         forward = "none"
       }
-    }
+    }*/
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 31536000
-    default_ttl            = 31536001
-    max_ttl                = 31536002
+    cache_policy_id = "ccbe5100-fe97-4484-8111-4467cea80fd3"
     compress               = true
   }
+         ordered_cache_behavior {
+           allowed_methods        = [
+               "GET",
+               "HEAD",
+               "OPTIONS",
+            ]
+           cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" 
+           cached_methods         = [
+               "GET",
+               "HEAD",
+            ] 
+           compress               = true 
+           default_ttl            = 0 
+           max_ttl                = 0
+           min_ttl                = 0
+           path_pattern           = "/bootcamp/*"
+           smooth_streaming       = false 
+           target_origin_id       = "images" 
+           trusted_key_groups     = [] 
+           trusted_signers        = [] 
+           viewer_protocol_policy = "redirect-to-https" 
+        }
+
+
   restrictions {
     geo_restriction {
       restriction_type = "none"

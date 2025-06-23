@@ -74,7 +74,7 @@ resource "aws_rds_cluster" "main" {
   cluster_identifier              = "primary"
   engine                          = "aurora-mysql"
   engine_mode                     = "provisioned"
-  engine_version                  = "8.0.mysql_aurora.3.04.0"
+  engine_version                  = "8.0.mysql_aurora.3.05.2"
   database_name                   = "exercism"
   master_username                 = "exercism"
   master_password                 = "exercism"
@@ -87,6 +87,8 @@ resource "aws_rds_cluster" "main" {
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T00-00-00Z"
 
   deletion_protection = true
+  performance_insights_enabled = true
+  enabled_cloudwatch_logs_exports = [ "slowquery" ]
 
   # ignore changes to final_snapshot_identifier, which are caused by the
   # timestamp being regenerated on each run.

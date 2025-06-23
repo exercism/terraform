@@ -6,16 +6,16 @@ Create an AMI using the script in this direcory (ami.sh) with the following base
   - tooling-representers: all
   - tooling-test-runners: all
   - tooling-analyzers: all
-- Ubuntu Server 22.04 LTS (HVM), SSD Volume Type (ami-0eb260c4d5475b901)
+- Ubuntu Server 24.04 LTS (HVM), SSD Volume Type (ami-044415bb13eee2391)
 - t3.medium
 - Keypair: iHiD-v3
 - v3 vpc
 - Auto-assign IP: Enable
 - Security Groups:
   - tooling-invoker-ec2
-  - efs-submissions-access
+  - efs-tooling-jobs-access
   - efs-repositories-access
-- Storage: 130GB (General purpose SSD - gp2)
+- Storage: 130GB (General purpose SSD - gp3)
 - IAM Profile: tooling-invoker-ec2
 
 Then create a launch template and autoscaling group:

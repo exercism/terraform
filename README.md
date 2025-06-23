@@ -1,4 +1,16 @@
+
 # Terraform scripts for Exercism
+
+## Manual Changes to Sync!
+
+- Add EFS Backup
+
+## TODO
+
+- Clean out old caches.
+- Switch Sidekick to small server.
+- Switch anycable to micro.
+- Toggle tooling jobs to serverless
 
 ## Install
 

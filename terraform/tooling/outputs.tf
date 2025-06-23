@@ -7,7 +7,7 @@ output "security_group_elasticache_jobs" {
 }
 
 output "redis_url" {
-  value = aws_elasticache_cluster.jobs.cache_nodes.0.address
+  value = aws_elasticache_serverless_cache.tooling_jobs.endpoint[0].address
 }
 
 output "aws_cloudwatch_jobs_log_group" {

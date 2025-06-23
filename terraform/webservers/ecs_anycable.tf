@@ -59,7 +59,56 @@ resource "aws_ecs_service" "anycable" {
   lifecycle {
     create_before_destroy = true
     ignore_changes = [
-      task_definition
+      task_definition,
+      desired_count
     ]
+  }
+}
+
+resource "aws_appautoscaling_target" "anycable_desired_count" {
+  max_capacity       = 12
+  min_capacity       = 2
+  resource_id        = "service/webservers/anycable"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "anycable_cpu" {
+  name               = "CPU Tracking"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = "service/webservers/anycable"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+
+  target_tracking_scaling_policy_configuration {
+    target_value       = 50.0
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+
+    scale_in_cooldown  = 120
+    scale_out_cooldown = 120
+    disable_scale_in   = false
+  }
+}
+
+resource "aws_appautoscaling_policy" "anycable_memory" {
+  name               = "Memory Tracking"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = "service/webservers/anycable"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+
+  target_tracking_scaling_policy_configuration {
+    target_value       = 50.0
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+    }
+
+    scale_in_cooldown  = 120
+    scale_out_cooldown = 120
+    disable_scale_in   = false
   }
 }

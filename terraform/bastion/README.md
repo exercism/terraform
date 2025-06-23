@@ -16,11 +16,13 @@ Key is iHiD-v3
 
 Change to v3 vpc
 
-Sec Groups: bastion-ec2, efs-repositories-access, efs-submissions-access, iHiD-ssh-access
+Sec Groups: bastion-ec2, efs-repositories-access, efs-tooling-jobs-access, efs-cache-access, iHiD-ssh-access
 
-Mount the two EFS filesystems
+Mount the EFS filesystems:
 - /mnt/efs/repos
 - /mnt/efs/submissions
+- /mnt/efs/tooling_jobs
+- /mnt/efs/cache
 
 Set iam Profile: 
 

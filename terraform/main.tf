@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
 
     archive = {
@@ -26,8 +26,9 @@ locals {
   acm_certificate_arn       = "arn:aws:acm:us-east-1:681735686245:certificate/a68be00b-70bc-48d1-84eb-5741fb1c0066"
   forum_acm_certificate_arn = "arn:aws:acm:us-east-1:681735686245:certificate/050200a9-85a7-4ddf-8854-a32748456352"
 
-  efs_submissions_mount_point  = "/mnt/efs/submissions"
+  efs_cache_mount_point  = "/mnt/efs/cache"
   efs_repositories_mount_point = "/mnt/efs/repos"
+  efs_tooling_jobs_mount_point = "/mnt/efs/tooling_jobs"
 
   s3_bucket_assets_name           = "exercism-v3-assets"
   s3_bucket_attachments_name      = "exercism-v3-attachments"
@@ -231,7 +232,8 @@ module "webservers" {
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
+  aws_security_group_efs_cache_access    = aws_security_group.efs_cache_access
+  aws_security_group_efs_tooling_jobs_access    = aws_security_group.efs_tooling_jobs_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
@@ -239,9 +241,11 @@ module "webservers" {
   aws_security_group_es_general                = aws_security_group.es_general
   aws_security_group_internal_alb              = aws_security_group.internal_alb
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_submissions              = aws_efs_file_system.submissions
-  efs_submissions_mount_point                  = local.efs_submissions_mount_point
+  aws_efs_file_system_cache              = aws_efs_file_system.cache
+  aws_efs_file_system_tooling_jobs              = aws_efs_file_system.tooling_jobs
+  efs_cache_mount_point                  = local.efs_cache_mount_point
   efs_repositories_mount_point                 = local.efs_repositories_mount_point
+  efs_tooling_jobs_mount_point                  = local.efs_tooling_jobs_mount_point
   route53_zone_main                            = aws_route53_zone.main
   acm_certificate_arn                          = local.acm_certificate_arn
   aws_redis_url_anycable                       = module.anycable.redis_url
@@ -252,20 +256,16 @@ module "webservers" {
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
 
-  container_cpu    = 2048
-  container_memory = 4096
-  container_count  = 6
-
-  service_website_cpu    = 1024
-  service_website_memory = 2048
+  service_website_cpu    = 512
+  service_website_memory = 1024
   service_website_count  = 6
 
-  service_api_cpu    = 1024
-  service_api_memory = 2048
+  service_api_cpu    = 512
+  service_api_memory = 1024
   service_api_count  = 3
 
-  service_anycable_cpu    = 2048
-  service_anycable_memory = 4096
+  service_anycable_cpu    = 512
+  service_anycable_memory = 1024
   service_anycable_count  = 3
 
   http_port       = local.http_port
@@ -289,22 +289,26 @@ module "sidekiq" {
   aws_iam_policy_invalidate_cloudfront_assets = module.files.iam_policy_invalidate_cloudfront_assets
   aws_iam_policy_invalidate_cloudfront_webservers = module.webservers.iam_policy_invalidate_cloudfront_webservers
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
+  aws_security_group_elasticache_cache       = module.webservers.security_group_cache
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
+  aws_security_group_efs_cache_access    = aws_security_group.efs_cache_access
+  aws_security_group_efs_tooling_jobs_access    = aws_security_group.efs_tooling_jobs_access
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_security_group_es_general                = aws_security_group.es_general
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_submissions              = aws_efs_file_system.submissions
-  efs_submissions_mount_point                  = local.efs_submissions_mount_point
+  aws_efs_file_system_cache              = aws_efs_file_system.cache
+  aws_efs_file_system_tooling_jobs              = aws_efs_file_system.tooling_jobs
+  efs_cache_mount_point                  = local.efs_cache_mount_point
+  efs_tooling_jobs_mount_point                  = local.efs_tooling_jobs_mount_point
   efs_repositories_mount_point                 = local.efs_repositories_mount_point
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
 
-  container_cpu    = 1024
-  container_memory = 2048
+  container_cpu    = 512
+  container_memory = 1024
   container_count  = 5
   monitor_port     = 3333
 }
@@ -321,7 +325,9 @@ module "bastion" {
   aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access    = aws_security_group.efs_submissions_access
+  aws_security_group_efs_cache_access    = aws_security_group.efs_cache_access
+  aws_security_group_efs_tooling_jobs_access    = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_elasticache_cache       = module.webservers.security_group_cache
   aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
@@ -329,7 +335,8 @@ module "bastion" {
   aws_security_group_rds_main                  = aws_security_group.rds_main
   aws_security_group_es_general                = aws_security_group.es_general
   aws_efs_file_system_repositories             = aws_efs_file_system.repositories
-  aws_efs_file_system_submissions              = aws_efs_file_system.submissions
+  aws_efs_file_system_cache              = aws_efs_file_system.cache
+  aws_efs_file_system_tooling_jobs              = aws_efs_file_system.tooling_jobs
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -372,7 +379,7 @@ module "tooling_invoker" {
   aws_iam_policy_read_dynamodb_tooling_language_groups_arn = aws_iam_policy.read_dynamodb_tooling_language_groups.arn
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
   aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
-  aws_security_group_efs_submissions_access                = aws_security_group.efs_submissions_access
+  aws_security_group_efs_tooling_jobs_access    = aws_security_group.efs_tooling_jobs_access
   aws_cloudwatch_log_stream_jobs_general                   = module.tooling.aws_cloudwatch_log_stream_jobs_general
 
   aws_vpc_main       = aws_vpc.main
@@ -480,9 +487,11 @@ module "lines_of_code_counter" {
   region                                    = var.region
   aws_account_id                            = data.aws_caller_identity.current.account_id
   aws_subnet_publics                        = aws_subnet.publics
-  aws_efs_mount_target_submissions          = aws_efs_mount_target.submissions
-  aws_efs_access_point_submissions          = aws_efs_access_point.submissions
-  aws_security_group_efs_submissions_access = aws_security_group.efs_submissions_access
+  aws_efs_mount_target_tooling_jobs          = aws_efs_mount_target.tooling_jobs
+  aws_efs_access_point_tooling_jobs          = aws_efs_access_point.tooling_jobs
+  aws_security_group_efs_tooling_jobs_access = aws_security_group.efs_tooling_jobs_access
+  efs_tooling_jobs_mount_point                  = local.efs_tooling_jobs_mount_point
+
   aws_alb_listener_internal                 = aws_alb_listener.internal
 }
 
@@ -533,7 +542,7 @@ module "training_room" {
 
   container_cpu    = 512
   container_memory = 1024
-  container_count  = 1
+  container_count  = 0
 
   http_port       = local.http_port
 }

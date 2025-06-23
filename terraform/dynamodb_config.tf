@@ -226,6 +226,17 @@ resource "aws_dynamodb_table_item" "mysql_socket" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "cache_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "cache_url"},
+  "value": {"S": "rediss://${module.webservers.cache_hostname}"}
+}
+ITEM
+}
 resource "aws_dynamodb_table_item" "tooling_redis_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -233,7 +244,7 @@ resource "aws_dynamodb_table_item" "tooling_redis_url" {
   item = <<ITEM
 {
   "id": {"S": "tooling_redis_url"},
-  "value": {"S": "redis://${module.tooling.redis_url}"}
+  "value": {"S": "rediss://${module.tooling.redis_url}"}
 }
 ITEM
 }
@@ -309,13 +320,13 @@ resource "aws_dynamodb_table_item" "language_server_url" {
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "efs_submissions_mount_point" {
+resource "aws_dynamodb_table_item" "efs_cache_mount_point" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
   item       = <<ITEM
 {
-  "id": {"S": "efs_submissions_mount_point"},
-  "value": {"S": "${local.efs_submissions_mount_point}"}
+  "id": {"S": "efs_cache_mount_point"},
+  "value": {"S": "${local.efs_cache_mount_point}"}
 }
 ITEM
 }
@@ -331,6 +342,16 @@ resource "aws_dynamodb_table_item" "efs_repositories_mount_point" {
 ITEM
 }
 
+resource "aws_dynamodb_table_item" "efs_tooling_jobs_mount_point" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+  item       = <<ITEM
+{
+  "id": {"S": "efs_tooling_jobs_mount_point"},
+  "value": {"S": "${local.efs_tooling_jobs_mount_point}"}
+}
+ITEM
+}
 resource "aws_dynamodb_table_item" "github_organization" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
@@ -461,28 +482,4 @@ resource "aws_dynamodb_table_item" "tooling_cloudwatch_jobs_log_stream_name" {
 }
 ITEM
 }
-
-resource "aws_dynamodb_table_item" "mongodb_url" {
-  table_name = aws_dynamodb_table.config.name
-  hash_key   = aws_dynamodb_table.config.hash_key
-  item       = <<ITEM
-{
-  "id": {"S": "mongodb_url"},
-  "value": {"S": "mongodb://exercism:exercism@${aws_docdb_cluster.general.endpoint}:${aws_docdb_cluster.general.port}/?replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"}
-}
-ITEM
-}
-
-resource "aws_dynamodb_table_item" "mongodb_database_name" {
-  table_name = aws_dynamodb_table.config.name
-  hash_key   = aws_dynamodb_table.config.hash_key
-  item       = <<ITEM
-{
-  "id": {"S": "mongodb_database_name"},
-  "value": {"S": "exercism"}
-}
-ITEM
-}
-
-
 

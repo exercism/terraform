@@ -1,23 +1,12 @@
+
 resource "aws_elasticache_subnet_group" "jobs" {
   name       = "tooling-jobs"
   subnet_ids = var.aws_subnet_publics.*.id
 }
 
-resource "aws_elasticache_cluster" "jobs" {
-  cluster_id           = "tooling-jobs"
-  engine               = "redis"
-  node_type            = "cache.m5.large"
-  num_cache_nodes      = 1
-  parameter_group_name = "default.redis6.x"
-  engine_version       = "6.x"
-  port                 = 6379
-  availability_zone    = data.aws_availability_zones.available.names[0]
-  subnet_group_name    = aws_elasticache_subnet_group.jobs.name
+resource "aws_elasticache_serverless_cache" "tooling_jobs" { 
+  name = "tooling-jobs-serverless"
+  engine               = "valkey"
+  subnet_ids           = var.aws_subnet_publics.*.id
   security_group_ids   = [aws_security_group.elasticache_jobs.id]
-
-
-  # lifecycle {
-  #   ignore_changes = [engine_version]
-  # }
 }
-

@@ -16,16 +16,17 @@ README
 sudo apt-get -y update
 sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config slirp4netns
 
-#########################
-# Mount EFS Submissions #
-#########################
+##########################
+# Mount EFS Tooling Jobs #
+##########################
 sudo su -
 
-  FILE_SYSTEM_ID="fs-36ba41c6"
-  EFS_MOUNT_POINT="/mnt/efs/submissions"
+  FILE_SYSTEM_ID="fs-0bb91d42557869c49"
+  EFS_MOUNT_POINT="/mnt/efs/tooling_jobs"
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev,ro 0 0\n" >> /etc/fstab
   retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+  systemctl daemon-reload
 
 exit
 
@@ -39,6 +40,7 @@ sudo su -
   mkdir -p "${EFS_MOUNT_POINT}"
   test -f "/sbin/mount.efs" && printf "\n${FILE_SYSTEM_ID}:/ ${EFS_MOUNT_POINT} efs iam,tls,_netdev\n" >> /etc/fstab || printf "\n${FILE_SYSTEM_ID}.efs.eu-west-2.amazonaws.com:/ ${EFS_MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
   retryCnt=15; waitTime=30; while true; do mount -r -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+  systemctl daemon-reload
 
 exit
 
@@ -68,6 +70,26 @@ exit
 ###################################
 # Install Docker as non-root user #
 ###################################
+sudo sh -eux <<EOF
+# Load nf_tables module
+modprobe nf_tables
+EOF
+
+cat <<EOT | sudo tee "/etc/apparmor.d/home.exercism.bin.rootlesskit"
+# ref: https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces
+abi <abi/4.0>,
+include <tunables/global>
+
+/home/exercism/bin/rootlesskit flags=(unconfined) {
+  userns,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/home.exercism.bin.rootlesskit>
+}
+EOT
+
+sudo systemctl restart apparmor.service
+
 sudo su - exercism
   mkdir ~/install
   cd ~/install/
@@ -128,7 +150,7 @@ sudo su -
   pushd ruby-install-0.9.1/
     make install
   popd
-  ruby-install ruby 3.2.1 -- --disable-install-rdoc
+  ruby-install ruby 3.4.4 -- --disable-install-rdoc
 
   wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
   tar -xzvf chruby-0.3.9.tar.gz
@@ -138,12 +160,12 @@ sudo su -
 exit
 
 sudo su - exercism
-  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 3.2.1\n/' ~/.bashrc
+  sed -i '1s/^/source \/usr\/local\/share\/chruby\/chruby.sh\nchruby 3.4.4\n/' ~/.bashrc
   sed -i '1s/^/EXERCISM_ENV=production\n/' ~/.bashrc
   source /usr/local/share/chruby/chruby.sh
-  chruby ruby-3.2.1
+  chruby ruby-3.4.4
 
-  gem install bundler:2.4.12
+  gem install bundler:2.6.9
 exit
 
 ###############
@@ -178,9 +200,8 @@ sudo su -
   DIR="/opt/tooling-invoker"
   mkdir $DIR
 
-  # TODO: Pull this from AWS'Git thing
   cd $DIR/..
-  git clone https://github.com/exercism/tooling-invoker.git
+  git clone /mnt/efs/repos/tooling-invoker
 
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
@@ -190,6 +211,8 @@ exit
 sudo su - exercism
 
   cd /opt/tooling-invoker
+  bundle config set deployment 'true'
+  bundle config set without 'development test'
   bundle install
 
 exit
@@ -198,20 +221,25 @@ exit
 # Install tooling manager #
 ###########################
 sudo su -
+
   DIR="/opt/tooling-manager"
   mkdir $DIR
 
-  # TODO: Pull this from AWS's Git thing
   cd $DIR/..
-  git clone https://github.com/exercism/tooling-manager.git
+  git clone /mnt/efs/repos/tooling-manager
 
   chown -R exercism:exercism $DIR
   chmod 700 $DIR
+
 exit
 
 sudo su - exercism
+
   cd /opt/tooling-manager
+  bundle config set deployment 'true'
+  bundle config set without 'development test'
   bundle install
+
 exit
 
 #####################################
@@ -235,8 +263,8 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-manager
-ExecStartPre=/usr/local/bin/chruby-exec ruby-3.2.1 -- ./bin/update
-ExecStart=/usr/local/bin/chruby-exec ruby-3.2.1 -- bundle exec ruby bin/start
+ExecStartPre=/usr/local/bin/chruby-exec ruby-3.4.4 -- ./bin/update
+ExecStart=/usr/local/bin/chruby-exec ruby-3.4.4 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-manager
 
 [Install]
@@ -257,6 +285,7 @@ exit
 # Setup Systemd for tooling invoker #
 #####################################
 sudo su -
+
   cat >/etc/systemd/system/exercism-invoker.service << EOM
 [Unit]
 Description=Exercism Tooling Invoker Worker
@@ -273,8 +302,8 @@ Restart=always
 RestartSec=30
 User=exercism
 WorkingDirectory=/opt/tooling-invoker
-ExecStartPre=/usr/local/bin/chruby-exec ruby-3.2.1 -- ./bin/update
-ExecStart=/usr/local/bin/chruby-exec ruby-3.2.1 -- bundle exec ruby bin/start
+ExecStartPre=/usr/local/bin/chruby-exec ruby-3.4.4 -- ./bin/update
+ExecStart=/usr/local/bin/chruby-exec ruby-3.4.4 -- bundle exec ruby bin/start
 SyslogIdentifier=tooling-invoker
 
 [Install]
@@ -297,7 +326,6 @@ exit
 #########################
 
 sudo systemctl start exercism-manager.service
-sudo systemctl start exercism-invoker.service
 
 ############
 # CLEAN UP #
@@ -305,6 +333,13 @@ sudo systemctl start exercism-invoker.service
 # Watch this until it's finished everything:
 sudo journalctl -u exercism-manager.service -f
 
+# Start and stop the invoker just to cycle it once and check it works.
+sudo systemctl start exercism-invoker.service
+
+# Check the canary runs ok
+sudo journalctl -u exercism-invoker.service  -f
+sudo systemctl stop exercism-invoker.service
+
 # Now stop the manager and remove the "ready" file
 sudo systemctl stop exercism-manager.service
-rm /home/exercism/.tooling-manager-ready
+sudo rm /home/exercism/.tooling-manager-ready

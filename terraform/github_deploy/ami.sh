@@ -13,7 +13,7 @@ docker run hello-world
 
 sudo systemctl enable docker
 
-echo '0 0 * * * docker system prune --all --force --filter until="168h"' | sudo crontab -u root -
+echo '0 0 * * * docker system prune --all --force --filter until="48h"' | sudo crontab -u root -
 
 mkdir aws-setup && cd aws-setup
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

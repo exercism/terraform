@@ -9,6 +9,7 @@ resource "aws_lambda_function" "main" {
   vpc_config {
     subnet_ids         = [var.aws_subnet_lambda.id]
     security_group_ids = [aws_security_group.main.id]
+    ipv6_allowed_for_dual_stack = true
   }
 }
 resource "aws_lambda_function_url" "main" {

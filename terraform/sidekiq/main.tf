@@ -13,14 +13,18 @@ variable "aws_iam_policy_invalidate_cloudfront_assets" {}
 variable "aws_iam_policy_invalidate_cloudfront_webservers" {}
 variable "aws_security_group_rds_main" {}
 variable "aws_security_group_efs_repositories_access" {}
-variable "aws_security_group_efs_submissions_access" {}
+variable "aws_security_group_efs_cache_access" {}
+variable "aws_security_group_efs_tooling_jobs_access" {}
+variable "aws_security_group_elasticache_cache" {}
 variable "aws_security_group_elasticache_anycable" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
 variable "aws_security_group_es_general" {}
 variable "aws_efs_file_system_repositories" {}
-variable "aws_efs_file_system_submissions" {}
-variable "efs_submissions_mount_point" {}
+variable "aws_efs_file_system_cache" {}
+variable "aws_efs_file_system_tooling_jobs" {}
+variable "efs_cache_mount_point" {}
 variable "efs_repositories_mount_point" {}
+variable "efs_tooling_jobs_mount_point" {}
 
 variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}

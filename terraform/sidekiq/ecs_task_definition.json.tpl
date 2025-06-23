@@ -24,8 +24,8 @@
         "sourceVolume": "efs-repositories"
       },
       {
-        "containerPath": "${efs_submissions_mount_point}",
-        "sourceVolume": "efs-submissions"
+        "containerPath": "${efs_tooling_jobs_mount_point}",
+        "sourceVolume": "efs-tooling-jobs"
       }
     ],
     "portMappings": [],
