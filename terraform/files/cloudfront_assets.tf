@@ -4,7 +4,7 @@ locals {
   s3_images_origin_id  = "images"
 }
 
-variable images_ordered_cache_behavior_paths {
+variable "images_ordered_cache_behavior_paths" {
   default = ["images", "exercises", "key-features", "meta", "placeholders", "tracks"]
 }
 
@@ -57,7 +57,7 @@ resource "aws_cloudfront_distribution" "assets" {
     forwarded_values {
       query_string = true
 
-      cookies{
+      cookies {
         forward = "none"
       }
     }
@@ -67,7 +67,7 @@ resource "aws_cloudfront_distribution" "assets" {
     max_ttl                = 86400
     compress               = true
     viewer_protocol_policy = "allow-all"
- }
+  }
 
 
   dynamic "ordered_cache_behavior" {
@@ -75,24 +75,24 @@ resource "aws_cloudfront_distribution" "assets" {
 
     content {
       path_pattern     = "/${ordered_cache_behavior.value}/*"
-      allowed_methods  = ["GET", "HEAD", "OPTIONS" ]
+      allowed_methods  = ["GET", "HEAD", "OPTIONS"]
       cached_methods   = ["GET", "HEAD"]
       target_origin_id = local.s3_images_origin_id
-      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
+      cache_policy_id  = data.aws_cloudfront_cache_policy.CachingOptimized.id
 
       viewer_protocol_policy = "redirect-to-https"
       compress               = true
     }
   }
 
-   ordered_cache_behavior {
-     path_pattern           = "/avatars/*"
-     allowed_methods        = [ "GET", "HEAD" ]
-     cached_methods         = [ "GET", "HEAD" ]
-     target_origin_id       = "webservers"
-      cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
-     viewer_protocol_policy = "redirect-to-https"
-      compress               = true
+  ordered_cache_behavior {
+    path_pattern           = "/avatars/*"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "webservers"
+    cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
   }
 
   default_cache_behavior {
@@ -111,31 +111,31 @@ resource "aws_cloudfront_distribution" "assets" {
     }*/
 
     viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id = "ccbe5100-fe97-4484-8111-4467cea80fd3"
+    cache_policy_id        = "ccbe5100-fe97-4484-8111-4467cea80fd3"
     compress               = true
   }
-         ordered_cache_behavior {
-           allowed_methods        = [
-               "GET",
-               "HEAD",
-               "OPTIONS",
-            ]
-           cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" 
-           cached_methods         = [
-               "GET",
-               "HEAD",
-            ] 
-           compress               = true 
-           default_ttl            = 0 
-           max_ttl                = 0
-           min_ttl                = 0
-           path_pattern           = "/bootcamp/*"
-           smooth_streaming       = false 
-           target_origin_id       = "images" 
-           trusted_key_groups     = [] 
-           trusted_signers        = [] 
-           viewer_protocol_policy = "redirect-to-https" 
-        }
+  ordered_cache_behavior {
+    allowed_methods = [
+      "GET",
+      "HEAD",
+      "OPTIONS",
+    ]
+    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    cached_methods = [
+      "GET",
+      "HEAD",
+    ]
+    compress               = true
+    default_ttl            = 0
+    max_ttl                = 0
+    min_ttl                = 0
+    path_pattern           = "/bootcamp/*"
+    smooth_streaming       = false
+    target_origin_id       = "images"
+    trusted_key_groups     = []
+    trusted_signers        = []
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
 
   restrictions {

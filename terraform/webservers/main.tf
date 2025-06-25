@@ -54,7 +54,7 @@ variable "service_anycable_memory" {}
 variable "service_anycable_count" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 provider "aws" {
@@ -68,5 +68,5 @@ data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  aws_account_id     = data.aws_caller_identity.current.account_id
+  aws_account_id = data.aws_caller_identity.current.account_id
 }

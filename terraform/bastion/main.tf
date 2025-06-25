@@ -23,7 +23,7 @@ variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 # Fetch AZs in the current region

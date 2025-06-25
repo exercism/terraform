@@ -21,7 +21,7 @@ resource "aws_cloudfront_distribution" "webservers" {
   enabled         = true
   is_ipv6_enabled = true
 
-  web_acl_id   = "arn:aws:wafv2:us-east-1:681735686245:global/webacl/CreatedByCloudFront-57aa465d/8d01fb38-fc78-484b-bd9b-1505e5f37cbf" 
+  web_acl_id = "arn:aws:wafv2:us-east-1:681735686245:global/webacl/CreatedByCloudFront-57aa465d/8d01fb38-fc78-484b-bd9b-1505e5f37cbf"
 
   aliases = [
     var.website_host,
@@ -48,17 +48,17 @@ resource "aws_cloudfront_distribution" "webservers" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.origin_id_alb
-    cache_policy_id = aws_cloudfront_cache_policy.main.id
+    allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods           = ["GET", "HEAD"]
+    target_origin_id         = local.origin_id_alb
+    cache_policy_id          = aws_cloudfront_cache_policy.main.id
     origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
-    compress = true
+    compress                 = true
 
     viewer_protocol_policy = "redirect-to-https"
 
     function_association {
-      event_type = "viewer-request"
+      event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.set_x_if_none_match.arn
     }
 

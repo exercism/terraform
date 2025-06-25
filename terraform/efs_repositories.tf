@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "repositories" {
-  creation_token = "git-repositories"
+  creation_token  = "git-repositories"
   throughput_mode = "elastic"
 
   tags = {

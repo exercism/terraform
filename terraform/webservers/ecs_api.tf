@@ -11,7 +11,7 @@ locals {
     puma_log_group_name          = aws_cloudwatch_log_group.puma.name
     nginx_log_group_name         = aws_cloudwatch_log_group.nginx.name
     log_group_prefix             = "api"
-    efs_cache_mount_point  = var.efs_cache_mount_point
+    efs_cache_mount_point        = var.efs_cache_mount_point
     efs_repositories_mount_point = var.efs_repositories_mount_point
     efs_tooling_jobs_mount_point = var.efs_tooling_jobs_mount_point
   })
@@ -58,25 +58,25 @@ resource "aws_ecs_service" "api" {
   # Pause for 10mins to let migrations run
   health_check_grace_period_seconds = 600
 
-      capacity_provider_strategy { 
-           base              = 0 
-           capacity_provider = "FARGATE_SPOT" 
-           weight            = 10 
-        }
-       capacity_provider_strategy {
-           base              = 1 
-           capacity_provider = "FARGATE" 
-           weight            = 1 
-        }
+  capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 10
+  }
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
 
-       deployment_circuit_breaker {
-           enable   = false 
-           rollback = false 
-        }
+  deployment_circuit_breaker {
+    enable   = false
+    rollback = false
+  }
 
-       deployment_controller {
-           type = "ECS" 
-        }
+  deployment_controller {
+    type = "ECS"
+  }
 
   network_configuration {
     security_groups = [
@@ -131,7 +131,7 @@ resource "aws_appautoscaling_policy" "api_cpu" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value = 50.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
@@ -151,7 +151,7 @@ resource "aws_appautoscaling_policy" "api_memory" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 75.0
+    target_value = 75.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"

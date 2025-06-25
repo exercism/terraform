@@ -7,7 +7,7 @@ resource "aws_ecr_repository" "repos" {
 }
 
 resource "aws_ecr_lifecycle_policy" "repos" {
-  for_each = var.ecr_tooling_repos
+  for_each   = var.ecr_tooling_repos
   repository = each.key
 
   policy = <<EOF

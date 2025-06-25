@@ -6,12 +6,12 @@ resource "aws_ecs_cluster" "sidekiq" {
 }
 locals {
   container_definition = templatefile("./sidekiq/ecs_task_definition.json.tpl", {
-    rails_image        = "${var.aws_ecr_repository_webserver_rails.repository_url}:latest"
-    monitor_image      = "${aws_ecr_repository.sidekiq_monitor.repository_url}:latest"
-    monitor_port         = var.monitor_port
-    region             = var.region
-    log_group_name     = aws_cloudwatch_log_group.sidekiq.name
-    efs_cache_mount_point  = var.efs_cache_mount_point
+    rails_image                  = "${var.aws_ecr_repository_webserver_rails.repository_url}:latest"
+    monitor_image                = "${aws_ecr_repository.sidekiq_monitor.repository_url}:latest"
+    monitor_port                 = var.monitor_port
+    region                       = var.region
+    log_group_name               = aws_cloudwatch_log_group.sidekiq.name
+    efs_cache_mount_point        = var.efs_cache_mount_point
     efs_repositories_mount_point = var.efs_repositories_mount_point
     efs_tooling_jobs_mount_point = var.efs_tooling_jobs_mount_point
   })
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     name = "efs-repositories"
     efs_volume_configuration {
       file_system_id = var.aws_efs_file_system_repositories.id
-      root_directory          = "/"
+      root_directory = "/"
     }
   }
 
@@ -39,14 +39,14 @@ resource "aws_ecs_task_definition" "sidekiq" {
     name = "efs-cache"
     efs_volume_configuration {
       file_system_id = var.aws_efs_file_system_cache.id
-      root_directory          = "/"
+      root_directory = "/"
     }
   }
   volume {
     name = "efs-tooling-jobs"
     efs_volume_configuration {
       file_system_id = var.aws_efs_file_system_tooling_jobs.id
-      root_directory          = "/"
+      root_directory = "/"
     }
   }
 }
@@ -58,25 +58,25 @@ resource "aws_ecs_service" "sidekiq" {
   desired_count    = var.container_count
   platform_version = "1.4.0"
 
-      capacity_provider_strategy { 
-           base              = 0 
-           capacity_provider = "FARGATE_SPOT" 
-           weight            = 10 
-        }
-       capacity_provider_strategy {
-           base              = 1 
-           capacity_provider = "FARGATE" 
-           weight            = 1 
-        }
+  capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 10
+  }
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
 
-       deployment_circuit_breaker {
-           enable   = false 
-           rollback = false 
-        }
+  deployment_circuit_breaker {
+    enable   = false
+    rollback = false
+  }
 
-       deployment_controller {
-           type = "ECS" 
-        }
+  deployment_controller {
+    type = "ECS"
+  }
 
   network_configuration {
     security_groups = [
@@ -123,7 +123,7 @@ resource "aws_appautoscaling_policy" "cpu" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value = 50.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
@@ -143,7 +143,7 @@ resource "aws_appautoscaling_policy" "memory" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 75.0
+    target_value = 75.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"

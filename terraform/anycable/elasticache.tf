@@ -16,9 +16,9 @@ resource "aws_elasticache_cluster" "main" {
   security_group_ids   = [aws_security_group.elasticache.id]
 }
 
-resource "aws_elasticache_serverless_cache" "main" { 
-  name                 = "anycable-serverless"
-  engine               = "valkey"
-  subnet_ids           = var.aws_subnet_publics.*.id
-  security_group_ids   = [aws_security_group.elasticache.id]
+resource "aws_elasticache_serverless_cache" "main" {
+  name               = "anycable-serverless"
+  engine             = "valkey"
+  subnet_ids         = var.aws_subnet_publics.*.id
+  security_group_ids = [aws_security_group.elasticache.id]
 }

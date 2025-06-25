@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "cache" {
-  creation_token = "cache"
+  creation_token  = "cache"
   throughput_mode = "elastic"
 
   tags = {

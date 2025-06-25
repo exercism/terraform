@@ -10,7 +10,7 @@ locals {
     http_port          = var.http_port
     region             = var.region
     log_group_name     = aws_cloudwatch_log_group.webservers.name
-    log_group_prefix     = "anycable"
+    log_group_prefix   = "anycable"
   })
 }
 resource "aws_ecs_task_definition" "anycable" {
@@ -23,7 +23,7 @@ resource "aws_ecs_task_definition" "anycable" {
   execution_role_arn       = var.aws_iam_role_ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ecs.arn
   tags                     = {}
-  skip_destroy = true
+  skip_destroy             = true
 }
 
 resource "aws_ecs_service" "anycable" {
@@ -33,25 +33,25 @@ resource "aws_ecs_service" "anycable" {
   desired_count    = var.service_anycable_count
   platform_version = "1.4.0"
 
-      capacity_provider_strategy { 
-           base              = 0 
-           capacity_provider = "FARGATE_SPOT" 
-           weight            = 10 
-        }
-       capacity_provider_strategy {
-           base              = 1 
-           capacity_provider = "FARGATE" 
-           weight            = 1 
-        }
+  capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 10
+  }
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
 
-       deployment_circuit_breaker {
-           enable   = false 
-           rollback = false 
-        }
+  deployment_circuit_breaker {
+    enable   = false
+    rollback = false
+  }
 
-       deployment_controller {
-           type = "ECS" 
-        }
+  deployment_controller {
+    type = "ECS"
+  }
 
   # Pause for 10mins to let migrations run
   health_check_grace_period_seconds = 600
@@ -100,7 +100,7 @@ resource "aws_appautoscaling_policy" "anycable_cpu" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value = 50.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
@@ -120,7 +120,7 @@ resource "aws_appautoscaling_policy" "anycable_memory" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 75.0
+    target_value = 75.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"

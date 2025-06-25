@@ -35,7 +35,7 @@ variable "container_count" {}
 variable "monitor_port" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 # Fetch AZs in the current region

@@ -64,7 +64,8 @@
       {"name": "ANYCABLE_PORT", "value": "3035"},
       {"name": "ANYCABLE_HEALTH_PATH", "value": "/cable/health"},
       {"name": "ANYCABLE_RPC_HOST", "value": "127.0.0.1:50051"},
-      {"name": "ANYCABLE_DEBUG", "value": "true"}
+      {"name": "ANYCABLE_DEBUG", "value": "false"},
+      {"name": "ANYCABLE_LOG_LEVEL", "value": "error"}
     ],
     "logConfiguration": {
       "logDriver":"awslogs",

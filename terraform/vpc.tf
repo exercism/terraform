@@ -6,10 +6,10 @@ locals {
 # The Virtual Private Cloud that holds all of
 # the resources defined in this terraform
 resource "aws_vpc" "main" {
-  cidr_block           = "10.1.0.0/16"
+  cidr_block                       = "10.1.0.0/16"
   assign_generated_ipv6_cidr_block = true
-       # ipv6_cidr_block                      = "2a05:d01c:69d:9b00::/56"
-       # ipv6_ipam_pool_id = ""
+  # ipv6_cidr_block                      = "2a05:d01c:69d:9b00::/56"
+  # ipv6_ipam_pool_id = ""
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
@@ -26,8 +26,8 @@ resource "aws_internet_gateway" "main" {
 
 # Create public subnets, each in a different AZ
 resource "aws_subnet" "publics" {
-  count                   = local.az_count
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+  count      = local.az_count
+  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
   # ipv6_cidr_block              = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 0, count.index)
   # ipv6_cidr_block                                = "2a05:d01c:69d:9b00::/56"
   availability_zone       = local.az_names[count.index]
@@ -54,17 +54,17 @@ resource "aws_default_route_table" "main" {
 
 # Create a private subnet for lambdas
 resource "aws_subnet" "lambda" {
-  vpc_id                  = aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
 
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 4)
-       ipv6_cidr_block                                = "2a05:d01c:d38:b600::/56"
-  availability_zone       = local.az_names[0]
+  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, 4)
+  ipv6_cidr_block   = "2a05:d01c:d38:b600::/56"
+  availability_zone = local.az_names[0]
   tags = {
     Name = "V3 Lambda (private)"
   }
 }
 
-resource "aws_eip" "nat_gateway_lambda" { }
+resource "aws_eip" "nat_gateway_lambda" {}
 
 resource "aws_nat_gateway" "lambda" {
   allocation_id = aws_eip.nat_gateway_lambda.id
@@ -75,10 +75,10 @@ resource "aws_nat_gateway" "lambda" {
 
 # Add in the ability for all traffic to go via the gateway
 resource "aws_route_table" "lambda" {
-  vpc_id                  = aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.lambda.id
   }
 

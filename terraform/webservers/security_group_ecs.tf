@@ -4,9 +4,9 @@ resource "aws_security_group" "ecs" {
   vpc_id      = var.aws_vpc_main.id
 
   ingress {
-    protocol        = "tcp"
-    from_port       = var.http_port
-    to_port         = var.http_port
+    protocol  = "tcp"
+    from_port = var.http_port
+    to_port   = var.http_port
     security_groups = [
       aws_security_group.alb.id,
       var.aws_security_group_internal_alb.id
@@ -32,7 +32,7 @@ resource "aws_security_group" "ecs" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-    egress {
+  egress {
     from_port = 0
     to_port   = 0
     ipv6_cidr_blocks = [
