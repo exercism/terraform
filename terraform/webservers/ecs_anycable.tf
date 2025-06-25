@@ -31,8 +31,27 @@ resource "aws_ecs_service" "anycable" {
   cluster          = aws_ecs_cluster.webservers.id
   task_definition  = aws_ecs_task_definition.anycable.arn
   desired_count    = var.service_anycable_count
-  launch_type      = "FARGATE"
   platform_version = "1.4.0"
+
+      capacity_provider_strategy { 
+           base              = 0 
+           capacity_provider = "FARGATE_SPOT" 
+           weight            = 10 
+        }
+       capacity_provider_strategy {
+           base              = 1 
+           capacity_provider = "FARGATE" 
+           weight            = 1 
+        }
+
+       deployment_circuit_breaker {
+           enable   = false 
+           rollback = false 
+        }
+
+       deployment_controller {
+           type = "ECS" 
+        }
 
   # Pause for 10mins to let migrations run
   health_check_grace_period_seconds = 600
@@ -101,7 +120,7 @@ resource "aws_appautoscaling_policy" "anycable_memory" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value       = 75.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"

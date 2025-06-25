@@ -80,7 +80,7 @@ resource "aws_rds_cluster" "main" {
   master_password                 = "exercism"
   port                            = 3306
   availability_zones              = data.aws_availability_zones.available.names
-  backup_retention_period = 21
+  backup_retention_period = 10
   vpc_security_group_ids          = [aws_security_group.rds_main.id]
   db_subnet_group_name            = aws_db_subnet_group.main.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main_v8.name

@@ -10,6 +10,7 @@ resource "aws_cloudfront_distribution" "discourse" {
   enabled         = true
   is_ipv6_enabled = true
   aliases = [ "forum.exercism.org" ]
+       web_acl_id                     = "arn:aws:wafv2:us-east-1:681735686245:global/webacl/CreatedByCloudFront-7a3bb654/41cd2bab-f7f0-44f5-b633-c178a87b797a" 
 
   origin {
     domain_name = aws_alb.discourse.dns_name
