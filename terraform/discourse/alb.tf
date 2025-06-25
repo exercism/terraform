@@ -9,10 +9,10 @@ resource "aws_alb" "discourse" {
 }
 
 resource "aws_alb_target_group" "discourse" {
-  name        = "discourse"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.aws_vpc_main.id
+  name     = "discourse"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.aws_vpc_main.id
 }
 
 # Redirect all traffic from the ALB to the target group

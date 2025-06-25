@@ -19,7 +19,7 @@ resource "aws_elasticsearch_domain" "general" {
 
   ebs_options {
     ebs_enabled = true
-    iops = 0
+    iops        = 0
     volume_size = 20
     volume_type = "gp2"
   }
@@ -39,7 +39,7 @@ resource "aws_elasticsearch_domain" "general" {
   timeouts {}
 
   vpc_options {
-    subnet_ids         = [
+    subnet_ids = [
       aws_subnet.publics[0].id,
       aws_subnet.publics[1].id
     ]
@@ -87,7 +87,7 @@ resource "aws_elasticsearch_domain" "general" {
 
 
 resource "aws_cloudwatch_log_group" "cloudsearch_general" {
-  name = "cloudsearch-general"
+  name              = "cloudsearch-general"
   retention_in_days = 1
 }
 

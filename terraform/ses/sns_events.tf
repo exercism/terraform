@@ -9,8 +9,8 @@ resource "aws_sns_topic_subscription" "events" {
 }
 
 resource "aws_sns_topic_policy" "ses_events" {
-  arn = aws_sns_topic.events.arn
-  policy      = <<EOF
+  arn    = aws_sns_topic.events.arn
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Id": "notification-policy",

@@ -10,7 +10,7 @@ resource "aws_alb" "main" {
 }
 
 resource "aws_alb_target_group" "http" {
-  vpc_id      = var.aws_vpc_main.id
+  vpc_id = var.aws_vpc_main.id
 
   name        = "training-room"
   port        = var.http_port
@@ -39,13 +39,13 @@ resource "aws_alb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_alb_target_group.http.id
 
-#     type = "fixed-response"
+    #     type = "fixed-response"
 
-#     fixed_response {
-#       content_type = "text/plain"
-#       message_body = ""
-#       status_code  = 429 # We use a 429 as this is exclusively to block bots
-#     }
+    #     fixed_response {
+    #       content_type = "text/plain"
+    #       message_body = ""
+    #       status_code  = 429 # We use a 429 as this is exclusively to block bots
+    #     }
   }
   lifecycle {
     create_before_destroy = true

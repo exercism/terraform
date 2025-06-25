@@ -11,7 +11,7 @@ locals {
     puma_log_group_name          = aws_cloudwatch_log_group.puma.name
     nginx_log_group_name         = aws_cloudwatch_log_group.nginx.name
     log_group_prefix             = "website"
-    efs_cache_mount_point  = var.efs_cache_mount_point
+    efs_cache_mount_point        = var.efs_cache_mount_point
     efs_repositories_mount_point = var.efs_repositories_mount_point
     efs_tooling_jobs_mount_point = var.efs_tooling_jobs_mount_point
   })
@@ -54,7 +54,6 @@ resource "aws_ecs_service" "website" {
   cluster          = aws_ecs_cluster.webservers.id
   task_definition  = aws_ecs_task_definition.website.arn
   desired_count    = var.service_website_count
-  launch_type      = "FARGATE"
   platform_version = "1.4.0"
 
   # Pause for 10mins to let migrations run
@@ -77,6 +76,27 @@ resource "aws_ecs_service" "website" {
     container_name   = "nginx"
     container_port   = var.http_port
   }
+
+  capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 10
+  }
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+
+  deployment_circuit_breaker {
+    enable   = false
+    rollback = false
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
 
   depends_on = [
     aws_alb_listener.http
@@ -108,7 +128,7 @@ resource "aws_appautoscaling_policy" "website_cpu" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value = 50.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
@@ -128,7 +148,7 @@ resource "aws_appautoscaling_policy" "website_memory" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0
+    target_value = 75.0
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"

@@ -39,33 +39,33 @@ resource "aws_rds_cluster_parameter_group" "main_v8" {
     value = "1"
   }
   parameter {
-    name = "binlog_format"
-    value = "MIXED"
+    name         = "binlog_format"
+    value        = "MIXED"
     apply_method = "pending-reboot"
   }
   parameter {
-    name = "performance_schema"
-    value = "1"
+    name         = "performance_schema"
+    value        = "1"
     apply_method = "pending-reboot"
   }
   parameter {
-    name = "performance-schema-consumer-events-waits-current"
-    value = "ON"
+    name         = "performance-schema-consumer-events-waits-current"
+    value        = "ON"
     apply_method = "pending-reboot"
   }
   parameter {
-    name = "performance-schema-instrument"
-    value = "wait/%=ON"
+    name         = "performance-schema-instrument"
+    value        = "wait/%=ON"
     apply_method = "pending-reboot"
   }
   parameter {
-    name = "performance_schema_consumer_global_instrumentation"
-    value = "1"
+    name         = "performance_schema_consumer_global_instrumentation"
+    value        = "1"
     apply_method = "pending-reboot"
   }
   parameter {
-    name = "performance_schema_consumer_thread_instrumentation"
-    value = "1"
+    name         = "performance_schema_consumer_thread_instrumentation"
+    value        = "1"
     apply_method = "pending-reboot"
   }
 }
@@ -80,15 +80,15 @@ resource "aws_rds_cluster" "main" {
   master_password                 = "exercism"
   port                            = 3306
   availability_zones              = data.aws_availability_zones.available.names
-  backup_retention_period = 21
+  backup_retention_period         = 10
   vpc_security_group_ids          = [aws_security_group.rds_main.id]
   db_subnet_group_name            = aws_db_subnet_group.main.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main_v8.name
   final_snapshot_identifier       = "v3-${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T00-00-00Z"
 
-  deletion_protection = true
-  performance_insights_enabled = true
-  enabled_cloudwatch_logs_exports = [ "slowquery" ]
+  deletion_protection             = true
+  performance_insights_enabled    = true
+  enabled_cloudwatch_logs_exports = ["slowquery"]
 
   # ignore changes to final_snapshot_identifier, which are caused by the
   # timestamp being regenerated on each run.
@@ -101,7 +101,7 @@ resource "aws_rds_cluster" "main" {
     min_capacity = 2
   }
 
-  cluster_members = [ "primary-a" ]
+  cluster_members = ["primary-a"]
 }
 
 # resource "aws_rds_cluster_instance" "main_write_instance" {
@@ -156,8 +156,8 @@ resource "aws_rds_cluster_parameter_group" "main" {
   }
 
   parameter {
-    name = "binlog_format"
-    value = "MIXED"
+    name         = "binlog_format"
+    value        = "MIXED"
     apply_method = "pending-reboot"
   }
 }

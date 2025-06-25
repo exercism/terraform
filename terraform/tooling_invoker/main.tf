@@ -15,7 +15,7 @@ variable "aws_vpc_main" {}
 variable "aws_subnet_publics" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 data "aws_caller_identity" "current" {}

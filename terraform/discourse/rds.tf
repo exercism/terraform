@@ -16,7 +16,8 @@ resource "aws_rds_cluster" "discourse" {
   master_username                 = "exercism"
   master_password                 = "exercism"
   availability_zones              = data.aws_availability_zones.available.names
-  backup_retention_period = 21
+  deletion_protection             = true
+  backup_retention_period         = 7
   vpc_security_group_ids          = [aws_security_group.rds_discourse.id]
   db_subnet_group_name            = aws_db_subnet_group.discourse.name
   db_cluster_parameter_group_name = "default.aurora-postgresql13"

@@ -6,12 +6,12 @@ variable "aws_alb_listener_internal" {}
 variable "aws_iam_policy_read_dynamodb_config" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 data "aws_caller_identity" "current" {}
 locals {
-  aws_account_id = data.aws_caller_identity.current.account_id
-  lambda_public_write_user       = "lambda-public-write-user"
-  function_name = "translator"
+  aws_account_id           = data.aws_caller_identity.current.account_id
+  lambda_public_write_user = "lambda-public-write-user"
+  function_name            = "translator"
 }

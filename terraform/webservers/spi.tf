@@ -14,7 +14,7 @@ resource "aws_alb_listener_rule" "spi" {
 }
 
 resource "aws_alb_target_group" "spi" {
-  vpc_id      = var.aws_vpc_main.id
+  vpc_id = var.aws_vpc_main.id
 
   name        = "webservers-spi"
   port        = var.http_port

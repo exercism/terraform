@@ -10,7 +10,7 @@ resource "aws_alb" "webservers" {
 }
 
 resource "aws_alb_target_group" "website" {
-  vpc_id      = var.aws_vpc_main.id
+  vpc_id = var.aws_vpc_main.id
 
   name        = "webservers-website"
   port        = var.http_port
@@ -30,7 +30,7 @@ resource "aws_alb_target_group" "website" {
 }
 
 resource "aws_alb_target_group" "api" {
-  vpc_id      = var.aws_vpc_main.id
+  vpc_id = var.aws_vpc_main.id
 
   name        = "webservers-api"
   port        = var.http_port
@@ -50,7 +50,7 @@ resource "aws_alb_target_group" "api" {
 }
 
 resource "aws_alb_target_group" "anycable" {
-  vpc_id      = var.aws_vpc_main.id
+  vpc_id = var.aws_vpc_main.id
 
   name        = "webservers-anycable"
   port        = var.http_port
@@ -230,10 +230,10 @@ resource "aws_alb_listener_rule" "legacy" {
   }
 }
 
-  # condition {
-  #   http_header {
-  #     http_header_name = "X-Forwarded-For"
-  #     values           = ["217.31.189.43"]
-  #   }
-  # }
+# condition {
+#   http_header {
+#     http_header_name = "X-Forwarded-For"
+#     values           = ["217.31.189.43"]
+#   }
+# }
 

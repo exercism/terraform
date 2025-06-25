@@ -15,17 +15,17 @@ resource "aws_cloudfront_distribution" "staging" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.origin_id_alb
-    cache_policy_id = aws_cloudfront_cache_policy.main.id
+    allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods           = ["GET", "HEAD"]
+    target_origin_id         = local.origin_id_alb
+    cache_policy_id          = aws_cloudfront_cache_policy.main.id
     origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
-    compress = true
+    compress                 = true
 
     viewer_protocol_policy = "redirect-to-https"
 
     function_association {
-      event_type = "viewer-request"
+      event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.set_x_if_none_match.arn
     }
 

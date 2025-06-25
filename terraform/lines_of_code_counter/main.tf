@@ -8,12 +8,12 @@ variable "aws_alb_listener_internal" {}
 variable "efs_tooling_jobs_mount_point" {}
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 data "aws_caller_identity" "current" {}
 locals {
   aws_account_id = data.aws_caller_identity.current.account_id
   username       = "lambda-public-write-user"
-  function_name = "lines_of_code_counter"
+  function_name  = "lines_of_code_counter"
 }
