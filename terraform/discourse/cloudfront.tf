@@ -28,15 +28,10 @@ resource "aws_cloudfront_distribution" "discourse" {
     allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.origin_id_alb
+  cache_policy_id          = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+  origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc" 
+  compress = true
 
-    forwarded_values {
-      query_string = true
-      headers      = ["*"]
-
-      cookies {
-        forward = "all"
-      }
-    }
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
