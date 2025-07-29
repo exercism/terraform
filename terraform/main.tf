@@ -184,6 +184,7 @@ locals {
     "sml-test-runner",
     "sqlite-test-runner",
     "stub-analyzer",
+    "swift-analyzer",
     "swift-test-runner",
     "tcl-test-runner",
     "typescript-analyzer",
