@@ -74,7 +74,7 @@ resource "aws_rds_cluster" "main" {
   cluster_identifier              = "primary"
   engine                          = "aurora-mysql"
   engine_mode                     = "provisioned"
-  engine_version                  = "8.0.mysql_aurora.3.05.2"
+  engine_version                  = "8.0.mysql_aurora.3.08.2"
   database_name                   = "exercism"
   master_username                 = "exercism"
   master_password                 = "exercism"
@@ -89,6 +89,7 @@ resource "aws_rds_cluster" "main" {
   deletion_protection             = true
   performance_insights_enabled    = true
   enabled_cloudwatch_logs_exports = ["slowquery"]
+  enable_local_write_forwarding = false
 
   # ignore changes to final_snapshot_identifier, which are caused by the
   # timestamp being regenerated on each run.

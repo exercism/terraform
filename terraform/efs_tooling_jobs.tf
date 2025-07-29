@@ -1,6 +1,7 @@
 resource "aws_efs_file_system" "tooling_jobs" {
   creation_token  = "tooling_jobs"
-  throughput_mode = "elastic"
+  throughput_mode = "provisioned"
+  provisioned_throughput_in_mibps = 1
 
   tags = {
     Name = "Tooling Jobs"

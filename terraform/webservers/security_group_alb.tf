@@ -8,10 +8,20 @@ resource "aws_security_group" "alb" {
     from_port   = var.http_port
     to_port     = var.http_port
     cidr_blocks = ["0.0.0.0/0"]
+    description = ""
   }
 
-  lifecycle {
-    create_before_destroy = true
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = var.cloudflare_ipv4_ranges
+  }
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    ipv6_cidr_blocks = var.cloudflare_ipv6_ranges
   }
 
   egress {
@@ -27,5 +37,9 @@ resource "aws_security_group" "alb" {
       "::/0",
     ]
     protocol = "-1"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

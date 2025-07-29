@@ -9,6 +9,7 @@ resource "aws_launch_template" "main" {
   vpc_security_group_ids = [
     var.aws_security_group_efs_repositories_access.id,
     var.aws_security_group_efs_tooling_jobs_access.id,
+    var.aws_security_group_elasticache_git_cache_access.id,
     aws_security_group.ec2.id
   ]
 

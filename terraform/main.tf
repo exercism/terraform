@@ -16,6 +16,40 @@ variable "region" {
   default = "eu-west-2"
 }
 
+variable "cloudflare_ipv4_ranges" {
+  type = list(string)
+  default = [
+    "173.245.48.0/20",
+    "103.21.244.0/22",
+    "103.22.200.0/22",
+    "103.31.4.0/22",
+    "141.101.64.0/18",
+    "108.162.192.0/18",
+    "190.93.240.0/20",
+    "188.114.96.0/20",
+    "197.234.240.0/22",
+    "198.41.128.0/17",
+    "162.158.0.0/15",
+    "104.16.0.0/13",
+    "104.24.0.0/14",
+    "172.64.0.0/13",
+    "131.0.72.0/22"
+  ]
+}
+
+variable "cloudflare_ipv6_ranges" {
+  type = list(string)
+  default = [
+    "2400:cb00::/32",
+    "2606:4700::/32",
+    "2803:f800::/32",
+    "2405:b500::/32",
+    "2405:8100::/32",
+    "2a06:98c0::/29",
+    "2c0f:f248::/32"
+  ]
+}
+
 locals {
   website_protocol    = "https"
   website_host        = "exercism.org"
@@ -253,6 +287,8 @@ module "webservers" {
   aws_ecr_repository_anycable_go               = module.anycable.ecr_repository_go
   aws_ecr_repository_anycable_go_pro           = module.anycable.ecr_repository_go_pro
   aws_alb_listener_internal                    = aws_alb_listener.internal
+  cloudflare_ipv4_ranges = var.cloudflare_ipv4_ranges
+  cloudflare_ipv6_ranges = var.cloudflare_ipv6_ranges
 
   aws_vpc_main       = aws_vpc.main
   aws_subnet_publics = aws_subnet.publics
@@ -290,7 +326,8 @@ module "sidekiq" {
   aws_iam_policy_invalidate_cloudfront_assets     = module.files.iam_policy_invalidate_cloudfront_assets
   aws_iam_policy_invalidate_cloudfront_webservers = module.webservers.iam_policy_invalidate_cloudfront_webservers
   aws_iam_role_ecs_task_execution                 = aws_iam_role.ecs_task_execution
-  aws_security_group_elasticache_cache            = module.webservers.security_group_cache
+  aws_security_group_elasticache_git_cache            = module.webservers.security_group_elasticache_git_cache
+  aws_security_group_elasticache_cache            = module.webservers.security_group_elasticache_cache
   aws_security_group_elasticache_anycable         = module.anycable.security_group_elasticache
   aws_security_group_efs_repositories_access      = aws_security_group.efs_repositories_access
   aws_security_group_efs_cache_access             = aws_security_group.efs_cache_access
@@ -328,7 +365,8 @@ module "bastion" {
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_cache_access          = aws_security_group.efs_cache_access
   aws_security_group_efs_tooling_jobs_access   = aws_security_group.efs_tooling_jobs_access
-  aws_security_group_elasticache_cache         = module.webservers.security_group_cache
+  aws_security_group_elasticache_git_cache         = module.webservers.security_group_elasticache_git_cache
+  aws_security_group_elasticache_cache         = module.webservers.security_group_elasticache_cache
   aws_security_group_elasticache_sidekiq       = module.sidekiq.security_group_elasticache
   aws_security_group_elasticache_tooling_jobs  = module.tooling.security_group_elasticache_jobs
   aws_security_group_elasticache_anycable      = module.anycable.security_group_elasticache
@@ -381,6 +419,7 @@ module "tooling_invoker" {
   aws_iam_policy_write_s3_bucket_tooling_jobs              = module.files.bucket_tooling_jobs_write
   aws_security_group_efs_repositories_access               = aws_security_group.efs_repositories_access
   aws_security_group_efs_tooling_jobs_access               = aws_security_group.efs_tooling_jobs_access
+  aws_security_group_elasticache_git_cache_access = module.webservers.security_group_elasticache_git_cache_access
   aws_cloudwatch_log_stream_jobs_general                   = module.tooling.aws_cloudwatch_log_stream_jobs_general
 
   aws_vpc_main       = aws_vpc.main
@@ -526,6 +565,8 @@ module "discourse" {
   aws_vpc_main        = aws_vpc.main
   aws_subnet_publics  = aws_subnet.publics
   acm_certificate_arn = local.forum_acm_certificate_arn
+  cloudflare_ipv4_ranges = var.cloudflare_ipv4_ranges
+  cloudflare_ipv6_ranges = var.cloudflare_ipv6_ranges
 }
 
 module "training_room" {

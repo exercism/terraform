@@ -18,6 +18,7 @@ variable "aws_security_group_efs_tooling_jobs_access" {}
 variable "aws_security_group_elasticache_cache" {}
 variable "aws_security_group_elasticache_anycable" {}
 variable "aws_security_group_elasticache_tooling_jobs" {}
+variable "aws_security_group_elasticache_git_cache" {}
 variable "aws_security_group_es_general" {}
 variable "aws_efs_file_system_repositories" {}
 variable "aws_efs_file_system_cache" {}

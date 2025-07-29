@@ -16,6 +16,22 @@ README
 sudo apt-get -y update
 sudo apt-get install -y wget git make unzip uidmap nfs-common cmake pkg-config slirp4netns
 
+#######################
+# Add the worker user #
+#######################
+sudo groupadd exercism
+sudo useradd -g exercism -m -s /bin/bash exercism
+sudo loginctl enable-linger exercism
+
+#########################
+# Mount the magic drive #
+#########################
+sudo mkfs.ext4 /dev/nvme1n1
+sudo mkdir -p /mnt/docker
+sudo mount /dev/nvme1n1 /mnt/docker
+sudo chown exercism:exercism /mnt/docker
+sudo blkid -s UUID -o value /dev/nvme1n1 | xargs -I{} sudo bash -c 'echo "UUID={} /mnt/docker ext4 defaults,nofail 0 2" >> /etc/fstab'
+
 ##########################
 # Mount EFS Tooling Jobs #
 ##########################
@@ -43,13 +59,6 @@ sudo su -
   systemctl daemon-reload
 
 exit
-
-#######################
-# Add the worker user #
-#######################
-sudo groupadd exercism
-sudo useradd -g exercism -m -s /bin/bash exercism
-sudo loginctl enable-linger exercism
 
 ##############################
 # Set up permissions for efs #
@@ -93,6 +102,9 @@ sudo systemctl restart apparmor.service
 sudo su - exercism
   mkdir ~/install
   cd ~/install/
+
+  mkdir -p ~/.config/docker
+  echo '{ "data-root": "/mnt/docker" }' > ~/.config/docker/daemon.json
 
   export XDG_RUNTIME_DIR=/run/user/$UID
   export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
@@ -174,7 +186,7 @@ exit
 sudo su -
 
   cd ~/install
-  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
   sudo ./aws/install
 

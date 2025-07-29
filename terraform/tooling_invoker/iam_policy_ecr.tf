@@ -22,6 +22,7 @@ resource "aws_iam_policy" "ecr" {
       ],
       "Resource": [
         "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-test-runner",
+        "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-test-runner-arm64",
         "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-representer",
         "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/*-analyzer"
       ]

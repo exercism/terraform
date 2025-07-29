@@ -232,11 +232,24 @@ resource "aws_dynamodb_table_item" "cache_url" {
 
   item = <<ITEM
 {
-  "id": {"S": "cache_url"},
+  "id": {"S": "cache_redis_url"},
   "value": {"S": "rediss://${module.webservers.cache_hostname}"}
 }
 ITEM
 }
+
+resource "aws_dynamodb_table_item" "git_cache_url" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "git_cache_redis_url"},
+  "value": {"S": "rediss://${module.webservers.git_cache_hostname}"}
+}
+ITEM
+}
+
 resource "aws_dynamodb_table_item" "tooling_redis_url" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key

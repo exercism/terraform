@@ -21,8 +21,6 @@ resource "aws_cloudfront_distribution" "webservers" {
   enabled         = true
   is_ipv6_enabled = true
 
-  web_acl_id = "arn:aws:wafv2:us-east-1:681735686245:global/webacl/CreatedByCloudFront-57aa465d/8d01fb38-fc78-484b-bd9b-1505e5f37cbf"
-
   aliases = [
     var.website_host,
     "api.${var.website_host}",
@@ -56,11 +54,6 @@ resource "aws_cloudfront_distribution" "webservers" {
     compress                 = true
 
     viewer_protocol_policy = "redirect-to-https"
-
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.set_x_if_none_match.arn
-    }
 
     min_ttl     = 0
     default_ttl = 0

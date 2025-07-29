@@ -23,7 +23,7 @@ resource "aws_autoscaling_group" "spot" {
     }
 
     instances_distribution {
-      on_demand_base_capacity                  = 4
+      on_demand_base_capacity                  = 6
       on_demand_percentage_above_base_capacity = 0
     }
   }

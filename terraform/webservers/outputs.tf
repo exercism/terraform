@@ -3,14 +3,29 @@ output "security_group_ecs" {
   value = aws_security_group.ecs
 }
 
-output "security_group_cache" {
+output "security_group_elasticache_cache" {
   value = aws_security_group.elasticache_cache
+}
+
+output "security_group_elasticache_git_cache" {
+  value = aws_security_group.elasticache_git_cache
+}
+
+output "security_group_elasticache_cache_access" {
+  value = aws_security_group.elasticache_cache_access
+}
+
+output "security_group_elasticache_git_cache_access" {
+  value = aws_security_group.elasticache_git_cache_access
 }
 
 output "cache_hostname" {
   value = aws_elasticache_serverless_cache.cache.endpoint[0].address
 }
 
+output "git_cache_hostname" {
+  value = aws_elasticache_serverless_cache.git_cache.endpoint[0].address
+}
 output "alb_hostname" {
   value = aws_alb.webservers.dns_name
 }

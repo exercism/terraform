@@ -7,7 +7,7 @@ resource "aws_cloudfront_origin_access_identity" "icons" {
 }
 
 resource "aws_cloudfront_distribution" "icons" {
-  enabled         = true
+  enabled         = false
   is_ipv6_enabled = true
 
   origin {

@@ -1,5 +1,5 @@
 resource "aws_cloudfront_distribution" "staging" {
-  enabled         = true
+  enabled         = false
   is_ipv6_enabled = true
 
   origin {

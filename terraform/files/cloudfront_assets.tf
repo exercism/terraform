@@ -1,7 +1,12 @@
+data "aws_cloudfront_origin_request_policy" "AllViewerExceptHostHeader" {
+  name = "Managed-AllViewerExceptHostHeader"
+}
+
 locals {
   webservers_origin_id = "webservers"
   s3_assets_origin_id  = "assets"
   s3_images_origin_id  = "images"
+  origin_id_image_generator = "image-generator"
 }
 
 variable "images_ordered_cache_behavior_paths" {
@@ -47,7 +52,6 @@ resource "aws_cloudfront_distribution" "assets" {
     origin_id   = local.s3_images_origin_id
   }
 
-
   ordered_cache_behavior {
     path_pattern     = "/rails/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
@@ -69,6 +73,38 @@ resource "aws_cloudfront_distribution" "assets" {
     viewer_protocol_policy = "allow-all"
   }
 
+  ####################
+  # Generated images #
+  ####################
+  origin {
+    domain_name = "jndbzzcsm7f5srkgo7ktdsapnu0pjsbr.lambda-url.eu-west-2.on.aws"
+    origin_id   = local.origin_id_image_generator
+
+    custom_origin_config {
+      http_port              = "80"
+      https_port             = "443"
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  dynamic "ordered_cache_behavior" {
+    for_each = tolist([
+      "/tracks/*/exercises/*/solutions/*.jpg",
+      "/profiles/*.jpg"
+    ])
+    content {
+      path_pattern           = ordered_cache_behavior.value
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = true
+      viewer_protocol_policy = "redirect-to-https"
+      target_origin_id       = local.origin_id_image_generator
+
+      cache_policy_id          = data.aws_cloudfront_cache_policy.CachingOptimized.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.AllViewerExceptHostHeader.id
+    }
+  }
 
   dynamic "ordered_cache_behavior" {
     for_each = var.images_ordered_cache_behavior_paths
@@ -150,5 +186,3 @@ resource "aws_cloudfront_distribution" "assets" {
     ssl_support_method       = "sni-only"
   }
 }
-
-
