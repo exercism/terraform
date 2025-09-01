@@ -189,6 +189,7 @@ locals {
     "typescript-analyzer",
     "typescript-representer",
     "typescript-test-runner",
+    "uiua-analyzer",
     "uiua-test-runner",
     "unison-test-runner",
     "vbnet-test-runner",
