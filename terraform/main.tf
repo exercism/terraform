@@ -111,6 +111,7 @@ locals {
     "csharp-test-runner",
     "d-test-runner",
     "dart-test-runner",
+    "dyalog-apl-test-runner",
     "elixir-analyzer",
     "elixir-representer",
     "elixir-test-runner",
