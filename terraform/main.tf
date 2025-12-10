@@ -151,6 +151,7 @@ locals {
     "nim-analyzer",
     "nim-test-runner",
     "ocaml-test-runner",
+    "odin-test-runner",
     "perl5-analyzer",
     "perl5-test-runner",
     "pharo-smalltalk-test-runner",
