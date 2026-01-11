@@ -145,6 +145,7 @@ locals {
     "jq-test-runner",
     "julia-test-runner",
     "kotlin-test-runner",
+    "lean-test-runner",
     "lfe-test-runner",
     "lua-test-runner",
     "mips-test-runner",
