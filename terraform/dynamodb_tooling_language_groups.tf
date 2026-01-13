@@ -17,7 +17,7 @@ resource "aws_dynamodb_table_item" "tooling_language_tr_all" {
   item = <<ITEM
 {
   "group": {"S": "test-runners-all"},
-  "languages": {"S": "8th,abap,arm64-assembly,arturo,awk,ballerina,bash,batch,c,cairo,cfml,chapel,clojure,clojurescript,cobol,coffeescript,common-lisp,cpp,crystal,csharp,d,dart,elixir,elm,emacs-lisp,erlang,euphoria,fortran,fsharp,futhark,gdscript,gleam,go,groovy,haskell,haxe,idris,j,java,javascript,jq,julia,kotlin,lfe,lua,mips,nim,ocaml,odin,perl5,pharo-smalltalk,phix,php,pony,powershell,prolog,purescript,pyret,python,r,racket,raku,reasonml,red,roc,ruby,rust,scala,scheme,sml,sqlite,swift,tcl,typescript,uiua,unison,vbnet,vimscript,vlang,wasm,wren,x86-64-assembly,yamlscript,zig"}
+  "languages": {"S": "8th,abap,arm64-assembly,arturo,awk,ballerina,bash,batch,c,cairo,cfml,chapel,clojure,clojurescript,cobol,coffeescript,common-lisp,cpp,crystal,csharp,d,dart,dyalog-apl,elixir,elm,emacs-lisp,erlang,euphoria,fortran,free-pascal,fsharp,futhark,gdscript,gleam,go,groovy,haskell,haxe,idris,j,java,javascript,jq,julia,kotlin,lean,lfe,lua,mips,nim,ocaml,odin,perl5,pharo-smalltalk,phix,php,pony,powershell,prolog,purescript,pyret,python,r,racket,raku,reasonml,red,roc,ruby,rust,scala,scheme,sml,sqlite,swift,tcl,typescript,uiua,unison,vbnet,vimscript,vlang,wasm,wren,x86-64-assembly,yamlscript,zig"}
 }
 ITEM
 }
