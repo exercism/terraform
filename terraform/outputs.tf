@@ -10,3 +10,9 @@ output "anycable_redis_url" {
 output "discourse-db_hostname" {
   value = module.discourse.rds_cluster_endpoint
 }
+output "sentry_js_dsn" {
+  value = module.sentry.js_dsn
+}
+output "sentry_rails_dsn" {
+  value = module.sentry.rails_dsn
+}
