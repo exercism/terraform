@@ -11,7 +11,7 @@ resource "aws_rds_cluster_parameter_group" "discourse" {
 resource "aws_rds_cluster" "discourse" {
   cluster_identifier              = "discourse"
   engine                          = "aurora-postgresql"
-  engine_mode                     = "serverless"
+  engine_mode                     = "provisioned"
   database_name                   = "exercism"
   master_username                 = "exercism"
   master_password                 = "exercism"
@@ -27,12 +27,6 @@ resource "aws_rds_cluster" "discourse" {
   # timestamp being regenerated on each run.
   lifecycle {
     ignore_changes = [final_snapshot_identifier]
-  }
-
-  scaling_configuration {
-    auto_pause   = false
-    max_capacity = 2
-    min_capacity = 2
   }
 }
 

@@ -12,6 +12,7 @@ variable "aws_iam_policy_access_s3_attachments" {}
 variable "aws_iam_policy_access_s3_uploads" {}
 variable "aws_iam_role_ecs_task_execution" {}
 variable "aws_iam_policy_read_secret_config" {}
+variable "aws_iam_policy_ses_suppression" {}
 variable "aws_security_group_elasticache_anycable" {}
 variable "aws_security_group_elasticache_sidekiq" {}
 variable "aws_security_group_rds_main" {}

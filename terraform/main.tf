@@ -270,6 +270,7 @@ module "webservers" {
   aws_iam_policy_access_s3_attachments         = module.files.bucket_attachments_access
   aws_iam_policy_access_s3_uploads             = module.files.bucket_uploads_access
   aws_iam_policy_read_secret_config            = aws_iam_policy.read_secret_config
+  aws_iam_policy_ses_suppression               = aws_iam_policy.ses_suppression
   aws_iam_role_ecs_task_execution              = aws_iam_role.ecs_task_execution
   aws_security_group_efs_repositories_access   = aws_security_group.efs_repositories_access
   aws_security_group_efs_cache_access          = aws_security_group.efs_cache_access

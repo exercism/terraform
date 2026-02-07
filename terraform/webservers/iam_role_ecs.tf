@@ -34,3 +34,7 @@ resource "aws_iam_role_policy_attachment" "access_s3_uploads" {
   role       = aws_iam_role.ecs.name
   policy_arn = var.aws_iam_policy_access_s3_uploads.arn
 }
+resource "aws_iam_role_policy_attachment" "ses_suppression" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = var.aws_iam_policy_ses_suppression.arn
+}
