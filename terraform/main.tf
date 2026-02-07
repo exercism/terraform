@@ -9,6 +9,11 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.4"
     }
+
+    sentry = {
+      source  = "jianyuan/sentry"
+      version = "~> 0.14"
+    }
   }
 }
 
@@ -219,10 +224,20 @@ locals {
   ecr_language_server_repos = toset([
     "ruby-language-server"
   ])
+
+  # Sentry
+  sentry_organization_slug   = "thalamus-ai"
+  sentry_slack_workspace_id  = "359899"
+  sentry_js_slack_channel    = "#exercism-sentry-js"
+  sentry_rails_slack_channel = "#exercism-sentry-rails"
 }
 
 provider "aws" {
   region = var.region
+}
+
+provider "sentry" {
+  # Reads from SENTRY_AUTH_TOKEN environment variable
 }
 
 # Fetch AZs in the current region
@@ -595,3 +610,12 @@ module "training_room" {
   http_port = local.http_port
 }
 
+module "sentry" {
+  source = "./sentry"
+
+  project_name       = "exercism"
+  organization_slug  = local.sentry_organization_slug
+  slack_workspace_id = local.sentry_slack_workspace_id
+  slack_channel_js   = local.sentry_js_slack_channel
+  slack_channel_rails = local.sentry_rails_slack_channel
+}
