@@ -156,7 +156,6 @@ locals {
     "lfe-test-runner",
     "lua-test-runner",
     "mips-test-runner",
-    "moonscript-test-runner",
     "nim-analyzer",
     "nim-test-runner",
     "ocaml-test-runner",
