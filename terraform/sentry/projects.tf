@@ -4,7 +4,8 @@ resource "sentry_project" "js" {
   teams        = ["thalamus", "exercism"]
   name         = local.js_project
   slug         = local.js_project
-  platform     = "javascript"
+  platform    = "javascript"
+  resolve_age = 720
 
   lifecycle {
     prevent_destroy = true
@@ -17,7 +18,8 @@ resource "sentry_project" "rails" {
   teams        = ["thalamus", "exercism"]
   name         = local.rails_project
   slug         = local.rails_project
-  platform     = "ruby-rails"
+  platform    = "ruby-rails"
+  resolve_age = 720
 
   lifecycle {
     prevent_destroy = true
