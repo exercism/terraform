@@ -496,14 +496,26 @@ resource "aws_dynamodb_table_item" "tooling_cloudwatch_jobs_log_stream_name" {
 ITEM
 }
 
-resource "aws_dynamodb_table_item" "sentry_dsn" {
+resource "aws_dynamodb_table_item" "sentry_rails_dsn" {
   table_name = aws_dynamodb_table.config.name
   hash_key   = aws_dynamodb_table.config.hash_key
 
   item = <<ITEM
 {
-  "id": {"S": "sentry_dsn"},
+  "id": {"S": "sentry_rails_dsn"},
   "value": {"S": "${module.sentry.rails_dsn}"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "sentry_js_dsn" {
+  table_name = aws_dynamodb_table.config.name
+  hash_key   = aws_dynamodb_table.config.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "sentry_js_dsn"},
+  "value": {"S": "${module.sentry.js_dsn}"}
 }
 ITEM
 }
