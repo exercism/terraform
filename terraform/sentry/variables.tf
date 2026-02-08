@@ -22,3 +22,8 @@ variable "slack_channel_rails" {
   description = "Slack channel for Rails alert notifications"
   type        = string
 }
+
+variable "github_repo" {
+  description = "GitHub repo for issue creation (e.g. exercism/website)"
+  type        = string
+}

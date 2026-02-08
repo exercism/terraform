@@ -618,4 +618,5 @@ module "sentry" {
   slack_workspace_id = local.sentry_slack_workspace_id
   slack_channel_js   = local.sentry_js_slack_channel
   slack_channel_rails = local.sentry_rails_slack_channel
+  github_repo         = "exercism/website"
 }

@@ -19,6 +19,12 @@ resource "sentry_issue_alert" "js_slack" {
         channel         = var.slack_channel_js
         delivery_method = "slack"
       }
+    },
+    {
+      github_create_ticket = {
+        integration = data.sentry_organization_integration.github.internal_id
+        repo        = var.github_repo
+      }
     }
   ]
 }
@@ -43,6 +49,12 @@ resource "sentry_issue_alert" "rails_slack" {
         workspace       = var.slack_workspace_id
         channel         = var.slack_channel_rails
         delivery_method = "slack"
+      }
+    },
+    {
+      github_create_ticket = {
+        integration = data.sentry_organization_integration.github.internal_id
+        repo        = var.github_repo
       }
     }
   ]

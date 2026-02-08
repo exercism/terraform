@@ -3,3 +3,4 @@
 terraform/.terraform.tfstate.lock.info
 .terraform.lock.hcl
 .envrc
+.claude/settings.local.json
