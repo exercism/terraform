@@ -56,6 +56,7 @@ resource "aws_iam_policy" "bucket_attachments_access" {
       }, {
         "Effect": "Allow",
         "Action": [
+          "s3:DeleteObject",
           "s3:GetObject",
           "s3:PutObject",
           "s3:PutObjectAcl"
