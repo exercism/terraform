@@ -227,10 +227,8 @@ locals {
   ])
 
   # Sentry
-  sentry_organization_slug   = "thalamus-ai"
-  sentry_slack_workspace_id  = "359899"
-  sentry_js_slack_channel    = "#exercism-sentry-js"
-  sentry_rails_slack_channel = "#exercism-sentry-rails"
+  sentry_organization_slug        = "thalamus-ai"
+  sentry_ops_handler_service_slug = "ops-handler-3611c7"
 }
 
 provider "aws" {
@@ -614,10 +612,7 @@ module "training_room" {
 module "sentry" {
   source = "./sentry"
 
-  project_name       = "exercism"
-  organization_slug  = local.sentry_organization_slug
-  slack_workspace_id = local.sentry_slack_workspace_id
-  slack_channel_js   = local.sentry_js_slack_channel
-  slack_channel_rails = local.sentry_rails_slack_channel
-  github_repo         = "exercism/website"
+  project_name             = "exercism"
+  organization_slug        = local.sentry_organization_slug
+  ops_handler_service_slug = local.sentry_ops_handler_service_slug
 }

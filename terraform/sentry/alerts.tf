@@ -1,60 +1,70 @@
-# Alert rules for JS project
-resource "sentry_issue_alert" "js_slack" {
+# Escalating issue alert for JS project
+resource "sentry_issue_alert" "js_escalating" {
   organization = local.organization_slug
   project      = sentry_project.js.slug
-  name         = local.js_alert_name
+  name         = "Escalating Issue"
 
   action_match = "any"
   filter_match = "all"
-  frequency    = 1440
+  frequency    = 180
 
   conditions_v2 = [
-    { first_seen_event = {} }
+    {
+      event_unique_user_frequency = {
+        comparison_type = "count"
+        value           = 10
+        interval        = "1h"
+      }
+    },
+    {
+      event_unique_user_frequency = {
+        comparison_type = "count"
+        value           = 20
+        interval        = "1d"
+      }
+    }
   ]
 
   actions_v2 = [
     {
-      slack_notify_service = {
-        workspace       = var.slack_workspace_id
-        channel         = var.slack_channel_js
-        delivery_method = "slack"
-      }
-    },
-    {
-      github_create_ticket = {
-        integration = data.sentry_organization_integration.github.internal_id
-        repo        = var.github_repo
+      notify_event_service = {
+        service = var.ops_handler_service_slug
       }
     }
   ]
 }
 
-# Alert rules for Rails project
-resource "sentry_issue_alert" "rails_slack" {
+# Escalating issue alert for Rails project
+resource "sentry_issue_alert" "rails_escalating" {
   organization = local.organization_slug
   project      = sentry_project.rails.slug
-  name         = local.rails_alert_name
+  name         = "Escalating Issue"
 
   action_match = "any"
   filter_match = "all"
-  frequency    = 1440
+  frequency    = 180
 
   conditions_v2 = [
-    { first_seen_event = {} }
+    {
+      event_unique_user_frequency = {
+        comparison_type = "count"
+        value           = 10
+        interval        = "1h"
+      }
+    },
+    {
+      event_unique_user_frequency = {
+        comparison_type = "count"
+        value           = 20
+        interval        = "1d"
+      }
+    }
   ]
 
   actions_v2 = [
     {
-      slack_notify_service = {
-        workspace       = var.slack_workspace_id
-        channel         = var.slack_channel_rails
-        delivery_method = "slack"
-      }
-    },
-    {
-      github_create_ticket = {
-        integration = data.sentry_organization_integration.github.internal_id
-        repo        = var.github_repo
+      notify_event_service = {
+        service = var.ops_handler_service_slug
       }
     }
   ]

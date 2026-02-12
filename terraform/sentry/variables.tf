@@ -8,22 +8,7 @@ variable "organization_slug" {
   type        = string
 }
 
-variable "slack_workspace_id" {
-  description = "Slack workspace ID for alert notifications"
-  type        = string
-}
-
-variable "slack_channel_js" {
-  description = "Slack channel for JS alert notifications"
-  type        = string
-}
-
-variable "slack_channel_rails" {
-  description = "Slack channel for Rails alert notifications"
-  type        = string
-}
-
-variable "github_repo" {
-  description = "GitHub repo for issue creation (e.g. exercism/website)"
+variable "ops_handler_service_slug" {
+  description = "Sentry service slug for the Ops Handler internal integration"
   type        = string
 }
