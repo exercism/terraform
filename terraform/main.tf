@@ -181,6 +181,7 @@ locals {
     "raku-test-runner",
     "reasonml-test-runner",
     "red-test-runner",
+    "rescript-test-runner",
     "roc-test-runner",
     "ruby-analyzer",
     "ruby-representer",
