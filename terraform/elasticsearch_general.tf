@@ -49,7 +49,7 @@ resource "aws_elasticsearch_domain" "general" {
   domain_endpoint_options {
     custom_endpoint_enabled = false
     enforce_https           = true
-    tls_security_policy     = "Policy-Min-TLS-1-0-2019-07"
+    tls_security_policy     = "Policy-Min-TLS-1-2-2019-07"
   }
 
   advanced_options = {
