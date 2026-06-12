@@ -127,6 +127,7 @@ locals {
     "erlang-analyzer",
     "erlang-test-runner",
     "euphoria-test-runner",
+    "factor-test-runner",
     "fortran-test-runner",
     "free-pascal-test-runner",
     "fsharp-representer",
